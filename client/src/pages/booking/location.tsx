@@ -8,15 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StepIndicator } from "@/components/booking/step-indicator";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Treatment, City } from "@shared/schema";
+import type { Treatment } from "@shared/schema";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "wouter";
 
 const locationSchema = z.object({
-  cityId: z.string().min(1, "Please select a city"),
+  cityName: z.string().min(2, "Please enter your city name"),
   streetAddress: z.string().min(5, "Please enter your street address"),
   aptSuite: z.string().optional(),
   specialInstructions: z.string().optional(),
@@ -33,16 +32,12 @@ export default function BookingLocation() {
     queryKey: ["/api/treatments"],
   });
 
-  const { data: cities, isLoading: citiesLoading } = useQuery<City[]>({
-    queryKey: ["/api/cities"],
-  });
-
   const treatment = treatments?.find((t) => t.slug === treatmentSlug);
 
   const form = useForm<LocationForm>({
     resolver: zodResolver(locationSchema),
     defaultValues: {
-      cityId: "",
+      cityName: "",
       streetAddress: "",
       aptSuite: "",
       specialInstructions: "",
@@ -62,7 +57,7 @@ export default function BookingLocation() {
     { id: "payment", name: "Payment", status: "upcoming" as const },
   ];
 
-  if (treatmentsLoading || citiesLoading) {
+  if (treatmentsLoading) {
     return (
       <div className="min-h-screen py-12">
         <div className="container mx-auto px-4 max-w-3xl">
@@ -85,15 +80,6 @@ export default function BookingLocation() {
       </div>
     );
   }
-
-  // Group cities by region
-  const groupedCities = cities?.reduce((acc, city) => {
-    if (!acc[city.region]) {
-      acc[city.region] = [];
-    }
-    acc[city.region].push(city);
-    return acc;
-  }, {} as Record<string, City[]>);
 
   return (
     <div className="min-h-screen py-12">
@@ -125,35 +111,17 @@ export default function BookingLocation() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <FormField
                     control={form.control}
-                    name="cityId"
+                    name="cityName"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>City</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger data-testid="select-city">
-                              <SelectValue placeholder="Select your city" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {Object.entries(groupedCities || {}).map(([region, regionCities]) => (
-                              <div key={region}>
-                                <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
-                                  {region}
-                                </div>
-                                {regionCities.map((city) => (
-                                  <SelectItem 
-                                    key={city.id} 
-                                    value={city.id}
-                                    data-testid={`option-city-${city.id}`}
-                                  >
-                                    {city.name}, {city.state}
-                                  </SelectItem>
-                                ))}
-                              </div>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter your city" 
+                            {...field} 
+                            data-testid="input-city"
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
