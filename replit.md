@@ -2,7 +2,7 @@
 
 ## Overview
 
-Drip Hydration is a premium IV therapy booking platform that enables customers to schedule in-home IV hydration and wellness treatments with licensed nurses. The application provides a modern, mobile-first booking experience with treatments spanning vitamin wellness IVs, NAD+ therapy, and injectable boosters across 100+ cities.
+Drip Hydration is a premium IV therapy booking platform that enables customers to schedule in-home IV hydration and wellness treatments with licensed nurses. The application provides a modern, mobile-first booking experience with treatments spanning vitamin wellness IVs and NAD+ therapy across 100+ cities. The platform also features a comprehensive membership program with four pricing tiers offering exclusive benefits and savings.
 
 ## User Preferences
 
@@ -22,7 +22,7 @@ Preferred communication style: Simple, everyday language.
 - Tailwind CSS for utility-first styling with custom design tokens
 - CSS variables for consistent theming (light mode only - clean white medical aesthetic)
 - Drip Hydration brand colors: Teal primary (#00B8B0), white backgrounds, near-black text
-- Treatment cards with IV bag product images and "MOST POPULAR" badges
+- Treatment cards without product images for cleaner design aesthetic
 - All CTAs styled with uppercase text and teal branding
 
 **State Management**
@@ -57,16 +57,30 @@ Preferred communication style: Simple, everyday language.
 - Response formatting with consistent error handling
 
 **Database Schema**
-- Categories: Treatment groupings (Vitamin & Wellness, NAD+ Therapy, Injectable Boosters)
+- Categories: Treatment groupings (Vitamin & Wellness, NAD+ Therapy)
 - Treatments: Individual services with pricing, duration, benefits, and descriptions
 - Cities: Service locations with region grouping
 - Appointments: Customer bookings with address, scheduling, and contact information
 
-### Core Booking Flow
+**Note:** Injectable Boosters category has been removed from the application.
 
-**Multi-Step Process**
+### Core Features
+
+**Membership Program**
+- Four membership tiers: Basic ($295), Premium ($550), Elite ($1000), Platinum ($1800)
+- Exclusive member benefits: up to 40% off IVs, 15% off services, priority booking
+- HSA/FSA eligible badge highlighting
+- Dedicated membership page accessible from homepage hero and header navigation
+
+**Treatment Selection Flow**
+- Category overview page showing two main treatment categories
+- Category detail pages displaying individual treatments within each category
+- Click-through navigation from category cards to detailed treatment listings
+- 2-column grid layout for better visual balance with two categories
+
+**Core Booking Flow**
 1. Treatment selection from categorized catalog
-2. Location selection (city and address input)
+2. Location selection via free text input (city and address)
 3. Schedule selection (date and time)
 4. Payment and contact information
 5. Confirmation with appointment details
