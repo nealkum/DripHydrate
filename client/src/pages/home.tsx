@@ -19,13 +19,6 @@ export default function Home() {
       icon: Zap,
       slug: "nad-therapy",
     },
-    {
-      id: "injectable-boosters",
-      name: "Injectable Boosters",
-      description: "Quick vitamin shots for targeted wellness support",
-      icon: Heart,
-      slug: "injectable-boosters",
-    },
   ];
 
   const features = [
@@ -73,9 +66,9 @@ export default function Home() {
                 variant="outline" 
                 className="h-12 px-8 text-base font-semibold uppercase"
                 asChild
-                data-testid="button-learn-more"
+                data-testid="button-membership"
               >
-                <Link href="/treatments">View All Services</Link>
+                <Link href="/membership">Become A Member</Link>
               </Button>
             </div>
             <p className="text-muted-foreground font-medium pt-4">
@@ -118,7 +111,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {categories.map((category) => {
               const Icon = category.icon;
               return (
