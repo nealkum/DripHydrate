@@ -1,171 +1,167 @@
-# Drip Hydration IV Therapy Booking App - Design Guidelines
+# Drip Hydration Design Guidelines
 
-## Design Approach
-
-**Reference-Based Approach:** Drawing inspiration from modern healthcare and wellness booking platforms (Zocdoc, One Medical) combined with premium booking experiences (Airbnb). The design emphasizes trust, cleanliness, and ease-of-use while maintaining a premium wellness aesthetic.
-
-**Core Principles:**
-- Medical trust through clean, professional design
-- Calming wellness aesthetic with soft visual language
-- Effortless mobile-first booking flow
-- Premium service positioning without being clinical
+## Brand Identity
+This design system matches the official Drip Hydration website (driphydration.com) - a premium, professional IV therapy and mobile wellness brand.
 
 ## Color Palette
 
-### Light Mode
-- **Primary Brand:** 200 85% 45% (Deep teal-blue - conveys trust, health, hydration)
-- **Primary Hover:** 200 85% 38%
-- **Secondary/Accent:** 180 70% 92% (Soft aqua background)
-- **Text Primary:** 210 20% 15%
-- **Text Secondary:** 210 15% 45%
-- **Background:** 0 0% 100%
-- **Background Secondary:** 210 20% 98%
-- **Border:** 210 20% 90%
-- **Success:** 150 60% 45%
-- **Warning:** 40 90% 60%
+### Light Mode (Primary Theme)
+- **Primary Teal:** 174 100% 36% (Main brand color #00B8B0 for buttons, links, CTAs)
+- **Primary Hover:** 174 100% 30% (Darker teal #009B94)
+- **Background:** 0 0% 100% (White)
+- **Card Background:** 0 0% 98% (Subtle off-white #FAFAFA)
+- **Text Primary:** 0 0% 10% (Near-black #1A1A1A)
+- **Text Secondary:** 210 12% 35% (Medium gray #4A5568)
+- **Text Muted:** 210 12% 50% (Light gray #718096)
+- **Border:** 210 20% 90% (Subtle #E5E7EB)
+- **Border Muted:** 210 20% 95% (Very subtle #F3F4F6)
+- **Success:** 150 60% 45% (#10B981)
+- **Warning:** 38 92% 50% (#F59E0B)
+- **Error:** 0 72% 51% (#EF4444)
 
 ### Dark Mode
-- **Primary Brand:** 200 75% 55%
-- **Primary Hover:** 200 75% 48%
-- **Secondary/Accent:** 200 35% 20%
-- **Text Primary:** 210 20% 95%
-- **Text Secondary:** 210 15% 70%
-- **Background:** 215 25% 10%
-- **Background Secondary:** 215 20% 15%
-- **Border:** 210 15% 25%
+Not implemented - Drip Hydration uses clean white theme exclusively for medical trust and clarity.
 
 ## Typography
 
 **Font Stack:**
-- **Primary Font:** 'Inter' (Google Fonts) - Clean, medical-grade readability
-- **Accent Font:** 'Playfair Display' (Google Fonts) - For hero headlines only, adds premium wellness touch
+- **Primary Font:** 'Inter' (sans-serif) - Clean, medical-grade readability for all text
+- No accent fonts - consistency and clarity prioritized
 
 **Type Scale:**
-- Hero Headline: text-4xl md:text-6xl font-light (Playfair Display)
-- Section Headers: text-2xl md:text-3xl font-semibold
-- Treatment Names: text-xl font-semibold
-- Body Text: text-base leading-relaxed
-- Small Text: text-sm
-- Labels/Metadata: text-xs uppercase tracking-wide
-
-## Layout System
-
-**Spacing Primitives:** Use Tailwind units of 3, 4, 6, 8, 12, 16, 20
-- Tight spacing: p-3, gap-3
-- Standard spacing: p-4, gap-4, m-6
-- Section spacing: py-12, py-16, py-20
-- Large spacing: mt-20, mb-20
-
-**Container Strategy:**
-- Mobile-first: px-4, max-w-7xl mx-auto
-- Breakpoints: sm:px-6, lg:px-8
-- Content max-width: max-w-4xl for text-heavy sections
+- **Hero Heading:** text-5xl md:text-6xl font-bold (48-64px)
+- **Page Heading (H1):** text-4xl md:text-5xl font-bold (36-48px)
+- **Section Heading (H2):** text-3xl md:text-4xl font-semibold (30-36px)
+- **Subsection (H3):** text-2xl font-semibold (24-28px)
+- **Card Title:** text-xl font-semibold (20-24px)
+- **Body Text:** text-base leading-relaxed (16px)
+- **Small Text:** text-sm (14px)
+- **Tiny Text:** text-xs (12px)
 
 ## Component Library
 
-### Navigation
-- Fixed mobile header with logo, location indicator, menu icon
-- Clean white background with subtle shadow (shadow-sm)
-- Mobile menu: Full-screen overlay with large touch targets (min-h-14)
-- Desktop: Horizontal nav with categories dropdown
+### Buttons
+**Primary Button** (Main CTAs like "BOOK NOW"):
+- Background: Primary Teal (#00B8B0)
+- Text: White, font-weight 600, UPPERCASE
+- Height: h-12 minimum
+- Padding: px-8 py-3
+- Border Radius: rounded-lg (8px)
+- Hover: Darker teal with subtle shadow
+- Active: Slightly darker
+
+**Secondary Button**:
+- Background: White
+- Border: 2px solid Primary Teal
+- Text: Primary Teal, font-weight 600, UPPERCASE
+- Same sizing as primary
+
+**Ghost Button**:
+- Background: Transparent
+- Text: Primary Text
+- Hover: Light gray background
 
 ### Treatment Cards
-- Clean card design with subtle elevation (shadow-md hover:shadow-lg transition)
-- Treatment image (3:2 aspect ratio, rounded-t-lg)
-- Content padding: p-5
-- Includes: Name, duration, price, brief benefit list
-- CTA button: Full-width on mobile, inline on desktop
+**Card Structure** (Matches Drip Hydration):
+1. **Product Image:** Full-width at top, IV bag image, aspect ratio 4:3
+2. **Badge:** "MOST POPULAR" or "NEW" - teal background, white text, top-right corner
+3. **Treatment Name:** text-xl font-semibold, primary text color
+4. **Price:** text-2xl font-bold, primary teal color
+5. **Description:** text-sm, muted text, 2-3 lines
+6. **Ingredients List:** Bullet points with vitamin/ingredient names, text-sm
+7. **Tagline:** text-sm italic, muted ("Rejuvenate & Restore", "Defend & Supercharge")
+8. **CTA Button:** Primary button "BOOK NOW", full-width
 
-### Step Indicator
-- Horizontal progress bar at booking flow top
-- 4 steps: Treatment → Address → Schedule → Payment
-- Active step: Primary color, Completed: Success color, Upcoming: Gray
-- Mobile: Show only current step name, Desktop: Show all steps
+**Card Styling:**
+- Background: White
+- Border: 1px solid border color
+- Border Radius: rounded-xl (12px)
+- Padding: p-0 (image full-width), p-6 for content
+- Shadow: shadow-sm, hover:shadow-lg transition
+- Hover: Subtle lift animation
+
+### Navigation Header
+- **Background:** White with subtle shadow (shadow-sm)
+- **Logo:** "Drip Hydration" text, primary teal, text-2xl font-bold
+- **Nav Links:** text-base, primary text, hover:text-primary-teal
+- **Mobile:** Hamburger menu, teal color, full-screen overlay
+- **Height:** h-16 minimum
+
+### Layout & Spacing
+- **Max Width:** max-w-7xl (1280px) for main content
+- **Container Padding:** px-4 md:px-6 lg:px-8
+- **Section Spacing:** py-16 md:py-20 lg:py-24 between major sections
+- **Card Grid:** Grid cols-1 md:cols-2 lg:cols-3 gap-6
+
+**Treatment Grid:**
+- 1 column: Mobile (< 768px)
+- 2 columns: Tablet (768-1024px)
+- 3 columns: Desktop (> 1024px)
+
+### Step Indicator (Booking Flow)
+- **Progress Bar:** Horizontal with 3 steps
+- **Steps:** Location → Schedule → Payment
+- **Active Step:** Primary teal color, font-bold
+- **Completed:** Success green with checkmark
+- **Upcoming:** Gray muted
+- **Mobile:** Show step number and name
+- **Desktop:** Show all step names
 
 ### Form Inputs
-- Consistent height: h-12
-- Rounded corners: rounded-lg
-- Border: 2px border with focus:ring-2 focus:ring-primary
-- Labels: Block, font-medium, text-sm, mb-2
-- Error states: Red border, red text helper below
+- **Height:** h-12 consistent
+- **Border Radius:** rounded-lg
+- **Border:** 2px border, focus:ring-2 ring-primary
+- **Labels:** Block, font-medium, text-sm, mb-2
+- **Error States:** Red border with error message below
 
-### Buttons
-- Primary: bg-primary text-white, h-12, rounded-lg, font-semibold
-- Outline: border-2 border-primary text-primary with backdrop-blur-sm when over images
-- Touch targets: Minimum h-12 on mobile
-- Icons: Use Heroicons (outline style)
+### Images & Visual Style
+**Product Images (IV Bags):**
+- Clean, professional photography
+- White or very light backgrounds
+- Consistent lighting
+- Show IV bag clearly with branding
 
-### City Selector
-- Searchable dropdown with autocomplete
-- Group cities by region/state
-- Recently selected cities at top
-- Coverage badge: "100+ cities worldwide"
+**Hero Images:**
+- Professional medical setting
+- Clean, bright, modern environments
+- Warm and welcoming but professional
+- 16:9 aspect ratio on desktop, 4:3 mobile
 
-### Date/Time Picker
-- Calendar grid with available dates highlighted
-- Time slots in 2-hour windows
-- "Same-day available" badge for immediate slots
-- Disabled styling for unavailable times
+## Design Principles
 
-### Payment Form (Mocked)
-- Card input with icons (Heroicons: credit-card)
-- CVV tooltip helper
-- Order summary card with treatment breakdown
-- Trust badges: "Secure checkout" with lock icon
+### Clean & Professional
+- Generous white space for clarity
+- Clear visual hierarchy
+- Medical-grade professionalism
+- Approachable wellness aesthetic
 
-### Confirmation Screen
-- Large checkmark icon (Heroicons: check-circle)
-- Appointment summary card
-- Estimated arrival time with countdown
-- "Add to calendar" button
-- Nurse profile preview (name, photo placeholder)
+### Conversion-Focused
+- Clear, prominent CTAs ("BOOK NOW" buttons)
+- Pricing displayed prominently on all treatment cards
+- Trust indicators (patient count, reviews, certifications)
+- Social proof (media logos: Yahoo, ABC, Vice, Rolling Stone, CNN)
 
-## Images
+### Mobile-First
+- Touch-friendly button sizes (minimum 44px height)
+- Readable text sizes on all devices
+- Optimized images for fast loading
+- Bottom-aligned primary CTAs for thumb accessibility
 
-### Hero Section (Home Page)
-- **Large Hero Image:** Professional image of IV therapy setup or nurse preparing treatment in modern home setting. Conveys trust and professionalism. Image should show warm, bright, clean environment
-- Aspect ratio: 16:9 on desktop, 4:3 on mobile
-- Overlay: Subtle dark gradient (bottom to top) for text readability
-- CTA buttons with backdrop-blur-sm background
-
-### Treatment Category Images
-- **Category Headers:** Lifestyle images showing wellness results (energetic person, glowing skin, athletic recovery)
-- Use as background images with text overlay in category browsing
-
-### Treatment Detail Pages
-- **Product Images:** Clean product shots of IV bags and medical equipment on white/light backgrounds
-- Before/after style imagery where applicable (energy levels, skin glow)
-
-### Trust Elements
-- Nurse portraits: Professional headshots with warm smiles
-- Certification badges/logos if available
-- City location imagery for coverage areas
+## Badges & Labels
+- **MOST POPULAR:** Teal background, white text, rounded-full, text-xs uppercase, px-3 py-1
+- **NEW:** Similar styling to MOST POPULAR
+- **Position:** Absolute top-right corner of treatment card images
 
 ## Animations
+**Subtle & Professional:**
+- Card hover: Subtle shadow increase (duration-200)
+- Button hover: Slight brightness increase
+- Form focus: Ring animation
+- Avoid: Complex animations that distract from medical professionalism
 
-**Minimal and Purposeful:**
-- Card hover: Subtle lift with shadow transition (duration-200)
-- Button press: Scale down slightly (active:scale-98)
-- Form focus: Ring animation (transition-shadow)
-- Step progression: Slide transition between booking steps (slide-in from right)
-- Success state: Checkmark draw animation on confirmation
-
-**Avoid:** Complex parallax, continuous animations, distracting motion
-
-## Mobile-Specific Considerations
-
-- Bottom navigation for key actions (sticky CTA bar)
-- Thumb-zone optimization: Primary actions in lower third
-- Swipeable treatment galleries
-- Location services integration prompt for address autofill
-- Collapsible sections for long treatment descriptions
-- Large, spaced-out touch targets (minimum 44x44px)
-
-## Accessibility & Consistency
-
-- Maintain WCAG AA contrast ratios (4.5:1 for text)
-- Dark mode fully implemented across all components including forms
-- Focus indicators visible for keyboard navigation
-- Alt text for all treatment and lifestyle images
-- Loading states for async operations (skeleton screens)
-- Error messages clear and actionable
+## Accessibility
+- WCAG AA contrast ratios maintained
+- Focus indicators for keyboard navigation
+- Alt text for all images
+- Loading states with skeletons
+- Clear error messages
