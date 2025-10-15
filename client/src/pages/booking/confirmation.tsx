@@ -187,7 +187,7 @@ export default function BookingConfirmation() {
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <Button 
             size="lg" 
-            className="flex-1 h-12"
+            className="flex-1 h-12 font-semibold uppercase"
             asChild
             data-testid="button-book-another"
           >
@@ -196,7 +196,7 @@ export default function BookingConfirmation() {
           <Button 
             size="lg" 
             variant="outline" 
-            className="flex-1 h-12"
+            className="flex-1 h-12 font-semibold uppercase"
             asChild
             data-testid="button-home"
           >

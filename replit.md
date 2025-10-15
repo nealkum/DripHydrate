@@ -20,8 +20,10 @@ Preferred communication style: Simple, everyday language.
 **UI Component System**
 - Shadcn/ui component library (New York style variant) with Radix UI primitives
 - Tailwind CSS for utility-first styling with custom design tokens
-- CSS variables for dynamic theming supporting light/dark modes
-- Custom color palette emphasizing medical trust (teal-blue primary) and wellness aesthetics
+- CSS variables for consistent theming (light mode only - clean white medical aesthetic)
+- Drip Hydration brand colors: Teal primary (#00B8B0), white backgrounds, near-black text
+- Treatment cards with IV bag product images and "MOST POPULAR" badges
+- All CTAs styled with uppercase text and teal branding
 
 **State Management**
 - TanStack Query (React Query) for server state management and data fetching
@@ -29,9 +31,11 @@ Preferred communication style: Simple, everyday language.
 - Session storage for booking flow state persistence
 
 **Design System**
-- Typography: Inter (primary), Playfair Display (accent headlines)
+- Typography: Inter (primary font) - clean, medical-grade readability
 - Mobile-first responsive design approach
-- Professional healthcare aesthetic inspired by Zocdoc, One Medical, and Airbnb
+- Professional healthcare aesthetic matching driphydration.com branding
+- Teal primary color (#00B8B0 / HSL 174 100% 36%) with white backgrounds
+- Uppercase button styling for all CTAs with font-weight 600
 - Custom button, card, and elevation variants for consistent UX
 
 ### Backend Architecture

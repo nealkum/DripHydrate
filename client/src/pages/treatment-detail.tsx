@@ -118,7 +118,7 @@ export default function TreatmentDetail() {
           <div className="sticky bottom-0 py-6 bg-background border-t">
             <Button 
               size="lg" 
-              className="w-full h-12 text-base font-semibold"
+              className="w-full h-12 text-base font-semibold uppercase"
               asChild
               data-testid="button-book-now"
             >

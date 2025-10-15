@@ -312,7 +312,7 @@ export default function BookingPayment() {
                     <Button 
                       type="submit" 
                       size="lg" 
-                      className="w-full h-12"
+                      className="w-full h-12 font-semibold uppercase"
                       disabled={createAppointmentMutation.isPending}
                       data-testid="button-confirm-booking"
                     >

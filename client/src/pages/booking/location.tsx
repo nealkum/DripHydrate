@@ -218,7 +218,7 @@ export default function BookingLocation() {
                   <Button 
                     type="submit" 
                     size="lg" 
-                    className="w-full h-12"
+                    className="w-full h-12 font-semibold uppercase"
                     data-testid="button-continue"
                   >
                     Continue to Schedule

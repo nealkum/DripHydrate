@@ -152,7 +152,7 @@ export default function BookingSchedule() {
 
               <Button
                 size="lg"
-                className="w-full h-12"
+                className="w-full h-12 font-semibold uppercase"
                 disabled={!selectedDate || !selectedTime}
                 onClick={handleContinue}
                 data-testid="button-continue"

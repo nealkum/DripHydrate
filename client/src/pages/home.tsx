@@ -138,7 +138,7 @@ export default function Home() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button variant="ghost" className="w-full justify-between" data-testid={`button-view-${category.id}`}>
+                      <Button variant="ghost" className="w-full justify-between font-semibold uppercase" data-testid={`button-view-${category.id}`}>
                         View Treatments
                         <span className="ml-2">→</span>
                       </Button>
