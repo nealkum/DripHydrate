@@ -147,12 +147,6 @@ export class MemStorage implements IStorage {
       slug: "nad-therapy",
     });
 
-    const injectableBoosters = await this.createCategory({
-      name: "Injectable Boosters",
-      description: "Quick vitamin shots for targeted wellness support",
-      slug: "injectable-boosters",
-    });
-
     // Vitamin & Wellness Treatments
     await this.createTreatment({
       categoryId: vitaminWellness.id,
@@ -322,75 +316,6 @@ export class MemStorage implements IStorage {
       ],
       duration: 150,
       price: 79900, // $799
-      imageUrl: null,
-    });
-
-    // Injectable Boosters
-    await this.createTreatment({
-      categoryId: injectableBoosters.id,
-      name: "Vitamin B12 Shot",
-      slug: "vitamin-b12-shot",
-      description: "Quick energy boost with B12 injection. Supports cognitive function, memory, and mood while increasing energy levels.",
-      benefits: [
-        "Instant energy increase",
-        "Improves cognitive function",
-        "Enhances mood",
-        "Supports memory",
-        "Boosts metabolism"
-      ],
-      duration: 5,
-      price: 4900, // $49
-      imageUrl: null,
-    });
-
-    await this.createTreatment({
-      categoryId: injectableBoosters.id,
-      name: "Biotin Shot",
-      slug: "biotin-shot",
-      description: "Promote healthy hair, skin, and nails with our biotin injection. Perfect for beauty maintenance.",
-      benefits: [
-        "Strengthens hair",
-        "Improves skin health",
-        "Fortifies nails",
-        "Supports cell growth",
-        "Enhances natural beauty"
-      ],
-      duration: 5,
-      price: 4900, // $49
-      imageUrl: null,
-    });
-
-    await this.createTreatment({
-      categoryId: injectableBoosters.id,
-      name: "Glutathione Shot",
-      slug: "glutathione-shot",
-      description: "Master antioxidant for detoxification and immune support. Glutathione helps protect cells from damage and supports liver function.",
-      benefits: [
-        "Powerful antioxidant",
-        "Supports detoxification",
-        "Brightens skin",
-        "Strengthens immunity",
-        "Protects cells"
-      ],
-      duration: 5,
-      price: 5900, // $59
-      imageUrl: null,
-    });
-
-    await this.createTreatment({
-      categoryId: injectableBoosters.id,
-      name: "Lipostat (MIC) Shot",
-      slug: "lipostat-mic-shot",
-      description: "Fat-burning injection that supports metabolism and weight loss goals. Combines Methionine, Inositol, and Choline.",
-      benefits: [
-        "Supports fat metabolism",
-        "Boosts energy",
-        "Aids weight loss",
-        "Improves liver function",
-        "Enhances metabolism"
-      ],
-      duration: 5,
-      price: 4900, // $49
       imageUrl: null,
     });
 

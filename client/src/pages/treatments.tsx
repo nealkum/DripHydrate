@@ -52,6 +52,10 @@ export default function Treatments() {
 
               if (!categoryTreatments?.length) return null;
 
+              const gridCols = categoryTreatments.length === 2 
+                ? "grid md:grid-cols-2 gap-6 max-w-4xl mx-auto" 
+                : "grid md:grid-cols-2 lg:grid-cols-3 gap-6";
+
               return (
                 <div key={category.id} className="mb-16" data-testid={`section-${category.slug}`}>
                   <div className="mb-6">
@@ -61,7 +65,7 @@ export default function Treatments() {
                     <p className="text-muted-foreground">{category.description}</p>
                   </div>
 
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className={gridCols}>
                     {categoryTreatments.map((treatment) => (
                       <TreatmentCard 
                         key={treatment.id} 
