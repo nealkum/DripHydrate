@@ -4,7 +4,7 @@ import logoPath from "@assets/drip logo_1760551470270.png";
 
 export function Footer() {
   return (
-    <footer className="border-t bg-muted/30 py-12" data-testid="footer">
+    <footer className="border-t bg-muted/30 pt-12 pb-24" data-testid="footer">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
