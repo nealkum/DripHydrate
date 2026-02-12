@@ -1,0 +1,151 @@
+# Drip Hydration — IV Membership Signup & Booking Upsell
+
+## What’s Included
+
+### 1. `membership-signup.html` — Full Membership Page
+
+A complete, standalone page with:
+
+- **3-tier pricing cards** (Essential $149/mo, Performance $259/mo, VIP $449/mo) with per-session pricing and savings vs. single booking prominently displayed
+- **Side-by-side comparison table** — Single Session vs. Membership
+- **3-step signup modal** — Personal Info → Health & Preferences → Review & Confirm → Success
+- **FAQ accordion** covering billing, cancellation, plan changes, drip selection, delivery
+- Sticky nav with “Join Now” CTA
+- Fully responsive, dark luxury aesthetic matching a premium wellness brand
+
+### 2. `booking-upsell-components.html` — Upsell Components for Existing Booking Form
+
+Two components to embed in your current IV booking flow:
+
+**Component A: Inline Toast**
+A compact savings nudge that appears when a user selects a treatment.
+Shows: `SAVE $100 | Members pay $149 for this session instead of $249 | See plans →`
+
+**Component B: Full Comparison Card**
+A detailed upsell card to place before the “Book Now” / checkout button.
+Shows: side-by-side price comparison, savings breakdown (session + delivery), benefit bullets, and CTA to switch to membership. Includes dismiss/restore behavior with a subtle mini-reminder.
+
+-----
+
+## Integration into Your Replit Project
+
+### Option A: Add as Separate Pages (Simplest)
+
+1. Copy `membership-signup.html` into your project’s public/static directory
+1. Add a route or link to it (e.g., `/membership`)
+1. Update your nav to include a “Membership” link
+
+### Option B: Extract Components into Your Existing Codebase
+
+If your Replit app uses React/Next.js or another framework:
+
+#### For the Upsell in the Booking Form:
+
+1. Copy the CSS from `booking-upsell-components.html` (everything inside `<style>` tags) into your app’s stylesheet or a scoped CSS module
+1. Copy the HTML for `.inline-upsell-toast` and `.membership-upsell` into your booking form template/component — place them:
+- **Toast**: Right after the treatment/drip selector dropdown
+- **Full card**: Right before the “Book Now” / submit button
+1. Wire up the dynamic pricing by calling `updateUpsellPricing()` when the user selects a treatment:
+
+```javascript
+// In your treatment selector's onChange handler:
+const treatmentPrices = {
+  'Hydration Therapy': { single: 199, member: 149 },
+  'Energy Boost':      { single: 249, member: 149 },
+  'Immunity Defense':  { single: 249, member: 149 },
+  'Myers Cocktail':    { single: 299, member: 189 },
+  'NAD+ Infusion':     { single: 399, member: 279 },
+};
+
+// When treatment changes:
+const prices = treatmentPrices[selectedTreatment];
+if (prices) {
+  updateUpsellPricing(prices.single, prices.member, 25);
+}
+```
+
+#### For the Membership Page:
+
+1. Create a new route `/membership`
+1. Copy the content from `membership-signup.html`
+1. Wire up `submitSignup()` to your backend:
+
+```javascript
+// Replace the TODO in submitSignup() with:
+async function submitSignup() {
+  // ... checkbox validation ...
+
+  const formData = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    plan: selectedPlan.name,
+    planAmount: selectedPlan.amount,
+    treatment: document.getElementById('treatment').value,
+    address: document.getElementById('address').value,
+    preferredDay: document.getElementById('prefDay').value,
+    preferredTime: document.getElementById('prefTime').value,
+    healthNotes: document.getElementById('healthNotes').value,
+  };
+
+  const res = await fetch('/api/membership', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData),
+  });
+
+  if (res.ok) {
+    goToStep('success');
+  } else {
+    alert('Something went wrong. Please try again.');
+  }
+}
+```
+
+-----
+
+## Pricing to Customize
+
+All prices are placeholder values. Update these to match your actual pricing:
+
+|Plan                 |Monthly Price|Sessions|Per-Session|Single Booking Price|
+|---------------------|-------------|--------|-----------|--------------------|
+|Essential            |$149         |1       |$149       |$249                |
+|Performance          |$259         |2       |$129.50    |$249 each           |
+|VIP Unlimited        |$449         |4       |$112.25    |$249 each           |
+|Delivery fee (single)|$25-50       |—       |—          |Free for members    |
+
+Update all prices in:
+
+- `membership-signup.html`: Plan cards, comparison table, hero badge
+- `booking-upsell-components.html`: Toast text, comparison card, savings breakdown, and the `treatmentPrices` object
+
+-----
+
+## Backend API Endpoint to Create
+
+You’ll want a `/api/membership` POST endpoint that:
+
+1. Validates the signup data
+1. Creates a customer record (Stripe, your DB, etc.)
+1. Sets up recurring billing (Stripe Subscriptions recommended)
+1. Sends a welcome/confirmation email
+1. Returns success/failure
+
+Example Express.js route:
+
+```javascript
+app.post('/api/membership', async (req, res) => {
+  const { firstName, lastName, email, phone, plan, planAmount, treatment, address } = req.body;
+
+  try {
+    // 1. Create Stripe customer + subscription
+    // 2. Save to your database
+    // 3. Send confirmation email
+    res.json({ success: true, message: 'Membership created' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+```

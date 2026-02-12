@@ -13,7 +13,7 @@ import { StepIndicator } from "@/components/booking/step-indicator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import type { Treatment, City, InsertAppointment } from "@shared/schema";
-import { ArrowLeft, CreditCard, Lock, Shield, Star, Stethoscope, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, CreditCard, Lock, Shield, Star, Stethoscope, Check, Droplets } from "lucide-react";
 import { Link } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -36,6 +36,7 @@ export default function BookingPayment() {
   const { toast } = useToast();
   const treatmentSlug = params?.treatmentSlug;
   const [subscribeAndSave, setSubscribeAndSave] = useState(false);
+  const [upsellDismissed, setUpsellDismissed] = useState(false);
 
   const [locationData, setLocationData] = useState<any>(null);
   const [scheduleData, setScheduleData] = useState<any>(null);
@@ -346,7 +347,7 @@ export default function BookingPayment() {
               </span>
               <span className="flex items-center gap-1">
                 <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                4.9 Stars (200K+ treatments)
+                4.9 Stars (100K+ treatments)
               </span>
             </div>
           </div>
@@ -413,37 +414,130 @@ export default function BookingPayment() {
               </CardContent>
             </Card>
 
-            {/* Subscribe & Save */}
-            {memberPrice && (
+            {/* Membership Upsell Card */}
+            {memberPrice && !subscribeAndSave && !upsellDismissed && (
+              <Card className="border-primary/20 overflow-hidden" data-testid="card-membership-upsell">
+                <div className="bg-primary/5 border-b border-primary/10 px-4 py-3 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                    <Droplets className="w-4 h-4 text-primary-foreground" />
+                  </div>
+                  <p className="text-sm font-semibold">
+                    You'd <span className="text-primary">save ${savings} today</span> with a membership
+                  </p>
+                </div>
+                <CardContent className="p-4 space-y-4">
+                  <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
+                    <div className="text-center p-3 rounded-md bg-muted/50 border">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1">Single session</p>
+                      <p className="text-xl font-bold text-muted-foreground line-through decoration-red-400">${regularPrice}</p>
+                      <p className="text-[10px] text-muted-foreground">One-time price</p>
+                    </div>
+                    <div className="text-primary text-xl font-bold px-1">
+                      <ArrowRight className="w-5 h-5" />
+                    </div>
+                    <div className="text-center p-3 rounded-md border-2 border-primary bg-primary/5">
+                      <p className="text-[10px] uppercase tracking-wider text-primary font-semibold mb-1">As a member</p>
+                      <p className="text-xl font-bold text-foreground">${memberPriceFormatted}</p>
+                      <p className="text-[10px] text-primary font-semibold">Save ${savings}/session</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-muted/50 rounded-md p-3 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">This IV session (member rate)</span>
+                      <span className="font-semibold">${memberPriceFormatted}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Mobile delivery fee</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground line-through text-xs">$25</span>
+                        <span className="text-primary font-semibold text-xs">FREE</span>
+                      </div>
+                    </div>
+                    <Separator />
+                    <div className="flex justify-between pt-1">
+                      <span className="text-primary font-semibold">Your total savings today</span>
+                      <span className="text-primary font-bold">${Number(savings) + 25}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> Priority scheduling</div>
+                    <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> Free delivery always</div>
+                    <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> 10-20% off boosters</div>
+                    <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> Cancel anytime</div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      className="flex-1 font-semibold uppercase text-xs"
+                      onClick={() => setSubscribeAndSave(true)}
+                      data-testid="button-switch-membership"
+                    >
+                      Switch to Membership
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="text-xs"
+                      onClick={() => setUpsellDismissed(true)}
+                      data-testid="button-dismiss-upsell"
+                    >
+                      No thanks
+                    </Button>
+                  </div>
+                  <p className="text-center text-[10px] text-muted-foreground">
+                    No contracts · Cancel anytime · First session today
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Mini upsell reminder (after dismiss) */}
+            {memberPrice && !subscribeAndSave && upsellDismissed && (
+              <button
+                className="w-full flex items-center justify-between p-3 rounded-md border text-left hover-elevate transition-colors"
+                onClick={() => setUpsellDismissed(false)}
+                data-testid="button-restore-upsell"
+              >
+                <span className="text-sm text-muted-foreground">
+                  Members save <span className="text-primary font-semibold">${savings}+</span> on this session
+                </span>
+                <span className="text-xs text-primary font-semibold whitespace-nowrap ml-2">See offer</span>
+              </button>
+            )}
+
+            {/* Active membership selection */}
+            {memberPrice && subscribeAndSave && (
               <Card 
-                className={`cursor-pointer transition-colors ${subscribeAndSave ? 'border-primary bg-primary/5' : ''}`}
+                className="border-primary bg-primary/5"
                 data-testid="card-subscribe-save"
               >
                 <CardContent className="p-4">
-                  <button
-                    type="button"
-                    onClick={() => setSubscribeAndSave(!subscribeAndSave)}
-                    className="flex items-start gap-3 w-full text-left"
-                    data-testid="button-subscribe-save"
-                  >
-                    <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                      subscribeAndSave ? 'border-primary bg-primary' : 'border-muted-foreground/30'
-                    }`}>
-                      {subscribeAndSave && <Check className="w-3 h-3 text-primary-foreground" />}
+                  <div className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-md border-2 border-primary bg-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-primary-foreground" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <p className="font-semibold text-foreground text-sm">Subscribe & Save</p>
+                        <p className="font-semibold text-foreground text-sm">Membership Applied</p>
                         <Badge variant="outline" className="text-[10px] font-semibold border-green-300 bg-green-50 text-green-700 no-default-hover-elevate no-default-active-elevate">
-                          Save ${savings}
+                          Saving ${savings}
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        Become a member and pay <span className="font-semibold text-primary">${memberPriceFormatted}</span> instead of ${regularPrice}. 
-                        Cancel anytime. Includes priority booking, 15% off services, and exclusive promos.
+                        Paying <span className="font-semibold text-primary">${memberPriceFormatted}</span> instead of ${regularPrice}. Free delivery included.
                       </p>
                     </div>
-                  </button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs text-muted-foreground"
+                      onClick={() => setSubscribeAndSave(false)}
+                      data-testid="button-remove-membership"
+                    >
+                      Remove
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             )}

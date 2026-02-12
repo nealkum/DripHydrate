@@ -69,9 +69,11 @@ Preferred communication style: Simple, everyday language.
 ### Core Features
 
 **Membership Program**
-- Four membership tiers: Basic ($295), Premium ($550), Elite ($1000), Platinum ($1800)
-- Exclusive member benefits: up to 40% off IVs, 15% off services, priority booking
-- HSA/FSA eligible badge highlighting
+- Three membership tiers: Essential ($149/mo), Performance ($259/mo, featured), VIP Unlimited ($449/mo)
+- Per-session pricing and savings vs. single booking prominently displayed
+- Side-by-side comparison table (Single Session vs. Membership)
+- Multi-step signup modal: Personal Info → Health & Preferences → Review & Confirm → Success
+- Membership FAQ accordion covering billing, cancellation, plan changes, drip selection, delivery
 - Dedicated membership page accessible from homepage hero and header navigation
 
 **Treatment Selection Flow**
@@ -118,9 +120,11 @@ Preferred communication style: Simple, everyday language.
 - Treatment trust bar (painless treatment, nurse monitors vitals, session length)
 
 **Checkout CRO Enhancements**
-- Subscribe & Save toggle: click to apply member pricing at checkout with savings display
+- Full membership upsell card: side-by-side price comparison (single vs member), savings breakdown, benefit bullets
+- Dismiss/restore behavior: "No thanks" hides card, shows mini reminder to re-expand
+- "Switch to Membership" applies member pricing at checkout with visual confirmation
 - Checkout trust bar: 256-bit SSL, Licensed Nurses, 4.9 stars
-- Price updates dynamically when Subscribe & Save is toggled
+- Price updates dynamically when membership is applied
 
 **Confirmation Page Upsells**
 - Membership upsell card with plans link

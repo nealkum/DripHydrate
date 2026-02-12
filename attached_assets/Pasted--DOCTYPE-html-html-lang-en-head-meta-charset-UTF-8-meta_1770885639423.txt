@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drip Hydration - IV Membership Plans</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+```
+:root {
+  --bg: #0B0E11;
+  --surface: #12161B;
+  --surface-elevated: #1A1F26;
+  --border: rgba(255,255,255,0.06);
+  --border-focus: rgba(74,189,172,0.5);
+  --text: #E8ECF0;
+  --text-muted: #8A929B;
+  --accent: #4ABDAC;
+  --accent-glow: rgba(74,189,172,0.15);
+  --gold: #D4A855;
+  --gold-glow: rgba(212,168,85,0.15);
+  --danger: #E85D5D;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Ambient background ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 10%, rgba(74,189,172,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(212,168,85,0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-wrapper { position: relative; z-index: 1; }
+
+/* ── Navigation ── */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11,14,17,0.85);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-weight: 600 !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(74,189,172,0.3);
+}
+
+/* ── Hero ── */
+.hero {
+  text-align: center;
+  padding: 80px 24px 60px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold-glow);
+  border: 1px solid rgba(212,168,85,0.2);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+  animation: fadeDown 0.6s ease-out;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+  animation: fadeDown 0.6s ease-out 0.1s both;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--accent), #7EDBBE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 540px;
+  margin: 0 auto;
+  animation: fadeDown 0.6s ease-out 0.2s both;
+}
+
+/* ── Plan Cards ── */
+.plans-section { padding: 20px 24px 80px; }
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.plan-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  position: relative;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  animation: fadeUp 0.5s ease-out both;
+  display: flex;
+  flex-direction: column;
+}
+.plan-card:nth-child(1) { animation-delay: 0.1s; }
+.plan-card:nth-child(2) { animation-delay: 0.2s; }
+.plan-card:nth-child(3) { animation-delay: 0.3s; }
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+}
+
+.plan-card.featured {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(74,189,172,0.12);
+  background: linear-gradient(180deg, rgba(74,189,172,0.04) 0%, var(--surface) 40%);
+}
+.plan-card.featured:hover {
+  box-shadow: 0 0 0 1px var(--accent), 0 16px 48px rgba(74,189,172,0.2);
+}
+
+.plan-popular {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 6px 20px;
+  border-radius: 100px;
+}
+
+.plan-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.plan-tagline {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 24px;
+}
+
+.plan-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.plan-price {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.plan-period {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.plan-per-session {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.plan-savings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(74,189,172,0.1);
+  border: 1px solid rgba(74,189,172,0.15);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+}
+
+.plan-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 0 24px;
+}
+
+.plan-features { list-style: none; margin-bottom: 32px; flex: 1; }
+.plan-features li {
+  padding: 8px 0;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.plan-features li::before {
+  content: '✓';
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.plan-cta {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  border: none;
+}
+.plan-cta-primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+.plan-cta-primary:hover {
+  background: #5DCDB9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(74,189,172,0.3);
+}
+.plan-cta-secondary {
+  background: var(--surface-elevated);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.plan-cta-secondary:hover {
+  border-color: rgba(255,255,255,0.15);
+  background: #1F252E;
+}
+
+/* ── Comparison Table ── */
+.comparison-section {
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+.comparison-section h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.comparison-table th,
+.comparison-table td {
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+.comparison-table th {
+  background: var(--surface-elevated);
+  font-weight: 600;
+  color: var(--text);
+}
+.comparison-table th:first-child,
+.comparison-table td:first-child { text-align: left; }
+.comparison-table td { color: var(--text-muted); }
+.comparison-table td.highlight { color: var(--accent); font-weight: 600; }
+.comparison-table tr:last-child td { border-bottom: none; }
+
+/* ── Signup Form Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.3s;
+}
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: scaleIn 0.3s ease-out;
+}
+.modal-header {
+  padding: 28px 32px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.modal-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.modal-close:hover { color: var(--text); }
+
+.modal-body { padding: 24px 32px 32px; }
+
+.selected-plan-preview {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.selected-plan-preview .plan-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.selected-plan-preview .plan-price-label {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* ── Step indicator ── */
+.steps-indicator {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.step-dot {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--surface-elevated);
+  transition: background 0.3s;
+}
+.step-dot.active { background: var(--accent); }
+.step-dot.completed { background: var(--accent); opacity: 0.5; }
+
+/* ── Form Styles ── */
+.form-step { display: none; }
+.form-step.active { display: block; }
+
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(138,146,155,0.5);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A929B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+.form-group select option { background: var(--surface); }
+
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.checkbox-group label {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+.checkbox-group label a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+.btn-back {
+  padding: 14px 24px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-back:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
+.btn-next {
+  flex: 1;
+  padding: 14px 24px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  border: none;
+  color: var(--bg);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.btn-next:hover {
+  background: #5DCDB9;
+  box-shadow: 0 4px 20px rgba(74,189,172,0.3);
+}
+
+/* ── Success State ── */
+.success-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+.success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 2rem;
+}
+.success-state h3 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+.success-state p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+/* ── FAQ ── */
+.faq-section {
+  max-width: 720px;
+  margin: 0 auto 100px;
+  padding: 0 24px;
+}
+.faq-section h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+  padding: 20px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.faq-question::after {
+  content: '+';
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+.faq-item.open .faq-question::after { content: '−'; }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+.faq-answer p {
+  padding-bottom: 20px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+.faq-item.open .faq-answer { max-height: 300px; }
+
+/* ── Animations ── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav { padding: 16px 20px; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .hero { padding: 60px 20px 40px; }
+  .plans-grid { grid-template-columns: 1fr; max-width: 420px; }
+  .form-row { grid-template-columns: 1fr; }
+  .modal-body { padding: 20px 24px 28px; }
+  .modal-header { padding: 24px 24px 0; }
+  .comparison-table { font-size: 0.82rem; }
+  .comparison-table th, .comparison-table td { padding: 12px; }
+}
+```
+
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Navigation -->
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">Drip<span>.</span> Hydration</a>
+    <div class="nav-links">
+      <a href="/">Book IV</a>
+      <a href="#plans">Membership</a>
+      <a href="#faq">FAQ</a>
+      <a href="#plans" class="nav-cta">Join Now</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+
+  <section class="hero">
+    <div class="hero-badge">★ Members save up to 40%</div>
+    <h1>Your Wellness, <em>On Autopilot</em></h1>
+    <p>Subscribe to a monthly IV membership and get premium hydration therapy delivered to your door — for a fraction of the single-session price.</p>
+  </section>
+
+  <!-- Plans -->
+
+  <section class="plans-section" id="plans">
+    <div class="plans-grid">
+
+```
+  <!-- Essential Plan -->
+  <div class="plan-card" data-plan="essential">
+    <div class="plan-name">Essential</div>
+    <div class="plan-tagline">Perfect for monthly maintenance</div>
+    <div class="plan-price-row">
+      <div class="plan-price">$149</div>
+      <div class="plan-period">/month</div>
+    </div>
+    <div class="plan-per-session">1 IV session/month · $149/session</div>
+    <div class="plan-savings">↓ Save $100 vs. single booking ($249)</div>
+    <hr class="plan-divider" />
+    <ul class="plan-features">
+      <li>1 premium IV session per month</li>
+      <li>Choice of any standard IV drip</li>
+      <li>Free mobile delivery to your location</li>
+      <li>Priority scheduling</li>
+      <li>10% off add-on boosters</li>
+    </ul>
+    <button class="plan-cta plan-cta-secondary" onclick="openSignup('Essential', '$149/mo', 149)">Get Started</button>
+  </div>
+
+  <!-- Performance Plan (Featured) -->
+  <div class="plan-card featured" data-plan="performance">
+    <div class="plan-popular">Most Popular</div>
+    <div class="plan-name">Performance</div>
+    <div class="plan-tagline">For the committed wellness enthusiast</div>
+    <div class="plan-price-row">
+      <div class="plan-price">$259</div>
+      <div class="plan-period">/month</div>
+    </div>
+    <div class="plan-per-session">2 IV sessions/month · $129.50/session</div>
+    <div class="plan-savings">↓ Save $239/mo vs. two single bookings ($498)</div>
+    <hr class="plan-divider" />
+    <ul class="plan-features">
+      <li>2 premium IV sessions per month</li>
+      <li>Choice of any IV drip including premium blends</li>
+      <li>Free mobile delivery to your location</li>
+      <li>Same-day scheduling availability</li>
+      <li>15% off add-on boosters</li>
+      <li>Free vitamin B12 shot each visit</li>
+    </ul>
+    <button class="plan-cta plan-cta-primary" onclick="openSignup('Performance', '$259/mo', 259)">Get Started</button>
+  </div>
+
+  <!-- VIP Plan -->
+  <div class="plan-card" data-plan="vip">
+    <div class="plan-name">VIP Unlimited</div>
+    <div class="plan-tagline">The ultimate wellness experience</div>
+    <div class="plan-price-row">
+      <div class="plan-price">$449</div>
+      <div class="plan-period">/month</div>
+    </div>
+    <div class="plan-per-session">4 IV sessions/month · $112.25/session</div>
+    <div class="plan-savings">↓ Save $547/mo vs. four single bookings ($996)</div>
+    <hr class="plan-divider" />
+    <ul class="plan-features">
+      <li>4 premium IV sessions per month</li>
+      <li>Full access to all drip formulations</li>
+      <li>Free mobile delivery, any location</li>
+      <li>On-demand scheduling (24hr notice)</li>
+      <li>20% off all add-on boosters</li>
+      <li>Complimentary vitamin shots each visit</li>
+      <li>Dedicated wellness concierge</li>
+      <li>Guest pass: 1 free friend session/month</li>
+    </ul>
+    <button class="plan-cta plan-cta-secondary" onclick="openSignup('VIP Unlimited', '$449/mo', 449)">Get Started</button>
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- Comparison Table -->
+
+  <section class="comparison-section">
+    <h2>Single Session vs. Membership</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Single Booking</th>
+          <th>Membership</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Price per IV session</td>
+          <td>$249</td>
+          <td class="highlight">From $112/session</td>
+        </tr>
+        <tr>
+          <td>Mobile delivery fee</td>
+          <td>$25-50</td>
+          <td class="highlight">Always free</td>
+        </tr>
+        <tr>
+          <td>Scheduling priority</td>
+          <td>Standard (48hr)</td>
+          <td class="highlight">Same-day available</td>
+        </tr>
+        <tr>
+          <td>Add-on booster discounts</td>
+          <td>None</td>
+          <td class="highlight">10-20% off</td>
+        </tr>
+        <tr>
+          <td>Complimentary vitamin shots</td>
+          <td>—</td>
+          <td class="highlight">Included</td>
+        </tr>
+        <tr>
+          <td>Cancel anytime</td>
+          <td>—</td>
+          <td class="highlight">✓ No contracts</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- FAQ -->
+
+  <section class="faq-section" id="faq">
+    <h2>Questions? We've Got Answers</h2>
+
+```
+<div class="faq-item">
+  <button class="faq-question">How does the membership billing work?</button>
+  <div class="faq-answer">
+    <p>Your membership renews monthly on the date you sign up. You'll be charged automatically each month. Sessions that aren't used don't roll over, so we encourage you to book early each month!</p>
+  </div>
+</div>
+<div class="faq-item">
+  <button class="faq-question">Can I cancel or pause my membership?</button>
+  <div class="faq-answer">
+    <p>Absolutely. There are no long-term contracts. You can pause for up to 2 months or cancel anytime from your member dashboard. Cancellations take effect at the end of your current billing cycle.</p>
+  </div>
+</div>
+<div class="faq-item">
+  <button class="faq-question">Can I upgrade or downgrade my plan?</button>
+  <div class="faq-answer">
+    <p>Yes! Plan changes take effect at the start of your next billing cycle. If you upgrade mid-cycle, we'll prorate the difference so you can start enjoying your new benefits immediately.</p>
+  </div>
+</div>
+<div class="faq-item">
+  <button class="faq-question">Which IV drips are included?</button>
+  <div class="faq-answer">
+    <p>Essential members can choose from our standard menu (Hydration, Energy, Immunity, Recovery). Performance and VIP members get access to our full menu including premium formulations like NAD+, Myers' Cocktail Plus, and custom blends.</p>
+  </div>
+</div>
+<div class="faq-item">
+  <button class="faq-question">Where do you deliver?</button>
+  <div class="faq-answer">
+    <p>We deliver anywhere within our service area — your home, office, hotel, or event venue. Our nurses come to you with all necessary equipment. No clinic visit needed.</p>
+  </div>
+</div>
+```
+
+  </section>
+
+</div>
+
+<!-- ═══ SIGNUP MODAL ═══ -->
+
+<div class="modal-overlay" id="signupModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Join Drip Membership</h2>
+      <button class="modal-close" onclick="closeSignup()">&times;</button>
+    </div>
+    <div class="modal-body">
+
+```
+  <div class="selected-plan-preview">
+    <div>
+      <div class="plan-label" id="preview-plan">Performance Plan</div>
+    </div>
+    <div class="plan-price-label" id="preview-price">$259/mo</div>
+  </div>
+
+  <div class="steps-indicator">
+    <div class="step-dot active" data-step="1"></div>
+    <div class="step-dot" data-step="2"></div>
+    <div class="step-dot" data-step="3"></div>
+  </div>
+
+  <!-- Step 1: Personal Info -->
+  <div class="form-step active" id="step1">
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="Jane" id="firstName" required />
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Doe" id="lastName" required />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" placeholder="jane@email.com" id="email" required />
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" placeholder="(555) 123-4567" id="phone" required />
+    </div>
+    <div class="form-actions">
+      <button class="btn-next" onclick="goToStep(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Health & Preferences -->
+  <div class="form-step" id="step2">
+    <div class="form-group">
+      <label>Preferred IV Treatment</label>
+      <select id="treatment">
+        <option value="">Select your go-to drip...</option>
+        <option>Hydration Therapy</option>
+        <option>Energy Boost</option>
+        <option>Immunity Defense</option>
+        <option>Athletic Recovery</option>
+        <option>Myers' Cocktail</option>
+        <option>NAD+ Infusion</option>
+        <option>Beauty Glow</option>
+        <option>Not sure — help me choose</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Delivery Address</label>
+      <input type="text" placeholder="123 Main St, City, State ZIP" id="address" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Preferred Day</label>
+        <select id="prefDay">
+          <option value="">Any day</option>
+          <option>Weekdays</option>
+          <option>Weekends</option>
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+          <option>Saturday</option>
+          <option>Sunday</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Time</label>
+        <select id="prefTime">
+          <option value="">Any time</option>
+          <option>Morning (8–11am)</option>
+          <option>Midday (11am–2pm)</option>
+          <option>Afternoon (2–5pm)</option>
+          <option>Evening (5–8pm)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Health Notes <span style="font-weight:400; text-transform:none; letter-spacing:normal;">(allergies, conditions, medications)</span></label>
+      <textarea rows="3" placeholder="Any information our nurses should know..." id="healthNotes" style="resize:vertical;"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-back" onclick="goToStep(1)">← Back</button>
+      <button class="btn-next" onclick="goToStep(3)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Review & Confirm -->
+  <div class="form-step" id="step3">
+    <div id="reviewSummary" style="margin-bottom: 24px;"></div>
+    <div class="checkbox-group">
+      <input type="checkbox" id="agreeTerms" />
+      <label for="agreeTerms">I agree to the <a href="#">membership terms</a> and authorize monthly billing. I understand I can cancel anytime.</label>
+    </div>
+    <div class="checkbox-group" style="margin-top:12px;">
+      <input type="checkbox" id="agreeHealth" />
+      <label for="agreeHealth">I confirm the health information I provided is accurate and understand a nurse will review it before my first session.</label>
+    </div>
+    <div class="form-actions">
+      <button class="btn-back" onclick="goToStep(2)">← Back</button>
+      <button class="btn-next" onclick="submitSignup()">Confirm Membership →</button>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="form-step" id="stepSuccess">
+    <div class="success-state">
+      <div class="success-icon">💧</div>
+      <h3>Welcome to the Drip Family!</h3>
+      <p>Check your email for confirmation details and a link to schedule your first IV session. We can't wait to see you.</p>
+      <button class="btn-next" style="margin-top: 28px; max-width: 280px; margin-left: auto; margin-right: auto;" onclick="closeSignup()">Done</button>
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+  // ── Plan signup ──
+  let selectedPlan = {};
+
+  function openSignup(name, price, amount) {
+    selectedPlan = { name, price, amount };
+    document.getElementById('preview-plan').textContent = name + ' Plan';
+    document.getElementById('preview-price').textContent = price;
+    document.getElementById('signupModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    goToStep(1);
+  }
+
+  function closeSignup() {
+    document.getElementById('signupModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close modal on overlay click
+  document.getElementById('signupModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeSignup();
+  });
+
+  // ── Multi-step form ──
+  function goToStep(n) {
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+    document.getElementById(n === 'success' ? 'stepSuccess' : `step${n}`).classList.add('active');
+
+    document.querySelectorAll('.step-dot').forEach(dot => {
+      const s = parseInt(dot.dataset.step);
+      dot.classList.remove('active', 'completed');
+      if (n === 'success' || s < n) dot.classList.add('completed');
+      if (s === n) dot.classList.add('active');
+    });
+
+    if (n === 3) buildReview();
+  }
+
+  function buildReview() {
+    const data = {
+      Name: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
+      Email: document.getElementById('email').value,
+      Phone: document.getElementById('phone').value,
+      Plan: `${selectedPlan.name} — ${selectedPlan.price}`,
+      Treatment: document.getElementById('treatment').value || 'Not selected',
+      Address: document.getElementById('address').value || 'Not provided',
+    };
+    let html = '';
+    for (const [k, v] of Object.entries(data)) {
+      html += `<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:0.9rem;">
+        <span style="color:var(--text-muted);">${k}</span>
+        <span style="font-weight:500;text-align:right;max-width:60%;">${v}</span>
+      </div>`;
+    }
+    document.getElementById('reviewSummary').innerHTML = html;
+  }
+
+  function submitSignup() {
+    const t = document.getElementById('agreeTerms');
+    const h = document.getElementById('agreeHealth');
+    if (!t.checked || !h.checked) {
+      alert('Please agree to both checkboxes to continue.');
+      return;
+    }
+    // TODO: Wire up to your backend API here
+    // e.g., fetch('/api/membership', { method: 'POST', body: JSON.stringify({ ...formData, plan: selectedPlan }) })
+    goToStep('success');
+  }
+
+  // ── FAQ toggle ──
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // ── Escape key closes modal ──
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSignup();
+  });
+</script>
+
+</body>
+</html>

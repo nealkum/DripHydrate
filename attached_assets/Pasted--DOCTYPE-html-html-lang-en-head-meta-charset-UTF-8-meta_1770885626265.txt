@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IV Booking Form — Membership Upsell Component</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+```
+:root {
+  --bg: #0B0E11;
+  --surface: #12161B;
+  --surface-elevated: #1A1F26;
+  --border: rgba(255,255,255,0.06);
+  --text: #E8ECF0;
+  --text-muted: #8A929B;
+  --accent: #4ABDAC;
+  --accent-glow: rgba(74,189,172,0.12);
+  --gold: #D4A855;
+  --gold-glow: rgba(212,168,85,0.12);
+  --red-soft: #E85D5D;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.demo-container {
+  max-width: 560px;
+  width: 100%;
+}
+.demo-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+/* ════════════════════════════════════════
+   UPSELL COMPONENT — DROP THIS INTO YOUR
+   EXISTING BOOKING FORM
+   ════════════════════════════════════════ */
+
+.membership-upsell {
+  background: var(--surface);
+  border: 1px solid rgba(74,189,172,0.2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 24px 0;
+  animation: upsellSlideIn 0.5s ease-out;
+}
+
+/* Top savings banner */
+.upsell-banner {
+  background: linear-gradient(135deg, rgba(74,189,172,0.12) 0%, rgba(212,168,85,0.08) 100%);
+  border-bottom: 1px solid rgba(74,189,172,0.1);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.upsell-banner-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+.upsell-banner-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.upsell-banner-text strong {
+  color: var(--accent);
+}
+
+/* Price comparison */
+.upsell-body { padding: 24px 20px; }
+
+.price-comparison {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.price-option {
+  text-align: center;
+  padding: 16px 12px;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+}
+
+.price-option.single {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  opacity: 0.7;
+}
+.price-option.single .option-label { color: var(--text-muted); font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+.price-option.single .option-price {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 6px 0 2px;
+  text-decoration: line-through;
+  text-decoration-color: var(--red-soft);
+  color: var(--text-muted);
+}
+.price-option.single .option-detail { font-size: 0.78rem; color: var(--text-muted); }
+
+.price-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+}
+.price-arrow-line {
+  font-size: 1.5rem;
+  color: var(--accent);
+  animation: arrowBounce 1.5s infinite;
+}
+
+.price-option.member {
+  background: linear-gradient(180deg, rgba(74,189,172,0.08), transparent);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 4px rgba(74,189,172,0.08);
+}
+.price-option.member .option-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.price-option.member .option-price {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 6px 0 2px;
+  color: var(--text);
+}
+.price-option.member .option-detail { font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+
+/* Savings breakdown */
+.savings-breakdown {
+  background: var(--surface-elevated);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.savings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 0.85rem;
+}
+.savings-row .label { color: var(--text-muted); }
+.savings-row .value { font-weight: 600; }
+.savings-row.total {
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+  padding-top: 12px;
+}
+.savings-row.total .label { color: var(--accent); font-weight: 600; }
+.savings-row.total .value {
+  color: var(--accent);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* Benefits */
+.upsell-benefits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.upsell-benefit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.upsell-benefit::before {
+  content: '✓';
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* CTA buttons */
+.upsell-actions {
+  display: flex;
+  gap: 10px;
+}
+.upsell-btn {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+}
+.upsell-btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+.upsell-btn-primary:hover {
+  background: #5DCDB9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(74,189,172,0.3);
+}
+.upsell-btn-secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.upsell-btn-secondary:hover {
+  border-color: rgba(255,255,255,0.15);
+  color: var(--text);
+}
+
+.upsell-footnote {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  opacity: 0.7;
+}
+
+/* ── Dismissed state ── */
+.membership-upsell.dismissed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  transition: all 0.4s ease-out;
+}
+
+/* ── Mini upsell (shown after dismiss) ── */
+.upsell-mini {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.upsell-mini:hover { border-color: rgba(74,189,172,0.3); }
+.upsell-mini.visible { display: flex; }
+.upsell-mini-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.upsell-mini-text strong { color: var(--accent); }
+.upsell-mini-cta {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════════════
+   INLINE TOAST UPSELL — Shows during
+   treatment selection in booking form
+   ════════════════════════════════════════ */
+
+.inline-upsell-toast {
+  background: linear-gradient(135deg, rgba(74,189,172,0.08), rgba(212,168,85,0.05));
+  border: 1px solid rgba(74,189,172,0.15);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: toastSlide 0.4s ease-out;
+}
+.toast-savings-badge {
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.toast-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex: 1;
+}
+.toast-text strong { color: var(--text); }
+.toast-link {
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.toast-link:hover { text-decoration: underline; }
+
+/* ── Animations ── */
+@keyframes upsellSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastSlide {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,189,172,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(74,189,172,0); }
+}
+@keyframes arrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+@media (max-width: 480px) {
+  .price-comparison { grid-template-columns: 1fr; gap: 8px; }
+  .price-arrow { transform: rotate(90deg); padding: 4px 0; }
+  .upsell-benefits { grid-template-columns: 1fr; }
+  .upsell-actions { flex-direction: column; }
+}
+```
+
+  </style>
+</head>
+<body>
+
+<div class="demo-container">
+  <div class="demo-label">↓ Upsell Component #1 — Drop into booking form after treatment selection ↓</div>
+
+  <!-- ═══════════════════════════════════════════
+       COMPONENT: INLINE TOAST UPSELL
+       Shows when user selects a treatment
+       ═══════════════════════════════════════════ -->
+
+  <div class="inline-upsell-toast" id="inlineToast">
+    <div class="toast-savings-badge">SAVE $100</div>
+    <div class="toast-text"><strong>Members pay $149</strong> for this session instead of $249</div>
+    <a href="/membership" class="toast-link">See plans →</a>
+  </div>
+
+<br /><br />
+
+  <div class="demo-label">↓ Upsell Component #2 — Full comparison card, place before checkout button ↓</div>
+
+  <!-- ═══════════════════════════════════════════
+       COMPONENT: FULL MEMBERSHIP UPSELL CARD
+       Place before the "Book Now" button
+       ═══════════════════════════════════════════ -->
+
+  <div class="membership-upsell" id="upsellCard">
+
+```
+<div class="upsell-banner">
+  <div class="upsell-banner-icon">💧</div>
+  <div class="upsell-banner-text">
+    You'd <strong>save $100 today</strong> with a membership
+  </div>
+</div>
+
+<div class="upsell-body">
+
+  <!-- Side-by-side price comparison -->
+  <div class="price-comparison">
+    <div class="price-option single">
+      <div class="option-label">Single session</div>
+      <div class="option-price">$249</div>
+      <div class="option-detail">One-time price</div>
+    </div>
+    <div class="price-arrow">
+      <span class="price-arrow-line">→</span>
+    </div>
+    <div class="price-option member">
+      <div class="option-label">As a member</div>
+      <div class="option-price">$149</div>
+      <div class="option-detail">Save $100/session</div>
+    </div>
+  </div>
+
+  <!-- Savings breakdown -->
+  <div class="savings-breakdown">
+    <div class="savings-row">
+      <span class="label">This IV session (member rate)</span>
+      <span class="value">$149</span>
+    </div>
+    <div class="savings-row">
+      <span class="label">Mobile delivery fee</span>
+      <span class="value" style="text-decoration: line-through; color: var(--text-muted);">$25</span>
+      <span class="value" style="color: var(--accent); margin-left: 4px;">FREE</span>
+    </div>
+    <div class="savings-row total">
+      <span class="label">Your total savings today</span>
+      <span class="value">$125</span>
+    </div>
+  </div>
+
+  <!-- Extra benefits -->
+  <div class="upsell-benefits">
+    <div class="upsell-benefit">Priority scheduling</div>
+    <div class="upsell-benefit">Free delivery always</div>
+    <div class="upsell-benefit">10-20% off boosters</div>
+    <div class="upsell-benefit">Cancel anytime</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="upsell-actions">
+    <a href="/membership" class="upsell-btn upsell-btn-primary">Switch to Membership</a>
+    <button class="upsell-btn upsell-btn-secondary" onclick="dismissUpsell()">No thanks</button>
+  </div>
+  <div class="upsell-footnote">No contracts · Cancel anytime · First session today</div>
+
+</div>
+```
+
+  </div>
+
+  <!-- Mini upsell (appears after dismiss) -->
+
+  <div class="upsell-mini" id="upsellMini" onclick="restoreUpsell()">
+    <span class="upsell-mini-text">💡 Psst — members save <strong>$100+</strong> on this session</span>
+    <span class="upsell-mini-cta">See offer →</span>
+  </div>
+
+</div>
+
+<script>
+  // ── Dynamic savings calculation ──
+  // Call this when the user selects a treatment in your booking form
+  function updateUpsellPricing(singlePrice, memberPrice, deliveryFee) {
+    const savings = singlePrice - memberPrice + deliveryFee;
+
+    // Update toast
+    const toast = document.getElementById('inlineToast');
+    if (toast) {
+      toast.querySelector('.toast-savings-badge').textContent = `SAVE $${singlePrice - memberPrice}`;
+      toast.querySelector('.toast-text').innerHTML =
+        `<strong>Members pay $${memberPrice}</strong> for this session instead of $${singlePrice}`;
+    }
+
+    // Update full card
+    const card = document.getElementById('upsellCard');
+    if (card) {
+      card.querySelector('.upsell-banner-text').innerHTML =
+        `You'd <strong>save $${savings} today</strong> with a membership`;
+      card.querySelector('.price-option.single .option-price').textContent = `$${singlePrice}`;
+      card.querySelector('.price-option.member .option-price').textContent = `$${memberPrice}`;
+      card.querySelector('.price-option.member .option-detail').textContent = `Save $${singlePrice - memberPrice}/session`;
+    }
+  }
+
+  // ── Dismiss/restore upsell ──
+  function dismissUpsell() {
+    document.getElementById('upsellCard').classList.add('dismissed');
+    setTimeout(() => {
+      document.getElementById('upsellMini').classList.add('visible');
+    }, 400);
+  }
+
+  function restoreUpsell() {
+    document.getElementById('upsellMini').classList.remove('visible');
+    const card = document.getElementById('upsellCard');
+    card.classList.remove('dismissed');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ── INTEGRATION EXAMPLE ──
+  // In your existing booking form, hook into the treatment selector:
+  //
+  //   document.getElementById('your-treatment-select').addEventListener('change', (e) => {
+  //     const prices = {
+  //       'Hydration Therapy': { single: 199, member: 149 },
+  //       'Energy Boost':      { single: 249, member: 149 },
+  //       'Immunity Defense':  { single: 249, member: 149 },
+  //       'Myers Cocktail':    { single: 299, member: 189 },
+  //       'NAD+ Infusion':     { single: 399, member: 279 },
+  //     };
+  //     const selected = prices[e.target.value];
+  //     if (selected) {
+  //       updateUpsellPricing(selected.single, selected.member, 25);
+  //       document.querySelector('.membership-upsell').style.display = 'block';
+  //       document.querySelector('.inline-upsell-toast').style.display = 'flex';
+  //     }
+  //   });
+</script>
+
+</body>
+</html>
