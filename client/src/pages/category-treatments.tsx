@@ -44,7 +44,7 @@ export default function CategoryTreatments() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Category not found</h2>
+          <h2 className="font-serif text-2xl font-bold mb-4">Category not found</h2>
           <Button asChild>
             <Link href="/treatments">Browse All Treatments</Link>
           </Button>
@@ -69,7 +69,7 @@ export default function CategoryTreatments() {
         </Button>
 
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-semibold text-foreground mb-4">
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
             {category.name}
           </h1>
           <p className="text-lg text-muted-foreground">

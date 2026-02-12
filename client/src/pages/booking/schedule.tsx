@@ -72,7 +72,7 @@ export default function BookingSchedule() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Treatment not found</h2>
+          <h2 className="font-serif text-2xl font-bold mb-4">Treatment not found</h2>
           <Button asChild>
             <Link href="/treatments">Browse Treatments</Link>
           </Button>

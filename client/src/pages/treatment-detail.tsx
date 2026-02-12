@@ -61,7 +61,7 @@ export default function TreatmentDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Treatment not found</h2>
+          <h2 className="font-serif text-2xl font-bold mb-4">Treatment not found</h2>
           <Button asChild>
             <Link href="/treatments">Browse All Treatments</Link>
           </Button>
@@ -132,7 +132,7 @@ export default function TreatmentDetail() {
                 </Badge>
               )}
             </div>
-            <h1 className="text-4xl md:text-5xl font-semibold text-foreground mb-4" data-testid="text-treatment-name">
+            <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4" data-testid="text-treatment-name">
               {treatment.name}
             </h1>
             <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
@@ -143,7 +143,7 @@ export default function TreatmentDetail() {
               {memberFormatted && (
                 <div className="flex items-center gap-2" data-testid="text-member-price">
                   <span className="text-xl font-bold text-primary">${memberFormatted}</span>
-                  <Badge variant="outline" className="text-[10px] font-semibold border-green-300 bg-green-50 text-green-700 no-default-hover-elevate no-default-active-elevate">
+                  <Badge variant="outline" className="text-[10px] font-semibold border-emerald-500/30 bg-emerald-500/10 text-emerald-400 no-default-hover-elevate no-default-active-elevate">
                     Save ${savingsFormatted} ({savingsPercent}%)
                   </Badge>
                 </div>
@@ -258,7 +258,7 @@ export default function TreatmentDetail() {
           </div>
 
           {/* How It Works mini */}
-          <Card className="bg-muted/30">
+          <Card className="bg-accent/30">
             <CardContent className="p-6" data-testid="section-how-it-works">
               <h2 className="text-xl font-semibold mb-4">How It Works</h2>
               <div className="grid sm:grid-cols-3 gap-4">

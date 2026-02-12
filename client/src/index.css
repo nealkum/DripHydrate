@@ -2,92 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-/* LIGHT MODE */
+/* PREMIUM DARK THEME — Drip Hydration */
 :root {
-  --button-outline: rgba(0,0,0, .10);
-  --badge-outline: rgba(0,0,0, .05);
+  --button-outline: rgba(255,255,255, .10);
+  --badge-outline: rgba(255,255,255, .05);
 
-  /* Automatic computation of border around primary / danger buttons */
-  --opaque-button-border-intensity: -8; /* In terms of percentages */
+  --opaque-button-border-intensity: 9;
 
-  /* Backgrounds applied on top of other backgrounds when hovered/active */
-  --elevate-1: rgba(0,0,0, .03);
-  --elevate-2: rgba(0,0,0, .08);
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .09);
 
-  --background: 0 0% 100%;
+  --background: 155 16% 12%;
 
-  --foreground: 0 0% 10%;
+  --foreground: 60 6% 94%;
 
-  --border: 210 20% 90%;
+  --border: 171 19% 22%;
 
-  --card: 0 0% 100%;
+  --card: 168 17% 17%;
 
-  --card-foreground: 0 0% 10%;
+  --card-foreground: 60 6% 94%;
 
-  --card-border: 210 20% 90%;
+  --card-border: 171 19% 22%;
 
-  --sidebar: 210 20% 96%;
+  --sidebar: 155 16% 10%;
 
-  --sidebar-foreground: 210 20% 15%;
+  --sidebar-foreground: 60 6% 94%;
 
-  --sidebar-border: 210 20% 92%;
+  --sidebar-border: 171 19% 18%;
 
-  --sidebar-primary: 194 43% 37%;
+  --sidebar-primary: 166 39% 55%;
 
-  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-primary-foreground: 155 16% 12%;
 
-  --sidebar-accent: 194 20% 92%;
+  --sidebar-accent: 166 20% 18%;
 
-  --sidebar-accent-foreground: 0 0% 10%;
+  --sidebar-accent-foreground: 60 6% 94%;
 
-  --sidebar-ring: 194 43% 37%;
+  --sidebar-ring: 166 39% 55%;
 
-  --popover: 0 0% 100%;
+  --popover: 168 17% 17%;
 
-  --popover-foreground: 0 0% 10%;
+  --popover-foreground: 60 6% 94%;
 
-  --popover-border: 210 20% 90%;
+  --popover-border: 171 19% 22%;
 
-  --primary: 194 43% 37%;
+  --primary: 166 39% 55%;
 
-  --primary-foreground: 0 0% 100%;
+  --primary-foreground: 155 30% 10%;
 
-  --secondary: 210 16% 90%;
+  --secondary: 168 14% 22%;
 
-  --secondary-foreground: 210 20% 15%;
+  --secondary-foreground: 60 6% 94%;
 
-  --muted: 210 20% 95%;
+  --muted: 160 12% 20%;
 
-  --muted-foreground: 210 12% 50%;
+  --muted-foreground: 153 4% 55%;
 
-  --accent: 180 12% 94%;
+  --accent: 160 15% 18%;
 
-  --accent-foreground: 210 20% 15%;
+  --accent-foreground: 60 6% 94%;
 
-  --destructive: 0 70% 45%;
+  --destructive: 0 65% 50%;
 
-  --destructive-foreground: 0 70% 98%;
+  --destructive-foreground: 0 65% 98%;
 
-  --input: 210 20% 80%;
-  --ring: 194 43% 37%;
-  --chart-1: 194 43% 37%;
-  --chart-2: 180 70% 40%;
-  --chart-3: 150 60% 40%;
-  --chart-4: 210 60% 45%;
-  --chart-5: 230 70% 50%;
+  --input: 171 15% 28%;
+  --ring: 166 39% 55%;
+  --chart-1: 166 39% 55%;
+  --chart-2: 180 65% 65%;
+  --chart-3: 150 55% 60%;
+  --chart-4: 210 55% 65%;
+  --chart-5: 230 65% 70%;
 
   --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-mono: Menlo, Monaco, 'Courier New', monospace;
   --radius: .5rem; /* 8px */
-  --shadow-2xs: 0px 1px 2px 0px hsl(210 20% 15% / 0.05);
-  --shadow-xs: 0px 1px 3px 0px hsl(210 20% 15% / 0.08);
-  --shadow-sm: 0px 2px 4px 0px hsl(210 20% 15% / 0.06), 0px 1px 2px -1px hsl(210 20% 15% / 0.04);
-  --shadow: 0px 4px 6px -1px hsl(210 20% 15% / 0.08), 0px 2px 4px -1px hsl(210 20% 15% / 0.04);
-  --shadow-md: 0px 6px 12px -2px hsl(210 20% 15% / 0.10), 0px 3px 6px -2px hsl(210 20% 15% / 0.05);
-  --shadow-lg: 0px 10px 20px -4px hsl(210 20% 15% / 0.12), 0px 4px 8px -2px hsl(210 20% 15% / 0.06);
-  --shadow-xl: 0px 20px 30px -6px hsl(210 20% 15% / 0.15), 0px 8px 12px -4px hsl(210 20% 15% / 0.08);
-  --shadow-2xl: 0px 25px 50px -12px hsl(210 20% 15% / 0.20);
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.20);
+  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.25);
+  --shadow-sm: 0px 2px 4px 0px hsl(0 0% 0% / 0.20), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow: 0px 4px 6px -1px hsl(0 0% 0% / 0.25), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
+  --shadow-md: 0px 6px 12px -2px hsl(0 0% 0% / 0.30), 0px 3px 6px -2px hsl(0 0% 0% / 0.20);
+  --shadow-lg: 0px 10px 20px -4px hsl(0 0% 0% / 0.35), 0px 4px 8px -2px hsl(0 0% 0% / 0.25);
+  --shadow-xl: 0px 20px 30px -6px hsl(0 0% 0% / 0.40), 0px 8px 12px -4px hsl(0 0% 0% / 0.30);
+  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.50);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 

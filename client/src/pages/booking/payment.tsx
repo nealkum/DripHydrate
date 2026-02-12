@@ -142,7 +142,7 @@ export default function BookingPayment() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Treatment not found</h2>
+          <h2 className="font-serif text-2xl font-bold mb-4">Treatment not found</h2>
           <Button asChild>
             <Link href="/treatments">Browse Treatments</Link>
           </Button>
@@ -520,7 +520,7 @@ export default function BookingPayment() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <p className="font-semibold text-foreground text-sm">Membership Applied</p>
-                        <Badge variant="outline" className="text-[10px] font-semibold border-green-300 bg-green-50 text-green-700 no-default-hover-elevate no-default-active-elevate">
+                        <Badge variant="outline" className="text-[10px] font-semibold border-emerald-500/30 bg-emerald-500/10 text-emerald-400 no-default-hover-elevate no-default-active-elevate">
                           Saving ${savings}
                         </Badge>
                       </div>

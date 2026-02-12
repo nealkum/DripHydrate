@@ -46,7 +46,7 @@ export default function BookingConfirmation() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Appointment not found</h2>
+          <h2 className="font-serif text-2xl font-bold mb-4">Appointment not found</h2>
           <p className="text-muted-foreground mb-6">
             We couldn't find your appointment details.
           </p>
@@ -69,7 +69,7 @@ export default function BookingConfirmation() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4">
             <CheckCircle2 className="w-10 h-10 text-primary" data-testid="icon-success" />
           </div>
-          <h1 className="text-4xl font-semibold text-foreground mb-2">
+          <h1 className="font-serif text-4xl font-bold text-foreground mb-2">
             Booking Confirmed!
           </h1>
           <p className="text-lg text-muted-foreground">
@@ -160,7 +160,7 @@ export default function BookingConfirmation() {
           </CardContent>
         </Card>
 
-        <Card className="bg-accent/50 mb-6">
+        <Card className="bg-accent/30 mb-6">
           <CardContent className="pt-6">
             <h3 className="font-semibold text-foreground mb-3">What's Next?</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">

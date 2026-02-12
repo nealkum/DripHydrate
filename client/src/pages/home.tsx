@@ -72,11 +72,11 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-primary/5 py-16 md:py-24" data-testid="section-hero">
+      <section className="relative py-16 md:py-24" data-testid="section-hero">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center max-w-4xl mx-auto space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-              Premium IV Therapy — <span className="text-primary">Delivered to You</span>
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
+              Premium IV Therapy — <span className="text-primary italic">Delivered to You</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
               Licensed nurses at your door in as little as 2 hours. 100+ cities worldwide.
@@ -105,7 +105,7 @@ export default function Home() {
       </section>
 
       {/* Trust Bar */}
-      <section className="py-6 border-b" data-testid="section-trust-bar">
+      <section className="py-6 border-b border-t" data-testid="section-trust-bar">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5" data-testid="trust-rating">
@@ -141,8 +141,8 @@ export default function Home() {
       <section className="py-12 md:py-16" data-testid="section-symptoms">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              What do you need <span className="text-primary">help with?</span>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
+              What do you need <span className="text-primary italic">help with?</span>
             </h2>
             <p className="text-muted-foreground">
               Select a concern and we'll recommend the best treatment for you.
@@ -171,11 +171,11 @@ export default function Home() {
       </section>
 
       {/* Categories */}
-      <section className="py-12 md:py-16 bg-muted/30" data-testid="section-categories">
+      <section className="py-12 md:py-16 bg-accent/30" data-testid="section-categories">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              The first step to better health <span className="text-primary">is just a drip away</span>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
+              The first step to better health <span className="text-primary italic">is just a drip away</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Explore our range of in-home vitamin IV treatments designed for optimal health.
@@ -236,8 +236,8 @@ export default function Home() {
       <section className="py-12 md:py-16" data-testid="section-how-it-works">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              How it <span className="text-primary">works</span>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
+              How it <span className="text-primary italic">works</span>
             </h2>
             <p className="text-muted-foreground">
               Experience seamless wellness with our at-home IV therapy.
@@ -289,11 +289,11 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-12 md:py-16 bg-muted/30" data-testid="section-testimonials">
+      <section className="py-12 md:py-16 bg-accent/30" data-testid="section-testimonials">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Hear from our <span className="text-primary">clients</span>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Hear from our <span className="text-primary italic">clients</span>
             </h2>
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
               <div className="flex">
@@ -336,16 +336,16 @@ export default function Home() {
       {/* Membership CTA */}
       <section className="py-12 md:py-16" data-testid="section-membership-cta">
         <div className="container mx-auto px-4 max-w-7xl">
-          <Card className="bg-primary/5 border-primary/20">
+          <Card className="border-primary/20 bg-primary/5">
             <CardContent className="p-8 md:p-12 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-                Save with a Membership
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-3">
+                Save with a <span className="text-primary italic">Membership</span>
               </h2>
               <p className="text-muted-foreground mb-2 max-w-2xl mx-auto">
                 Members save up to 40% per treatment plus exclusive perks like priority booking and member-only promotions.
               </p>
               <p className="text-sm text-muted-foreground mb-6">
-                Plans starting at <span className="font-semibold text-foreground">$295/month</span> &middot; HSA/FSA Eligible
+                Plans starting at <span className="font-semibold text-foreground">$149/month</span> &middot; HSA/FSA Eligible
               </p>
               <Button
                 size="lg"
@@ -361,11 +361,11 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="py-12 md:py-16 bg-muted/30" data-testid="section-faq">
+      <section className="py-12 md:py-16 bg-accent/30" data-testid="section-faq">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Frequently asked <span className="text-primary">questions</span>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Frequently asked <span className="text-primary italic">questions</span>
             </h2>
           </div>
           <Accordion type="single" collapsible className="w-full">

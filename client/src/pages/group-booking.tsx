@@ -40,7 +40,7 @@ export default function GroupBooking() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">
             <Check className="w-10 h-10 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-3">Request Submitted</h1>
+          <h1 className="font-serif text-3xl font-bold text-foreground mb-3">Request Submitted</h1>
           <p className="text-lg text-muted-foreground mb-8">
             Our team will reach out within 24 hours to help plan your group experience.
           </p>
@@ -67,7 +67,7 @@ export default function GroupBooking() {
             <Users className="w-3 h-3 mr-1" />
             Group Bookings
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4" data-testid="text-group-heading">
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4" data-testid="text-group-heading">
             Group IV Therapy
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
