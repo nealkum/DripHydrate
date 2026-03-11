@@ -1,13 +1,15 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { 
-  Droplet, Zap, MapPin, Clock, Shield, Star, 
+import {
+  Droplet, Zap, MapPin, Clock, Shield, Star,
   Search, Heart, Battery, Brain, Dumbbell, Sparkles,
   Stethoscope, CheckCircle2, Users, Award, Package
 } from "lucide-react";
+import heroPhoto from "@assets/photoshoot/drip-shoot-8241.jpeg";
+import photo2 from "@assets/photoshoot/drip-shoot-9277.jpeg";
+import photo3 from "@assets/photoshoot/drip-shoot-1036.jpeg";
 
 const symptomFilters = [
   { label: "Hangover", icon: Droplet, slug: "hangover-iv" },
@@ -71,29 +73,47 @@ const faqItems = [
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-16 md:py-24" data-testid="section-hero">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center max-w-4xl mx-auto space-y-6">
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-              Premium IV Therapy — <span className="text-primary italic">Delivered to You</span>
+      {/* Hero Section — full bleed photo */}
+      <section className="relative min-h-[88vh] flex items-center" data-testid="section-hero">
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={heroPhoto}
+            alt="Woman relaxing during in-home IV therapy session"
+            className="w-full h-full object-cover object-top"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        </div>
+
+        <div className="relative container mx-auto px-4 max-w-7xl py-20 md:py-28">
+          <div className="max-w-lg space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm">
+              <Shield className="w-3 h-3" />
+              Licensed RNs &middot; Same-Day Appointments
+            </div>
+
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
+              Premium IV Therapy —{" "}
+              <span className="text-primary italic">Delivered to You</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+
+            <p className="text-lg text-white/75 leading-relaxed">
               Licensed nurses at your door in as little as 2 hours. 100+ cities worldwide.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
-              <Button 
-                size="lg" 
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <Button
+                size="lg"
                 className="font-semibold uppercase"
                 asChild
                 data-testid="button-browse-treatments"
               >
                 <Link href="/treatments">Browse Treatments</Link>
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="font-semibold uppercase"
+              <Button
+                size="lg"
+                variant="outline"
+                className="font-semibold uppercase text-white border-white/40 bg-white/5 backdrop-blur-sm"
                 asChild
                 data-testid="button-membership"
               >
@@ -105,7 +125,7 @@ export default function Home() {
       </section>
 
       {/* Trust Bar */}
-      <section className="py-6 border-b border-t" data-testid="section-trust-bar">
+      <section className="py-5 border-b border-t bg-card" data-testid="section-trust-bar">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5" data-testid="trust-rating">
@@ -127,7 +147,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-1.5" data-testid="trust-nurses">
               <Stethoscope className="w-4 h-4 text-primary" />
-              <span><span className="font-semibold text-foreground">Doctor-Owned</span> & Directed</span>
+              <span><span className="font-semibold text-foreground">Doctor-Owned</span> &amp; Directed</span>
             </div>
             <div className="flex items-center gap-1.5" data-testid="trust-years">
               <Award className="w-4 h-4 text-primary" />
@@ -171,7 +191,7 @@ export default function Home() {
       </section>
 
       {/* Categories */}
-      <section className="py-12 md:py-16 bg-accent/30" data-testid="section-categories">
+      <section className="py-12 md:py-16 bg-accent/20" data-testid="section-categories">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-10">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
@@ -210,15 +230,15 @@ export default function Home() {
             ].map((category) => {
               const Icon = category.icon;
               return (
-                <Card 
-                  key={category.id} 
+                <Card
+                  key={category.id}
                   className="hover-elevate transition-all duration-200 cursor-pointer"
                   data-testid={`card-category-${category.id}`}
                 >
                   <Link href={`/treatments/${category.slug}`}>
                     <div className="p-6 space-y-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-lg bg-primary/15 flex items-center justify-center">
                           <Icon className="w-6 h-6 text-primary" />
                         </div>
                         <div>
@@ -240,8 +260,62 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Photo Feature — The Experience */}
+      <section className="py-12 md:py-20" data-testid="section-experience">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="space-y-5">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground leading-tight">
+                Luxury wellness, <span className="text-primary italic">at home</span>
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                Drip Hydration brings the spa experience directly to you. Relax in the comfort of your own home while a licensed registered nurse administers your treatment.
+              </p>
+              <ul className="space-y-3">
+                {[
+                  "Licensed RNs with ER/ICU experience",
+                  "All supplies included — no setup required",
+                  "Vitals monitored throughout your session",
+                  "Treatments tailored to your needs",
+                ].map((point) => (
+                  <li key={point} className="flex items-start gap-3 text-sm text-muted-foreground">
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button
+                size="lg"
+                variant="outline"
+                className="font-semibold uppercase mt-2"
+                asChild
+                data-testid="button-learn-more"
+              >
+                <Link href="/treatments">View All Treatments</Link>
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-lg overflow-hidden aspect-[3/4]">
+                <img
+                  src={photo2}
+                  alt="Client relaxing during IV therapy session"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="rounded-lg overflow-hidden aspect-[3/4] mt-8">
+                <img
+                  src={photo3}
+                  alt="Premium in-home IV therapy experience"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works */}
-      <section className="py-12 md:py-16" data-testid="section-how-it-works">
+      <section className="py-12 md:py-16 bg-accent/20" data-testid="section-how-it-works">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-10">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
@@ -275,7 +349,7 @@ export default function Home() {
               const Icon = item.icon;
               return (
                 <div key={item.step} className="text-center" data-testid={`step-${item.step}`}>
-                  <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                  <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/15 mb-4">
                     <Icon className="w-7 h-7 text-primary" />
                     <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
                       {item.step}
@@ -291,7 +365,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-12 md:py-16 bg-accent/30" data-testid="section-testimonials">
+      <section className="py-12 md:py-16" data-testid="section-testimonials">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-10">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
@@ -317,10 +391,10 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-muted-foreground text-sm leading-relaxed flex-1 mb-4">
-                    "{review.text}"
+                    &ldquo;{review.text}&rdquo;
                   </p>
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
                       <span className="text-xs font-semibold text-primary">{review.name[0]}</span>
                     </div>
                     <div>
@@ -336,9 +410,9 @@ export default function Home() {
       </section>
 
       {/* Membership CTA */}
-      <section className="py-12 md:py-16" data-testid="section-membership-cta">
+      <section className="py-12 md:py-16 bg-accent/20" data-testid="section-membership-cta">
         <div className="container mx-auto px-4 max-w-7xl">
-          <Card className="border-primary/20 bg-primary/5">
+          <Card className="border-primary/30 bg-primary/10">
             <CardContent className="p-8 md:p-12 text-center">
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-3">
                 Save with a <span className="text-primary italic">Membership</span>
@@ -363,7 +437,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="py-12 md:py-16 bg-accent/30" data-testid="section-faq">
+      <section className="py-12 md:py-16" data-testid="section-faq">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">

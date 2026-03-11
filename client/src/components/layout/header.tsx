@@ -17,17 +17,16 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="group" data-testid="link-logo">
-            <img 
-              src={logoPath} 
-              alt="Drip Hydration Logo" 
+        <div className="flex h-16 items-center justify-between gap-4">
+          <Link href="/" className="group flex-shrink-0" data-testid="link-logo">
+            <img
+              src={logoPath}
+              alt="Drip Hydration Logo"
               className="h-14 w-auto transition-transform group-hover:scale-105"
+              style={{ filter: 'brightness(0) invert(1)' }}
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <Button
@@ -41,14 +40,12 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:block">
+          <div className="hidden md:block flex-shrink-0">
             <Button asChild size="lg" className="font-semibold uppercase" data-testid="button-book-treatment">
               <Link href="/treatments">Book Now</Link>
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
@@ -60,7 +57,6 @@ export function Header() {
           </Button>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t py-4 space-y-2" data-testid="mobile-menu">
             {navItems.map((item) => (
@@ -75,8 +71,8 @@ export function Header() {
                 <Link href={item.href}>{item.label}</Link>
               </Button>
             ))}
-            <Button 
-              className="w-full font-semibold uppercase" 
+            <Button
+              className="w-full font-semibold uppercase"
               asChild
               onClick={() => setMobileMenuOpen(false)}
               data-testid="mobile-button-book-treatment"

@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Check, Star, ArrowRight, Droplets, ArrowDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import membershipHero from "@assets/photoshoot/drip-shoot-9362.jpeg";
+import membershipPhoto from "@assets/photoshoot/drip-shoot-2089.jpeg";
 
 interface PlanData {
   name: string;
@@ -183,27 +185,38 @@ export default function Membership() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
-      <section className="relative py-16 md:py-24 lg:py-32">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center max-w-3xl mx-auto space-y-6">
+      {/* Hero — full bleed photo */}
+      <section className="relative min-h-[75vh] flex items-center" data-testid="section-hero">
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={membershipHero}
+            alt="Drip Hydration IV bag — premium in-home therapy"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        </div>
+
+        <div className="relative container mx-auto px-4 max-w-7xl py-20 md:py-28">
+          <div className="max-w-lg space-y-6">
             <div
-              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm"
               data-testid="badge-hero-savings"
             >
               <Star className="w-3.5 h-3.5 fill-current" />
               Members save up to 40%
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-              Your Wellness, <span className="italic text-primary">On Autopilot</span>
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
+              Your Wellness,{" "}
+              <span className="italic text-primary">On Autopilot</span>
             </h1>
-            <p className="text-lg md:text-xl leading-relaxed max-w-xl mx-auto text-muted-foreground">
+            <p className="text-lg md:text-xl leading-relaxed text-white/75">
               Subscribe to a monthly IV membership and get premium hydration therapy delivered to your door — for a fraction of the single-session price.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <Button
                 size="lg"
-                className="rounded-full font-semibold uppercase px-8"
+                className="font-semibold uppercase"
                 asChild
                 data-testid="button-join-now"
               >
@@ -212,14 +225,14 @@ export default function Membership() {
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-full font-semibold uppercase px-8"
+                className="font-semibold uppercase text-white border-white/40 bg-white/5 backdrop-blur-sm"
                 asChild
                 data-testid="button-view-plans"
               >
                 <a href="#plans">View Plans</a>
               </Button>
             </div>
-            <p className="text-sm pt-2 text-muted-foreground">
+            <p className="text-sm text-white/60">
               100,000+ happy patients served
             </p>
           </div>
@@ -293,33 +306,44 @@ export default function Membership() {
       </section>
 
       {/* Comparison Table */}
-      <section className="py-16 md:py-20 bg-accent/30">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-10 text-foreground">
-            Single Session vs. Membership
-          </h2>
-          <Card className="overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full" data-testid="table-comparison">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-4 font-semibold text-sm text-foreground">Feature</th>
-                    <th className="text-center p-4 font-semibold text-sm text-muted-foreground">Single Booking</th>
-                    <th className="text-center p-4 font-semibold text-sm text-primary">Membership</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonRows.map((row, idx) => (
-                    <tr key={idx} className={idx < comparisonRows.length - 1 ? 'border-b' : ''}>
-                      <td className="p-4 text-sm text-muted-foreground">{row.feature}</td>
-                      <td className="p-4 text-sm text-center text-muted-foreground">{row.single}</td>
-                      <td className="p-4 text-sm text-center font-semibold text-primary">{row.member}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      <section className="py-16 md:py-20 bg-accent/20">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div className="rounded-lg overflow-hidden aspect-[3/4] hidden md:block">
+              <img
+                src={membershipPhoto}
+                alt="Member enjoying IV therapy at home"
+                className="w-full h-full object-cover"
+              />
             </div>
-          </Card>
+            <div>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold mb-8 text-foreground">
+                Single Session vs. <span className="text-primary italic">Membership</span>
+              </h2>
+              <Card className="overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full" data-testid="table-comparison">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-4 font-semibold text-sm text-foreground">Feature</th>
+                        <th className="text-center p-4 font-semibold text-sm text-muted-foreground">Single</th>
+                        <th className="text-center p-4 font-semibold text-sm text-primary">Member</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {comparisonRows.map((row, idx) => (
+                        <tr key={idx} className={idx < comparisonRows.length - 1 ? 'border-b' : ''}>
+                          <td className="p-4 text-sm text-muted-foreground">{row.feature}</td>
+                          <td className="p-4 text-sm text-center text-muted-foreground">{row.single}</td>
+                          <td className="p-4 text-sm text-center font-semibold text-primary">{row.member}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 

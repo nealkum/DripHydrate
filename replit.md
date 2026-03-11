@@ -20,8 +20,9 @@ Preferred communication style: Simple, everyday language.
 **UI Component System**
 - Shadcn/ui component library (New York style variant) with Radix UI primitives
 - Tailwind CSS for utility-first styling with custom design tokens
-- CSS variables for consistent theming (light mode only - clean white medical aesthetic)
-- Drip Hydration brand colors: Dark teal primary (#367588 / HSL 194 43% 37%), white backgrounds, near-black text
+- CSS variables for consistent theming (dark theme active via `class="dark"` on html element)
+- Drip Hydration brand colors: Dark teal primary (HSL 194 43% 45% in dark theme), dark navy backgrounds, light text
+- Logo uses `filter: brightness(0) invert(1)` in header and footer for dark background visibility
 - Treatment cards without product images, with ingredient tags and Book Now + Details buttons
 - All CTAs styled with uppercase text and brand teal styling
 - Sticky bottom CTA bar on all pages (hidden during booking flow)
@@ -89,6 +90,14 @@ NAD+ Injections, NAD+ Nasal Spray, Niagen® NR Injections, Sermorelin (Peptide),
 3. Schedule selection (date and time)
 4. Payment and contact information
 5. Confirmation with appointment details
+
+**Photography Assets**
+- 19 professional photoshoot images stored in `attached_assets/photoshoot/` (extracted from UK_PHOTOSHOOT ZIP)
+- Homepage hero uses `drip-shoot-8241.jpeg` (woman smiling, receiving IV therapy)
+- Homepage experience section uses `drip-shoot-9277.jpeg` and `drip-shoot-1036.jpeg` (2-photo grid)
+- Membership page hero uses `drip-shoot-9362.jpeg` (close-up of branded IV bag)
+- Membership comparison section uses `drip-shoot-2089.jpeg` (woman on sofa, IV therapy)
+- Photo heroes use gradient overlays (`from-black/85 via-black/60 to-black/20`) over full-bleed images
 
 **Homepage Sections**
 - Simplified hero with clear value proposition and trust badge
