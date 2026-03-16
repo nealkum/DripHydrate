@@ -69,29 +69,29 @@ const faqItems = [
   },
 ];
 
-const membershipPlans = [
+const homeMembershipTypes = [
   {
-    name: "Essential",
-    sessions: 1,
-    price: 149,
-    singlePrice: 249,
-    savings: 100,
+    id: "iv",
+    name: "IV Membership",
+    tagline: "Vitamin IV wellness",
+    startingPrice: 279,
+    savingsPercent: 25,
     featured: false,
   },
   {
-    name: "Performance",
-    sessions: 2,
-    price: 259,
-    singlePrice: 498,
-    savings: 239,
+    id: "nad",
+    name: "NAD IV Membership",
+    tagline: "Cellular energy & longevity",
+    startingPrice: 749,
+    savingsPercent: 15,
     featured: true,
   },
   {
-    name: "VIP Unlimited",
-    sessions: 4,
-    price: 449,
-    singlePrice: 996,
-    savings: 547,
+    id: "niagen",
+    name: "Niagen IV Membership",
+    tagline: "NR-powered daily health",
+    startingPrice: 749,
+    savingsPercent: 30,
     featured: false,
   },
 ];
@@ -391,7 +391,7 @@ export default function Home() {
               <div className="p-8 md:p-12 flex flex-col justify-center space-y-6 border-b lg:border-b-0 lg:border-r border-primary/20">
                 <div className="inline-flex items-center gap-2 w-fit rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-primary/20 text-primary border border-primary/30">
                   <Star className="w-3 h-3 fill-current" />
-                  Membership — Save up to 40%
+                  Membership — Save up to 45%
                 </div>
 
                 <div>
@@ -443,51 +443,43 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Right column — plan price cards */}
+              {/* Right column — membership type cards */}
               <div className="p-8 md:p-12 flex flex-col justify-center space-y-4">
                 <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">
-                  Membership plans
+                  Choose your membership type
                 </p>
-                {membershipPlans.map((plan) => (
-                  <div
-                    key={plan.name}
-                    className={`relative rounded-xl border p-5 flex items-center justify-between gap-4 transition-all ${
-                      plan.featured
-                        ? "border-primary bg-primary/15 shadow-md"
+                {homeMembershipTypes.map((type) => (
+                  <Link
+                    key={type.id}
+                    href={`/membership`}
+                    className={`relative rounded-xl border p-5 flex items-center justify-between gap-4 transition-all hover-elevate cursor-pointer no-underline ${
+                      type.featured
+                        ? "border-primary bg-primary/15"
                         : "border-border bg-card/50"
                     }`}
-                    data-testid={`membership-plan-${plan.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    data-testid={`membership-type-${type.id}`}
                   >
-                    {plan.featured && (
+                    {type.featured && (
                       <div className="absolute -top-3 left-4">
                         <Badge className="text-[10px] font-semibold uppercase px-2.5 py-0.5 no-default-hover-elevate no-default-active-elevate">
                           Most Popular
                         </Badge>
                       </div>
                     )}
-
                     <div>
-                      <p className={`font-semibold text-base ${plan.featured ? 'text-foreground' : 'text-foreground'}`}>
-                        {plan.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {plan.sessions} IV session{plan.sessions > 1 ? 's' : ''} / month
-                      </p>
+                      <p className="font-semibold text-base text-foreground">{type.name}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{type.tagline}</p>
                     </div>
-
                     <div className="text-right flex-shrink-0">
-                      <div className="text-xs text-muted-foreground line-through">
-                        ${plan.singlePrice}/mo single
-                      </div>
                       <div className="text-xl font-bold text-foreground">
-                        ${plan.price}
+                        From ${type.startingPrice.toLocaleString()}
                         <span className="text-sm font-normal text-muted-foreground">/mo</span>
                       </div>
                       <div className="inline-flex items-center gap-1 mt-0.5 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5">
-                        Save ${plan.savings}
+                        Save up to {type.savingsPercent}%
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
 
                 <p className="text-xs text-muted-foreground text-center pt-1">
