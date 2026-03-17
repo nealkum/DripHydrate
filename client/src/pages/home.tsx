@@ -100,7 +100,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section — full bleed photo */}
-      <section className="relative min-h-[88vh] flex items-center" data-testid="section-hero">
+      <section className="relative flex items-center" style={{ minHeight: 'clamp(420px, 70vh, 92vh)' }} data-testid="section-hero">
         <div className="absolute inset-0 overflow-hidden">
           <img
             src={heroPhoto}
@@ -111,7 +111,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         </div>
 
-        <div className="relative container mx-auto px-4 max-w-7xl py-20 md:py-28">
+        <div className="relative container mx-auto px-4 max-w-7xl py-14 md:py-28">
           <div className="max-w-lg space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm">
               <Shield className="w-3 h-3" />
