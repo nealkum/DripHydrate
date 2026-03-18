@@ -24,6 +24,7 @@ import BookingSchedule from "@/pages/booking/schedule";
 import BookingPayment from "@/pages/booking/payment";
 import BookingConfirmation from "@/pages/booking/confirmation";
 import GroupBooking from "@/pages/group-booking";
+import Account from "@/pages/account";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -41,7 +42,7 @@ function Router() {
         <Route path="/book/:treatmentSlug/payment" component={BookingPayment} />
         <Route path="/booking/confirmation" component={BookingConfirmation} />
         <Route path="/group-booking" component={GroupBooking} />
-        <Route path="/account" component={Home} />
+        <Route path="/account" component={Account} />
         <Route component={NotFound} />
       </Switch>
       <BottomTabBar />

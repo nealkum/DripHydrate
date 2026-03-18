@@ -1,12 +1,21 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, User } from "lucide-react";
+import { useState, useEffect } from "react";
 import logoPath from "@assets/drip logo_1760551470270.png";
 
 export function Header() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsLoggedIn(!!sessionStorage.getItem("dripAccount"));
+    check();
+    window.addEventListener("storage", check);
+    const interval = setInterval(check, 1000);
+    return () => { window.removeEventListener("storage", check); clearInterval(interval); };
+  }, []);
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -41,6 +50,18 @@ export function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="font-semibold"
+              data-testid="button-account"
+            >
+              <Link href="/account">
+                <User className="w-4 h-4 mr-1.5" />
+                {isLoggedIn ? "Account" : "Sign In"}
+              </Link>
+            </Button>
             <Button
               variant="outline"
               asChild
@@ -83,6 +104,18 @@ export function Header() {
                 <Link href={item.href}>{item.label}</Link>
               </Button>
             ))}
+            <Button
+              variant="ghost"
+              className="w-full justify-start font-semibold"
+              asChild
+              onClick={() => setMobileMenuOpen(false)}
+              data-testid="mobile-button-account"
+            >
+              <Link href="/account">
+                <User className="w-4 h-4 mr-2" />
+                {isLoggedIn ? "My Account" : "Sign In"}
+              </Link>
+            </Button>
             <div className="flex gap-2 pt-1">
               <Button
                 variant="outline"
