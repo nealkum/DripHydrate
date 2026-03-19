@@ -59,6 +59,11 @@ export default function BookingPayment() {
   const treatment = treatments?.find((t) => t.slug === treatmentSlug);
 
   useEffect(() => {
+    // Always clear any stale add-on data from a previous checkout
+    sessionStorage.removeItem("additionalShippedItems");
+    // Reset add-on UI state to empty for this fresh checkout
+    setAdditionalItems([]);
+
     const location = sessionStorage.getItem("bookingLocation");
 
     if (!location) {

@@ -77,6 +77,11 @@ export default function BookingConfirmation() {
   const formattedPrice = (appointment.totalPrice / 100).toFixed(2);
   const isShipped = treatment ? shippedToYouSlugs.has(treatment.slug) : false;
 
+  // Only use add-ons for shipped orders; guard against stale sessionStorage for IV bookings
+  const safeAddOns = isShipped ? additionalShippedItems : [];
+  const addOnTotal = safeAddOns.reduce((s, i) => s + i.price, 0);
+  const primaryPrice = appointment.totalPrice - addOnTotal;
+
   return (
     <div className="min-h-screen py-12">
       <div className="container mx-auto px-4 max-w-3xl">
@@ -113,10 +118,12 @@ export default function BookingConfirmation() {
                 {/* Primary product */}
                 <div className="flex justify-between items-center text-sm" data-testid="text-treatment-name">
                   <p className="text-muted-foreground">{treatment?.name}</p>
-                  <p className="font-medium text-foreground">${((appointment.totalPrice - additionalShippedItems.reduce((s, i) => s + i.price, 0)) / 100).toFixed(2)}</p>
+                  {isShipped && (
+                    <p className="font-medium text-foreground">${(primaryPrice / 100).toFixed(2)}</p>
+                  )}
                 </div>
-                {/* Add-on items */}
-                {additionalShippedItems.map(item => (
+                {/* Add-on items — shipped orders only */}
+                {safeAddOns.map(item => (
                   <div key={item.id} className="flex justify-between items-center text-sm mt-1" data-testid={`text-addon-confirmed-${item.slug}`}>
                     <p className="text-muted-foreground">{item.name}</p>
                     <p className="font-medium text-foreground">${(item.price / 100).toFixed(2)}</p>
