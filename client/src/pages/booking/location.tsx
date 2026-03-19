@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { StepIndicator } from "@/components/booking/step-indicator";
+import { SelectedTreatmentBanner } from "@/components/booking/selected-treatment-banner";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Treatment } from "@shared/schema";
 import { ArrowLeft } from "lucide-react";
@@ -143,7 +144,9 @@ export default function BookingLocation() {
 
         <StepIndicator steps={isShipped ? stepsShipped : stepsIV} />
 
-        <div className="mt-8">
+        <SelectedTreatmentBanner treatment={treatment} />
+
+        <div className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">

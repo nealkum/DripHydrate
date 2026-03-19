@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { StepIndicator } from "@/components/booking/step-indicator";
+import { SelectedTreatmentBanner } from "@/components/booking/selected-treatment-banner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import type { Treatment, City, InsertAppointment } from "@shared/schema";
@@ -283,7 +284,9 @@ export default function BookingPayment() {
 
         <StepIndicator steps={isShipped ? stepsShipped : stepsIV} />
 
-        <div className="mt-8 max-w-2xl mx-auto space-y-6">
+        <SelectedTreatmentBanner treatment={treatment} />
+
+        <div className="mt-6 max-w-2xl mx-auto space-y-6">
           {/* Membership Upsell — IV only */}
           {!isShipped && memberPrice && !subscribeAndSave && !upsellDismissed && (
             <Card className="border-primary/20 overflow-hidden" data-testid="card-membership-upsell">

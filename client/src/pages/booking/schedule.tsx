@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StepIndicator } from "@/components/booking/step-indicator";
+import { SelectedTreatmentBanner } from "@/components/booking/selected-treatment-banner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
@@ -115,7 +116,9 @@ export default function BookingSchedule() {
 
         <StepIndicator steps={steps} />
 
-        <div className="mt-8 space-y-6">
+        <SelectedTreatmentBanner treatment={treatment} />
+
+        <div className="mt-6 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">Select Date & Time</CardTitle>
