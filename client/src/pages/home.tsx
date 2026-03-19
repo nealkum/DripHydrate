@@ -201,7 +201,7 @@ export default function Home() {
                 <Button
                   key={symptom.label}
                   variant="outline"
-                  className="gap-2 text-sm hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                  className="gap-2 text-sm"
                   asChild
                   data-testid={`button-symptom-${symptom.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >

@@ -13,7 +13,7 @@ import { StepIndicator } from "@/components/booking/step-indicator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import type { Treatment, City, InsertAppointment } from "@shared/schema";
-import { ArrowLeft, ArrowRight, CreditCard, Lock, Shield, Star, Stethoscope, Check, Droplets, Package } from "lucide-react";
+import { ArrowLeft, ArrowRight, CreditCard, Lock, Shield, Star, Stethoscope, Check, Droplets, Package, ChevronDown, ChevronUp, Plus, Minus } from "lucide-react";
 import { Link } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -37,6 +37,8 @@ export default function BookingPayment() {
   const treatmentSlug = params?.treatmentSlug;
   const [subscribeAndSave, setSubscribeAndSave] = useState(false);
   const [upsellDismissed, setUpsellDismissed] = useState(false);
+  const [additionalItems, setAdditionalItems] = useState<Treatment[]>([]);
+  const [addMoreOpen, setAddMoreOpen] = useState(false);
 
   const [locationData, setLocationData] = useState<any>(null);
   const [scheduleData, setScheduleData] = useState<any>(null);
@@ -108,6 +110,7 @@ export default function BookingPayment() {
       sessionStorage.removeItem("shippingPlan");
       sessionStorage.removeItem("bookingContact");
       sessionStorage.removeItem("treatmentSlug");
+      // additionalShippedItems is intentionally NOT removed here so confirmation page can read it
       setLocation("/booking/confirmation");
     },
     onError: () => {
@@ -131,16 +134,30 @@ export default function BookingPayment() {
     },
   });
 
+  const toggleAddOn = (t: Treatment) => {
+    setAdditionalItems(prev => {
+      const exists = prev.find(i => i.id === t.id);
+      const updated = exists ? prev.filter(i => i.id !== t.id) : [...prev, t];
+      sessionStorage.setItem(
+        "additionalShippedItems",
+        JSON.stringify(updated.map(i => ({ id: i.id, slug: i.slug, name: i.name, price: i.price })))
+      );
+      return updated;
+    });
+  };
+
   const onSubmit = (data: PaymentForm) => {
     if (!treatment || !locationData) return;
 
+    const addOnTotal = additionalItems.reduce((sum, i) => sum + i.price, 0);
+
     let finalPrice: number;
     if (isShipped && shippingPlan) {
-      finalPrice = shippingPlan.pricePerMonth;
+      finalPrice = shippingPlan.pricePerMonth + addOnTotal;
     } else if (subscribeAndSave && memberPriceMap[treatment.slug]) {
-      finalPrice = memberPriceMap[treatment.slug];
+      finalPrice = memberPriceMap[treatment.slug] + addOnTotal;
     } else {
-      finalPrice = treatment.price;
+      finalPrice = treatment.price + addOnTotal;
     }
 
     const appointmentData: InsertAppointment = {
@@ -205,6 +222,20 @@ export default function BookingPayment() {
     : subscribeAndSave && memberPriceFormatted
       ? memberPriceFormatted
       : regularPrice;
+
+  // Shipped-only: other shipped products available to add
+  const availableAddOns = (treatments ?? []).filter(
+    t => shippedToYouSlugs.has(t.slug) && t.slug !== treatmentSlug
+  );
+
+  // Live total including add-ons
+  const primaryPrice = isShipped && shippingPlan
+    ? shippingPlan.pricePerMonth
+    : subscribeAndSave && memberPrice
+      ? memberPrice
+      : treatment.price;
+  const addOnTotal = additionalItems.reduce((sum, i) => sum + i.price, 0);
+  const grandTotal = primaryPrice + addOnTotal;
 
   return (
     <div className="min-h-screen py-12">
@@ -346,12 +377,7 @@ export default function BookingPayment() {
                 {isShipped ? "Order Summary" : "Booking Summary"}
               </h3>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between gap-2">
-                  <span className="text-muted-foreground">
-                    {isShipped ? "Product" : "Treatment"}
-                  </span>
-                  <span className="font-medium text-foreground text-right" data-testid="text-summary-treatment">{treatment.name}</span>
-                </div>
+                {/* Ship-to / Location row */}
                 <div className="flex justify-between gap-2">
                   <span className="text-muted-foreground">
                     {isShipped ? "Ship to" : "Location"}
@@ -361,44 +387,143 @@ export default function BookingPayment() {
                     {selectedCity && `, ${selectedCity.name}`}
                   </span>
                 </div>
-                {isShipped && shippingPlan ? (
-                  <div className="flex justify-between gap-2">
-                    <span className="text-muted-foreground">Plan</span>
-                    <span className="font-medium text-foreground text-right" data-testid="text-summary-plan">
-                      {shippingPlan.planLabel}
-                    </span>
-                  </div>
-                ) : scheduleData ? (
+
+                {/* Schedule row (IV only) */}
+                {scheduleData && (
                   <div className="flex justify-between gap-2">
                     <span className="text-muted-foreground">Date & Time</span>
                     <span className="font-medium text-foreground text-right" data-testid="text-summary-datetime">
                       {new Date(scheduleData.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}, {scheduleData.time}
                     </span>
                   </div>
-                ) : null}
+                )}
+
+                {/* Plan row (shipped only) */}
+                {isShipped && shippingPlan && (
+                  <div className="flex justify-between gap-2">
+                    <span className="text-muted-foreground">Plan</span>
+                    <span className="font-medium text-foreground text-right" data-testid="text-summary-plan">
+                      {shippingPlan.planLabel}
+                    </span>
+                  </div>
+                )}
+
                 <Separator className="my-2" />
+
+                {/* Primary product line */}
+                <div className="flex justify-between gap-2">
+                  <span className="text-foreground font-medium" data-testid="text-summary-treatment">{treatment.name}</span>
+                  <span className="font-medium text-foreground text-right">
+                    {isShipped && shippingPlan
+                      ? `$${(shippingPlan.pricePerMonth / 100).toFixed(2)}/mo`
+                      : subscribeAndSave && memberPriceFormatted
+                        ? `$${memberPriceFormatted}`
+                        : `$${regularPrice}`
+                    }
+                  </span>
+                </div>
+
+                {/* Add-on line items */}
+                {additionalItems.map(item => (
+                  <div key={item.id} className="flex justify-between gap-2" data-testid={`text-addon-${item.slug}`}>
+                    <span className="text-foreground font-medium">{item.name}</span>
+                    <span className="font-medium text-foreground">${(item.price / 100).toFixed(2)}</span>
+                  </div>
+                ))}
+
+                <Separator className="my-2" />
+
+                {/* Grand total */}
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-foreground">
-                    {isShipped ? "Monthly total" : "Total"}
+                    {isShipped ? "Total" : "Total"}
                   </span>
                   <div className="text-right">
-                    {!isShipped && subscribeAndSave && memberPriceFormatted ? (
+                    {!isShipped && subscribeAndSave && memberPriceFormatted && addOnTotal === 0 ? (
                       <>
                         <span className="text-xs line-through text-muted-foreground mr-2">${regularPrice}</span>
                         <span className="text-xl font-bold text-primary" data-testid="text-summary-total">${memberPriceFormatted}</span>
                       </>
-                    ) : isShipped && shippingPlan ? (
-                      <span className="text-xl font-bold text-primary" data-testid="text-summary-total">
-                        ${(shippingPlan.pricePerMonth / 100).toFixed(2)}/mo
-                      </span>
                     ) : (
-                      <span className="text-xl font-bold text-primary" data-testid="text-summary-total">${regularPrice}</span>
+                      <span className="text-xl font-bold text-primary" data-testid="text-summary-total">
+                        ${(grandTotal / 100).toFixed(2)}
+                        {isShipped && shippingPlan && addOnTotal === 0 && "/mo"}
+                      </span>
                     )}
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
+
+          {/* Add More Products — shipped orders only */}
+          {isShipped && availableAddOns.length > 0 && (
+            <Card data-testid="card-add-more-products">
+              <button
+                type="button"
+                className="w-full flex items-center justify-between p-4 text-left"
+                onClick={() => setAddMoreOpen(o => !o)}
+                data-testid="button-toggle-add-more"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Plus className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground text-sm">Add More Products</p>
+                    <p className="text-xs text-muted-foreground">
+                      {additionalItems.length > 0
+                        ? `${additionalItems.length} product${additionalItems.length > 1 ? "s" : ""} added to this shipment`
+                        : "Bundle additional shipped products in one order"}
+                    </p>
+                  </div>
+                </div>
+                {addMoreOpen
+                  ? <ChevronUp className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  : <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                }
+              </button>
+
+              {addMoreOpen && (
+                <CardContent className="px-4 pb-4 pt-0 space-y-2">
+                  <Separator className="mb-3" />
+                  {availableAddOns.map(addon => {
+                    const selected = !!additionalItems.find(i => i.id === addon.id);
+                    return (
+                      <div
+                        key={addon.id}
+                        className={`flex items-center justify-between gap-3 p-3 rounded-md border transition-colors ${
+                          selected ? "border-primary bg-primary/5" : "border-border bg-card"
+                        }`}
+                        data-testid={`row-addon-${addon.slug}`}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className={`font-medium text-sm truncate ${selected ? "text-primary" : "text-foreground"}`}>
+                            {addon.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">${(addon.price / 100).toFixed(2)}</p>
+                        </div>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant={selected ? "default" : "outline"}
+                          className="text-xs font-semibold flex-shrink-0"
+                          onClick={() => toggleAddOn(addon)}
+                          data-testid={`button-addon-${addon.slug}`}
+                        >
+                          {selected ? (
+                            <><Minus className="w-3 h-3 mr-1" />Remove</>
+                          ) : (
+                            <><Plus className="w-3 h-3 mr-1" />Add</>
+                          )}
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </CardContent>
+              )}
+            </Card>
+          )}
 
           {/* Payment Form */}
           <Card>

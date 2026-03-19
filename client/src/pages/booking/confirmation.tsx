@@ -1,18 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle2, Calendar, MapPin, Clock, User, Star, Users, Gift, ArrowRight } from "lucide-react";
+import { CheckCircle2, Calendar, MapPin, Clock, User, Star, Users, Gift, ArrowRight, Package } from "lucide-react";
 import type { Appointment, Treatment, City } from "@shared/schema";
 import { Link } from "wouter";
 import { shippedToYouSlugs } from "@/lib/treatment-data";
 
+interface AdditionalItem { id: string; slug: string; name: string; price: number; }
+
 export default function BookingConfirmation() {
   const [, setLocation] = useLocation();
   const appointmentId = sessionStorage.getItem("appointmentId");
+
+  // Read additional shipped items once on mount (stored in state so it survives re-renders)
+  const [additionalShippedItems] = useState<AdditionalItem[]>(() => {
+    try {
+      const raw = sessionStorage.getItem("additionalShippedItems");
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
 
   const { data: appointment, isLoading: appointmentLoading, error } = useQuery<Appointment>({
     queryKey: ["/api/appointments", appointmentId],
@@ -30,7 +40,10 @@ export default function BookingConfirmation() {
   useEffect(() => {
     if (!appointmentId) {
       setLocation("/");
+      return;
     }
+    // Clear add-ons from session once page mounts
+    sessionStorage.removeItem("additionalShippedItems");
   }, [appointmentId, setLocation]);
 
   if (appointmentLoading) {
@@ -91,13 +104,24 @@ export default function BookingConfirmation() {
           <CardContent className="space-y-4">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <User className="w-5 h-5 text-primary" />
+                <Package className="w-5 h-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-foreground mb-1">Treatment</h3>
-                <p className="text-muted-foreground" data-testid="text-treatment-name">
-                  {treatment?.name}
-                </p>
+                <h3 className="font-semibold text-foreground mb-2">
+                  {isShipped ? "Items Ordered" : "Treatment"}
+                </h3>
+                {/* Primary product */}
+                <div className="flex justify-between items-center text-sm" data-testid="text-treatment-name">
+                  <p className="text-muted-foreground">{treatment?.name}</p>
+                  <p className="font-medium text-foreground">${((appointment.totalPrice - additionalShippedItems.reduce((s, i) => s + i.price, 0)) / 100).toFixed(2)}</p>
+                </div>
+                {/* Add-on items */}
+                {additionalShippedItems.map(item => (
+                  <div key={item.id} className="flex justify-between items-center text-sm mt-1" data-testid={`text-addon-confirmed-${item.slug}`}>
+                    <p className="text-muted-foreground">{item.name}</p>
+                    <p className="font-medium text-foreground">${(item.price / 100).toFixed(2)}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
