@@ -655,7 +655,7 @@ export default function BookingPayment() {
                     {createAppointmentMutation.isPending
                       ? "Processing..."
                       : isShipped
-                        ? `Place Order — ${displayPrice}`
+                        ? `Place Order — $${(grandTotal / 100).toFixed(2)}`
                         : `Confirm Booking — $${displayPrice}`
                     }
                   </Button>
