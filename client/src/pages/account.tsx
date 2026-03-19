@@ -59,8 +59,8 @@ const REDEMPTION_TIERS = [
 const MOCK_ORDERS: MockOrder[] = [
   {
     id: "APT-9821",
-    treatmentName: "Myers' Cocktail",
-    treatmentSlug: "myers-cocktail",
+    treatmentName: "Myers' Cocktail Plus",
+    treatmentSlug: "myers-cocktail-plus",
     date: "2026-03-10",
     time: "Morning (9 AM–12 PM)",
     address: "142 Wilshire Blvd, Los Angeles",
@@ -84,7 +84,7 @@ const MOCK_ORDERS: MockOrder[] = [
   {
     id: "ORD-3312",
     treatmentName: "Vitamin B-12 Injections",
-    treatmentSlug: "vitamin-b-12-injections",
+    treatmentSlug: "vitamin-b12",
     date: "2026-02-05",
     address: "142 Wilshire Blvd, Los Angeles",
     price: 3500,
@@ -94,8 +94,8 @@ const MOCK_ORDERS: MockOrder[] = [
   },
   {
     id: "APT-9601",
-    treatmentName: "Immunity Defense",
-    treatmentSlug: "immunity-defense",
+    treatmentName: "Immunity Boost",
+    treatmentSlug: "immunity-boost",
     date: "2026-01-18",
     time: "10:00 AM",
     address: "142 Wilshire Blvd, Los Angeles",
