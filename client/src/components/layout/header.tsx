@@ -27,13 +27,16 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex h-16 items-center justify-between gap-4">
-          <Link href="/" className="group flex-shrink-0" data-testid="link-logo">
+          <Link href="/" className="group flex-shrink-0 flex items-center gap-3" data-testid="link-logo">
             <img
               src={logoPath}
               alt="Drip Hydration Logo"
               className="h-14 w-auto transition-transform group-hover:scale-105"
               style={{ filter: 'brightness(0) invert(1)' }}
             />
+            <span className="hidden sm:inline font-serif text-lg font-bold text-foreground tracking-tight leading-none">
+              Drip<span className="text-primary">.</span>
+            </span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -63,7 +66,6 @@ export function Header() {
               </Link>
             </Button>
             <Button
-              variant="outline"
               asChild
               className="font-semibold uppercase"
               data-testid="button-join-now"
@@ -71,6 +73,7 @@ export function Header() {
               <Link href="/membership">Join Now</Link>
             </Button>
             <Button
+              variant="outline"
               asChild
               className="font-semibold uppercase"
               data-testid="button-book-treatment"
@@ -118,7 +121,6 @@ export function Header() {
             </Button>
             <div className="flex gap-2 pt-1">
               <Button
-                variant="outline"
                 className="flex-1 font-semibold uppercase"
                 asChild
                 onClick={() => setMobileMenuOpen(false)}
@@ -127,6 +129,7 @@ export function Header() {
                 <Link href="/membership">Join Now</Link>
               </Button>
               <Button
+                variant="outline"
                 className="flex-1 font-semibold uppercase"
                 asChild
                 onClick={() => setMobileMenuOpen(false)}

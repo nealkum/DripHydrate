@@ -23,6 +23,7 @@ Preferred communication style: Simple, everyday language.
 - CSS variables for consistent theming (dark theme active via `class="dark"` on html element)
 - Drip Hydration brand colors: Dark teal primary (HSL 194 43% 45% in dark theme), dark navy backgrounds, light text
 - Logo uses `filter: brightness(0) invert(1)` in header and footer for dark background visibility
+- Header shows logo image + "Drip." wordmark in Playfair Display serif (hidden on small mobile), Join Now (primary/teal, default variant), Book Now (outline variant)
 - Treatment cards without product images, with ingredient tags and Book Now + Details buttons
 - All CTAs styled with uppercase text and brand teal styling
 - Sticky bottom CTA bar on all pages (hidden during booking flow)
