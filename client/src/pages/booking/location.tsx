@@ -29,6 +29,14 @@ interface RebookData {
 
 const locationSchema = z.object({
   customerName: z.string().min(2, "Please enter your full name"),
+  dateOfBirth: z.string()
+    .min(1, "Please enter your date of birth")
+    .refine((val) => {
+      const dob = new Date(val);
+      if (isNaN(dob.getTime())) return false;
+      const age = (Date.now() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+      return age >= 18;
+    }, "You must be 18 or older to book a treatment"),
   customerEmail: z.string().email("Please enter a valid email address"),
   customerPhone: z.string().min(10, "Please enter a valid phone number"),
   cityName: z.string().min(2, "Please enter your city name"),
@@ -78,6 +86,7 @@ export default function BookingLocation() {
     resolver: zodResolver(locationSchema),
     defaultValues: {
       customerName: rebookData?.customerName || saved.customerName || "",
+      dateOfBirth: saved.dateOfBirth || "",
       customerEmail: rebookData?.customerEmail || saved.customerEmail || "",
       customerPhone: rebookData?.customerPhone || saved.customerPhone || "",
       cityName: rebookData?.cityName || "",
@@ -95,18 +104,19 @@ export default function BookingLocation() {
 
   const saveContactIfPresent = () => {
     const name = form.getValues("customerName");
+    const dob = form.getValues("dateOfBirth");
     const email = form.getValues("customerEmail");
     const phone = form.getValues("customerPhone");
     if (name || email || phone) {
-      sessionStorage.setItem("bookingContact", JSON.stringify({ customerName: name, customerEmail: email, customerPhone: phone }));
+      sessionStorage.setItem("bookingContact", JSON.stringify({ customerName: name, dateOfBirth: dob, customerEmail: email, customerPhone: phone }));
     }
   };
 
   const onSubmit = (data: LocationForm) => {
-    const { customerName, customerEmail, customerPhone, ...locationFields } = data;
+    const { customerName, dateOfBirth, customerEmail, customerPhone, ...locationFields } = data;
 
     // Persist contact data separately so payment page can pre-fill
-    sessionStorage.setItem("bookingContact", JSON.stringify({ customerName, customerEmail, customerPhone }));
+    sessionStorage.setItem("bookingContact", JSON.stringify({ customerName, dateOfBirth, customerEmail, customerPhone }));
     sessionStorage.setItem("bookingLocation", JSON.stringify(locationFields));
     sessionStorage.setItem("treatmentSlug", treatmentSlug || "");
 
@@ -235,24 +245,46 @@ export default function BookingLocation() {
                       Contact Information
                     </h3>
 
-                    <FormField
-                      control={form.control}
-                      name="customerName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Jane Doe"
-                              {...field}
-                              onBlur={(e) => { field.onBlur(); saveContactIfPresent(); }}
-                              data-testid="input-customer-name"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="customerName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Full Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Jane Doe"
+                                {...field}
+                                onBlur={(e) => { field.onBlur(); saveContactIfPresent(); }}
+                                data-testid="input-customer-name"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="dateOfBirth"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Date of Birth</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="date"
+                                max={new Date(Date.now() - 18 * 365.25 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
+                                {...field}
+                                onBlur={(e) => { field.onBlur(); saveContactIfPresent(); }}
+                                data-testid="input-date-of-birth"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <FormField
