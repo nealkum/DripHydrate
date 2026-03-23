@@ -88,7 +88,7 @@ export function TreatmentCard({ treatment }: TreatmentCardProps) {
         {memberFormatted && (
           <div className="flex items-center gap-2 mb-3" data-testid={`member-price-${treatment.id}`}>
             <span className="text-lg font-bold text-primary">${memberFormatted}</span>
-            <span className="text-xs text-muted-foreground">with membership</span>
+            <span className="text-xs text-muted-foreground">with {isShipped ? "subscription" : "membership"}</span>
             <Badge variant="outline" className="text-[10px] font-semibold border-emerald-500/30 bg-emerald-500/10 text-emerald-400 no-default-hover-elevate no-default-active-elevate">
               Save ${savingsFormatted}
             </Badge>

@@ -12,7 +12,7 @@ import {
   Stethoscope, CheckCircle2, Users, Package, ArrowRight, TrendingUp, CreditCard
 } from "lucide-react";
 import heroPhoto from "@assets/photoshoot/drip-shoot-8241.jpeg";
-import { bestForMap, reviewMap, memberPriceMap } from "@/lib/treatment-data";
+import { bestForMap, reviewMap, memberPriceMap, shippedToYouSlugs } from "@/lib/treatment-data";
 
 const symptomFilters = [
   { label: "Hangover",    icon: Droplet,    slug: "hangover-iv",              href: "/treatment/hangover-iv" },
@@ -306,7 +306,7 @@ export default function Home() {
                         <div className="flex items-baseline gap-1.5 mb-1">
                           <span className="text-lg font-bold text-foreground">${(t.price / 100).toFixed(0)}</span>
                           {memberFormatted && (
-                            <span className="text-xs text-primary font-semibold">{memberFormatted} w/ membership</span>
+                            <span className="text-xs text-primary font-semibold">{memberFormatted} w/ {shippedToYouSlugs.has(t.slug) ? "subscription" : "membership"}</span>
                           )}
                         </div>
                         <Button size="sm" className="w-full font-semibold uppercase text-xs" asChild data-testid={`button-popular-book-${t.slug}`}>
