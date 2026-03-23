@@ -21,9 +21,8 @@ export function TreatmentCard({ treatment }: TreatmentCardProps) {
   const savings = memberPrice ? treatment.price - memberPrice : 0;
   const savingsFormatted = (savings / 100).toFixed(0);
 
-  const isFeatured = treatment.name.includes("Myers Cocktail") || 
-                     treatment.name.includes("NAD+ Boost") ||
-                     treatment.price >= 39900;
+  const MOST_POPULAR_SLUGS = new Set(["hangover-iv", "recovery-performance", "myers-cocktail-plus"]);
+  const isFeatured = MOST_POPULAR_SLUGS.has(treatment.slug);
 
   const durationText = treatment.duration >= 60 
     ? `${Math.floor(treatment.duration / 60)}-${Math.floor(treatment.duration / 60) + 1} hrs`

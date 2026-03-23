@@ -26,7 +26,7 @@ Preferred communication style: Simple, everyday language.
 - Header shows logo image + "Drip." wordmark in Playfair Display serif (hidden on small mobile), Join Now (primary/teal, default variant), Book Now (outline variant)
 - Treatment cards without product images, with ingredient tags and Book Now + Details buttons
 - All CTAs styled with uppercase text and brand teal styling
-- Sticky bottom CTA bar on all pages (hidden during booking flow)
+- Sticky bottom CTA bar on all pages (hidden during booking flow), visible on mobile above the tab bar at bottom-[60px], context-aware copy (treatment name/price on detail pages, "Get Started" on shipped category, "Book IV Therapy" default)
 
 **State Management**
 - TanStack Query (React Query) for server state management and data fetching
@@ -151,8 +151,7 @@ NAD+ Injections, NAD+ Nasal Spray, Niagen® NR Injections, Sermorelin (Peptide),
 - Footer link to group booking page
 
 **User Experience Features**
-- Bottom tab bar navigation on mobile (Home, Treatments, Book, Membership, Account)
-- Tab bar hidden during booking flow and confirmation page
+- Bottom tab bar navigation on mobile (Home, Treatments, Shop → /treatments/shipped-to-you with circular elevated icon, Membership, Account); hidden during booking flow and confirmation
 - Sticky bottom CTA bar on all non-booking pages
 - Step indicator component for booking progress visualization
 - Form validation at each step with error feedback

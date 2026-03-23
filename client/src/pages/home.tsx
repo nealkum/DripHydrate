@@ -1,24 +1,37 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useQuery } from "@tanstack/react-query";
+import type { Treatment } from "@shared/schema";
 import {
-  Droplet, Zap, MapPin, Clock, Shield, Star,
+  Droplet, Zap, MapPin, Clock, Shield, Star, X,
   Search, Heart, Battery, Brain, Dumbbell, Sparkles,
-  Stethoscope, CheckCircle2, Users, Award, Package, ArrowRight
+  Stethoscope, CheckCircle2, Users, Award, Package, ArrowRight, TrendingUp
 } from "lucide-react";
 import heroPhoto from "@assets/photoshoot/drip-shoot-8241.jpeg";
+import { bestForMap, reviewMap, memberPriceMap } from "@/lib/treatment-data";
 
 const symptomFilters = [
-  { label: "Hangover", icon: Droplet, slug: "hangover-iv" },
-  { label: "Low Energy", icon: Battery, slug: "energy-boost" },
-  { label: "Dehydration", icon: Droplet, slug: "hydration-package" },
-  { label: "Immune Boost", icon: Shield, slug: "immunity-boost" },
-  { label: "Recovery", icon: Dumbbell, slug: "recovery-performance" },
-  { label: "Anti-Aging", icon: Sparkles, slug: "nad-iv-therapy" },
-  { label: "Headache", icon: Brain, slug: "migraine-relief" },
-  { label: "Beauty", icon: Heart, slug: "beauty-drip" },
+  { label: "Hangover",    icon: Droplet,    slug: "hangover-iv",              href: "/treatment/hangover-iv" },
+  { label: "Low Energy",  icon: Battery,    slug: "energy-boost",             href: "/treatment/energy-boost" },
+  { label: "Dehydration", icon: Droplet,    slug: "hydration-package",        href: "/treatment/hydration-package" },
+  { label: "Immune Boost",icon: Shield,     slug: "immunity-boost",           href: "/treatment/immunity-boost" },
+  { label: "Recovery",    icon: Dumbbell,   slug: "recovery-performance",     href: "/treatment/recovery-performance" },
+  { label: "Weight Loss", icon: TrendingUp, slug: "weight-loss-semaglutide",  href: "/treatment/weight-loss-semaglutide" },
+  { label: "Anti-Aging",  icon: Sparkles,   slug: "nad-iv-therapy",           href: "/treatment/nad-iv-therapy" },
+  { label: "Headache",    icon: Brain,      slug: "migraine-relief",          href: "/treatment/migraine-relief" },
+  { label: "Beauty",      icon: Heart,      slug: "beauty-drip",              href: "/treatment/beauty-drip" },
+];
+
+const POPULAR_SLUGS = [
+  "hangover-iv",
+  "recovery-performance",
+  "immunity-boost",
+  "myers-cocktail-plus",
+  "nad-iv-therapy",
 ];
 
 const testimonials = [
@@ -97,8 +110,37 @@ const homeMembershipTypes = [
 ];
 
 export default function Home() {
+  const [promoDismissed, setPromoDismissed] = useState(false);
+
+  const { data: allTreatments } = useQuery<Treatment[]>({
+    queryKey: ["/api/treatments"],
+  });
+
+  const popularTreatments = POPULAR_SLUGS
+    .map((slug) => allTreatments?.find((t) => t.slug === slug))
+    .filter(Boolean) as Treatment[];
+
   return (
     <div className="min-h-screen">
+
+      {/* Promo Banner */}
+      {!promoDismissed && (
+        <div className="relative flex items-center justify-center px-10 py-2 text-xs font-medium text-white" style={{ background: "hsl(181 48% 35%)" }} data-testid="promo-banner">
+          <span>
+            Celebrating 10 Years &mdash; <span className="font-bold">10% off your first service</span> with code{" "}
+            <span className="font-bold tracking-wider">DRIPDECADE</span>
+          </span>
+          <button
+            onClick={() => setPromoDismissed(true)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 opacity-70 hover:opacity-100 transition-opacity"
+            aria-label="Dismiss banner"
+            data-testid="button-dismiss-promo"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* Hero Section — full bleed photo */}
       <section className="relative flex items-center" style={{ minHeight: 'clamp(380px, 58vh, 92vh)' }} data-testid="section-hero">
         <div className="absolute inset-0 overflow-hidden">
@@ -115,7 +157,7 @@ export default function Home() {
           <div className="max-w-lg space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm">
               <Shield className="w-3 h-3" />
-              Licensed RNs &middot; Same-Day Appointments
+              Licensed RNs &middot; Nurse at Your Door in 2 Hours
             </div>
 
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
@@ -134,7 +176,7 @@ export default function Home() {
                 asChild
                 data-testid="button-browse-treatments"
               >
-                <Link href="/treatments">Browse Treatments</Link>
+                <Link href="/treatments">Book IV Therapy</Link>
               </Button>
               <Button
                 size="lg"
@@ -146,6 +188,15 @@ export default function Home() {
                 <Link href="/membership">Become A Member</Link>
               </Button>
             </div>
+            <p className="text-sm">
+              <Link
+                href="/treatments/shipped-to-you"
+                className="text-white/60 hover:text-white/90 transition-colors underline underline-offset-4"
+                data-testid="link-shipped-to-you"
+              >
+                or shop treatments shipped to your door &rarr;
+              </Link>
+            </p>
           </div>
         </div>
       </section>
@@ -165,7 +216,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-1.5" data-testid="trust-treatments">
               <Users className="w-4 h-4 text-primary" />
-              <span><span className="font-semibold text-foreground">100,000+</span> treatments</span>
+              <span><span className="font-semibold text-foreground">200,000+</span> treatments</span>
             </div>
             <div className="flex items-center gap-1.5" data-testid="trust-cities">
               <MapPin className="w-4 h-4 text-primary" />
@@ -205,7 +256,7 @@ export default function Home() {
                   asChild
                   data-testid={`button-symptom-${symptom.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
-                  <Link href={`/treatment/${symptom.slug}`}>
+                  <Link href={symptom.href}>
                     <Icon className="w-4 h-4" />
                     {symptom.label}
                   </Link>
@@ -215,6 +266,64 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Popular Treatments Row */}
+      {popularTreatments.length > 0 && (
+        <section className="py-8 md:py-10 bg-accent/10" data-testid="section-popular-treatments">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="font-serif text-xl md:text-2xl font-bold text-foreground">
+                Most Popular <span className="text-primary italic">Treatments</span>
+              </h2>
+              <Button variant="ghost" size="sm" className="font-semibold text-primary uppercase text-xs" asChild>
+                <Link href="/treatments">View All &rarr;</Link>
+              </Button>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+              {popularTreatments.map((t) => {
+                const bestFor = bestForMap[t.slug];
+                const reviews = reviewMap[t.slug];
+                const memberPrice = memberPriceMap[t.slug];
+                const memberFormatted = memberPrice ? `$${(memberPrice / 100).toFixed(0)}` : null;
+                return (
+                  <Card
+                    key={t.id}
+                    className="flex-shrink-0 snap-start w-[220px] md:w-[240px] hover-elevate transition-all"
+                    data-testid={`card-popular-${t.slug}`}
+                  >
+                    <div className="p-4 flex flex-col h-full gap-2">
+                      {bestFor && (
+                        <Badge variant="outline" className={`self-start text-[10px] font-medium no-default-hover-elevate no-default-active-elevate ${bestFor.color}`}>
+                          {bestFor.label}
+                        </Badge>
+                      )}
+                      <h3 className="font-semibold text-sm text-foreground leading-tight">{t.name}</h3>
+                      {reviews && (
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                          <span className="text-xs font-semibold text-foreground">{reviews.rating}</span>
+                          <span className="text-[10px] text-muted-foreground">({reviews.count.toLocaleString()})</span>
+                        </div>
+                      )}
+                      <div className="mt-auto pt-1">
+                        <div className="flex items-baseline gap-1.5 mb-1">
+                          <span className="text-lg font-bold text-foreground">${(t.price / 100).toFixed(0)}</span>
+                          {memberFormatted && (
+                            <span className="text-xs text-primary font-semibold">{memberFormatted} w/ membership</span>
+                          )}
+                        </div>
+                        <Button size="sm" className="w-full font-semibold uppercase text-xs" asChild data-testid={`button-popular-book-${t.slug}`}>
+                          <Link href={`/book/${t.slug}/location`}>Book Now</Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Categories */}
       <section className="py-12 md:py-16 bg-accent/20" data-testid="section-categories">
@@ -236,6 +345,7 @@ export default function Home() {
                 icon: Droplet,
                 slug: "vitamin-wellness",
                 count: "10 treatments",
+                badge: null,
               },
               {
                 id: "specialty-ivs",
@@ -244,31 +354,40 @@ export default function Home() {
                 icon: Zap,
                 slug: "specialty-ivs",
                 count: "3 treatments",
+                badge: null,
               },
               {
                 id: "shipped-to-you",
                 name: "Shipped To You",
-                description: "At-home treatments shipped to your door — peptides, weight loss, testosterone, and more.",
+                description: "Doctor-prescribed weight loss, peptides, testosterone & NAD+ — shipped nationwide. No nurse visit required.",
                 icon: Package,
                 slug: "shipped-to-you",
-                count: "13 treatments",
+                count: "13+ treatments",
+                badge: "Ships Free",
               },
             ].map((category) => {
               const Icon = category.icon;
               return (
                 <Card
                   key={category.id}
-                  className="hover-elevate transition-all duration-200 cursor-pointer"
+                  className="hover-elevate transition-all duration-200 cursor-pointer overflow-visible"
                   data-testid={`card-category-${category.id}`}
                 >
                   <Link href={`/treatments/${category.slug}`}>
                     <div className="p-6 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-primary/15 flex items-center justify-center">
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 rounded-lg bg-primary/15 flex items-center justify-center flex-shrink-0">
                           <Icon className="w-6 h-6 text-primary" />
                         </div>
-                        <div>
-                          <h3 className="text-xl font-semibold text-foreground">{category.name}</h3>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="text-xl font-semibold text-foreground">{category.name}</h3>
+                            {category.badge && (
+                              <Badge className="text-[10px] font-semibold uppercase no-default-hover-elevate no-default-active-elevate">
+                                {category.badge}
+                              </Badge>
+                            )}
+                          </div>
                           <p className="text-xs text-muted-foreground">{category.count}</p>
                         </div>
                       </div>
@@ -350,7 +469,7 @@ export default function Home() {
                 ))}
               </div>
               <span className="font-semibold text-foreground">4.9 stars</span>
-              <span>on Google</span>
+              <span>· Based on 10,000+ verified reviews on Google</span>
             </div>
           </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -410,7 +529,7 @@ export default function Home() {
                     "Priority same-day scheduling, no wait",
                     "10–20% off all vitamin add-on boosters",
                     "Complimentary vitamin shots included",
-                    "HSA / FSA eligible &middot; Cancel anytime",
+                    "HSA / FSA eligible &middot; No contracts &middot; Cancel anytime",
                   ].map((perk, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
                       <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
