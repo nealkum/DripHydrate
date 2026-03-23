@@ -165,10 +165,6 @@ export default function Home() {
               <span className="text-primary italic">Delivered to You</span>
             </h1>
 
-            <p className="text-lg text-white/75 leading-relaxed">
-              In-home IV wellness in 100+ cities nationwide. HSA/FSA eligible.
-            </p>
-
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <Button
                 size="lg"
