@@ -223,36 +223,25 @@ export default function TreatmentDetail() {
             </p>
           </div>
 
-          {/* Evidence-based positioning */}
-          <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="p-5" data-testid="section-evidence">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <FlaskConical className="w-5 h-5 text-primary" />
+          {/* Evidence-based positioning — shipped products only */}
+          {isShipped && (
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-5" data-testid="section-evidence">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <FlaskConical className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground text-sm mb-1">Physician-Formulated &amp; Clinically Dosed</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Every product is formulated by Dr. Jon Snipes, MD, and compounded at a licensed US pharmacy. 
+                      Shipped cold-chain when required and verified for purity, potency, and sterility before dispatch.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  {isShipped ? (
-                    <>
-                      <p className="font-semibold text-foreground text-sm mb-1">Physician-Formulated &amp; Clinically Dosed</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Every product is formulated by Dr. Jon Snipes, MD, and compounded at a licensed US pharmacy. 
-                        Shipped cold-chain when required and verified for purity, potency, and sterility before dispatch.
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="font-semibold text-foreground text-sm mb-1">Why IV Therapy?</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        IV therapy delivers 100% bioavailability — compared to just 20-50% with oral supplements.
-                        Physician-formulated and clinically dosed by Dr. Jon Snipes, MD, our treatments are designed
-                        for maximum absorption and rapid results.
-                      </p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Ingredients */}
           {ingredients.length > 0 && (
