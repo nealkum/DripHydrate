@@ -34,9 +34,6 @@ export function Header() {
               className="h-14 w-auto transition-transform group-hover:scale-105"
               style={{ filter: 'brightness(0) invert(1)' }}
             />
-            <span className="hidden sm:inline font-serif text-lg font-bold text-foreground tracking-tight leading-none">
-              Drip<span className="text-primary">.</span>
-            </span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
