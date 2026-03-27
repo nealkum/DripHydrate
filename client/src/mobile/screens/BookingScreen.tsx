@@ -4,9 +4,11 @@ import { Btn } from "../components/Btn";
 import { useQuery } from "@tanstack/react-query";
 import type { Treatment } from "@shared/schema";
 import type { BookingConfirmation } from "../MobileApp";
+import { addOns as addOnDefs } from "@/lib/treatment-data";
 
 interface BookingScreenProps {
   slug?: string;
+  initialAddOns?: string[];
   onClose: () => void;
   onConfirmed: (details: BookingConfirmation) => void;
 }
@@ -25,13 +27,14 @@ const shippedSlugs = new Set([
 
 const USER_CREDITS = 75; // mock loyalty balance
 
-export function BookingScreen({ slug, onClose, onConfirmed }: BookingScreenProps) {
+export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: BookingScreenProps) {
   const [step, setStep] = useState<Step>(slug ? "location" : "select");
   const [selectedSlug, setSelectedSlug] = useState(slug ?? "");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [selectedAddOns, setSelectedAddOns] = useState<Set<string>>(new Set(initialAddOns ?? []));
 
   // Credits state
   const [creditsOn, setCreditsOn] = useState(false);
@@ -42,8 +45,13 @@ export function BookingScreen({ slug, onClose, onConfirmed }: BookingScreenProps
   const ivTreatments = treatments.filter((t) => !shippedSlugs.has(t.slug));
 
   const rawPrice = treatment ? Math.round(treatment.price / 100) : 0;
+  const addOnTotal = [...selectedAddOns].reduce((sum, id) => {
+    const ao = addOnDefs.find((a) => a.id === id);
+    return sum + (ao ? Math.round(ao.price / 100) : 0);
+  }, 0);
+  const subtotal = rawPrice + addOnTotal;
   const discount = creditsOn ? creditsApplied : 0;
-  const totalDue = Math.max(0, rawPrice - discount);
+  const totalDue = Math.max(0, subtotal - discount);
 
   const flowSteps: Step[] = slug
     ? ["location", "schedule", "confirm"]
@@ -78,7 +86,7 @@ export function BookingScreen({ slug, onClose, onConfirmed }: BookingScreenProps
       date: selectedDate,
       time: selectedTime,
       address: `${address}, ${city}`,
-      price: rawPrice,
+      price: subtotal,
       creditsApplied: discount,
       totalCharged: totalDue,
     });
@@ -269,6 +277,24 @@ export function BookingScreen({ slug, onClose, onConfirmed }: BookingScreenProps
                   <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400 }}>Treatment price</span>
                   <span style={{ ...T.ui, fontSize: 13, color: B.textPrimary, fontWeight: 600 }}>${rawPrice}</span>
                 </div>
+                {addOnTotal > 0 && (
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400 }}>Add-ons ({selectedAddOns.size})</span>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 4 }}>
+                        {[...selectedAddOns].map((id) => {
+                          const ao = addOnDefs.find((a) => a.id === id);
+                          return ao ? (
+                            <span key={id} style={{ ...T.ui, fontSize: 10, color: B.cyan, background: `${B.cyan}10`, padding: "2px 8px", borderRadius: 6, fontWeight: 600 }}>
+                              {ao.name}
+                            </span>
+                          ) : null;
+                        })}
+                      </div>
+                    </div>
+                    <span style={{ ...T.ui, fontSize: 13, color: B.textPrimary, fontWeight: 600 }}>+${addOnTotal}</span>
+                  </div>
+                )}
                 {creditsOn && creditsApplied > 0 && (
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ ...T.ui, fontSize: 13, color: B.cyan, fontWeight: 500 }}>Drip Credits applied</span>
@@ -278,8 +304,8 @@ export function BookingScreen({ slug, onClose, onConfirmed }: BookingScreenProps
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 8, borderTop: `1px solid ${B.borderLight}` }}>
                   <span style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>Total due</span>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    {creditsOn && creditsApplied > 0 && (
-                      <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400, textDecoration: "line-through" }}>${rawPrice}</span>
+                    {(creditsOn && creditsApplied > 0) && (
+                      <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400, textDecoration: "line-through" }}>${subtotal}</span>
                     )}
                     <span style={{ ...T.price, fontSize: 20, color: creditsOn && creditsApplied > 0 ? B.cyan : B.textPrimary }}>${totalDue}</span>
                   </div>

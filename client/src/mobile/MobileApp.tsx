@@ -39,13 +39,13 @@ export interface NavProps {
   navigate: (screen: NavScreen) => void;
   goBack: () => void;
   onTabChange: (tab: TabId) => void;
-  openBooking: (slug?: string) => void;
+  openBooking: (slug?: string, addOns?: string[]) => void;
 }
 
 export function MobileApp() {
   const [tab, setTab] = useState<TabId>("home");
   const [navStack, setNavStack] = useState<NavScreen[]>([]);
-  const [booking, setBooking] = useState<{ open: boolean; slug?: string }>({ open: false });
+  const [booking, setBooking] = useState<{ open: boolean; slug?: string; addOns?: string[] }>({ open: false });
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const currentScreen = navStack[navStack.length - 1] ?? null;
@@ -63,8 +63,8 @@ export function MobileApp() {
     setNavStack((prev) => prev.slice(0, -1));
   }
 
-  function openBooking(slug?: string) {
-    setBooking({ open: true, slug });
+  function openBooking(slug?: string, addOns?: string[]) {
+    setBooking({ open: true, slug, addOns });
   }
 
   function handleTabSelect(id: TabId) {
@@ -146,6 +146,7 @@ export function MobileApp() {
         {booking.open && (
           <BookingScreen
             slug={booking.slug}
+            initialAddOns={booking.addOns}
             onClose={() => setBooking({ open: false })}
             onConfirmed={handleBookingConfirmed}
           />
