@@ -44,6 +44,8 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
   const treatment = treatments.find((t) => t.slug === selectedSlug);
   const ivTreatments = treatments.filter((t) => !shippedSlugs.has(t.slug));
 
+  const isShipped = shippedSlugs.has(selectedSlug);
+
   const rawPrice = treatment ? Math.round(treatment.price / 100) : 0;
   const addOnTotal = [...selectedAddOns].reduce((sum, id) => {
     const ao = addOnDefs.find((a) => a.id === id);
@@ -53,9 +55,11 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
   const discount = creditsOn ? creditsApplied : 0;
   const totalDue = Math.max(0, subtotal - discount);
 
-  const flowSteps: Step[] = slug
-    ? ["location", "schedule", "confirm"]
-    : ["select", "location", "schedule", "confirm"];
+  // Shipped products skip the date/time scheduling step
+  const baseSteps: Step[] = isShipped
+    ? ["location", "confirm"]
+    : ["location", "schedule", "confirm"];
+  const flowSteps: Step[] = slug ? baseSteps : ["select", ...baseSteps];
   const stepIdx = flowSteps.indexOf(step);
 
   // Quick-pick credit amounts capped to available balance and price
@@ -83,12 +87,13 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
   function handleConfirm() {
     onConfirmed({
       treatmentName: treatment?.name ?? selectedSlug,
-      date: selectedDate,
-      time: selectedTime,
+      date: isShipped ? "Ships in 3–5 business days" : selectedDate,
+      time: isShipped ? "" : selectedTime,
       address: `${address}, ${city}`,
       price: subtotal,
       creditsApplied: discount,
       totalCharged: totalDue,
+      isShipped,
     });
   }
 
@@ -100,7 +105,7 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
           ? <button onClick={() => setStep(flowSteps[stepIdx - 1])} style={{ background: "none", border: "none", color: B.cyan, fontSize: 14, cursor: "pointer", fontFamily: SANS, ...T.ui }}>← Back</button>
           : <span />
         }
-        <div style={{ ...T.product, fontSize: 16, color: B.textPrimary }}>Book IV Therapy</div>
+        <div style={{ ...T.product, fontSize: 16, color: B.textPrimary }}>{isShipped ? "Place Order" : "Book IV Therapy"}</div>
         <button onClick={onClose} style={{ background: "none", border: "none", color: B.textMuted, fontSize: 22, cursor: "pointer", lineHeight: 1 }}>×</button>
       </div>
 
@@ -152,8 +157,8 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
         {/* Step 2: Location */}
         {step === "location" && (
           <div>
-            <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 4 }}>Where should we go?</div>
-            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 24 }}>Our nurse will come to you</div>
+            <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 4 }}>{isShipped ? "Shipping Address" : "Where should we go?"}</div>
+            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 24 }}>{isShipped ? "We'll ship your order directly to you" : "Our nurse will come to you"}</div>
 
             {treatment && (
               <div style={{ background: `${B.cyan}10`, border: `1px solid ${B.cyan}25`, borderRadius: 12, padding: "12px 16px", marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -197,7 +202,7 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
               ))}
             </div>
 
-            <Btn fullWidth style={{ marginTop: 24, padding: "14px 0", fontSize: 13 }} onClick={() => { if (address && city) setStep("schedule"); }}>
+            <Btn fullWidth style={{ marginTop: 24, padding: "14px 0", fontSize: 13 }} onClick={() => { if (address && city) setStep(isShipped ? "confirm" : "schedule"); }}>
               CONTINUE
             </Btn>
             {(!address || !city) && (
@@ -254,18 +259,25 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
         {/* Step 4: Confirm */}
         {step === "confirm" && (
           <div>
-            <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 20 }}>Confirm Booking</div>
+            <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 20 }}>{isShipped ? "Confirm Order" : "Confirm Booking"}</div>
 
             {/* Booking summary */}
             <div style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 14, padding: 18, marginBottom: 14 }}>
-              <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 14 }}>BOOKING SUMMARY</div>
-              {[
-                { label: "Treatment", value: treatment?.name ?? selectedSlug },
-                { label: "Date",      value: selectedDate },
-                { label: "Time",      value: selectedTime },
-                { label: "Address",   value: `${address}, ${city}` },
-              ].map((row, i) => (
-                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < 3 ? `1px solid ${B.borderLight}` : "none" }}>
+              <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 14 }}>{isShipped ? "ORDER SUMMARY" : "BOOKING SUMMARY"}</div>
+              {(isShipped
+                ? [
+                    { label: "Product",   value: treatment?.name ?? selectedSlug },
+                    { label: "Ships to",  value: `${address}, ${city}` },
+                    { label: "Delivery",  value: "3–5 business days" },
+                  ]
+                : [
+                    { label: "Treatment", value: treatment?.name ?? selectedSlug },
+                    { label: "Date",      value: selectedDate },
+                    { label: "Time",      value: selectedTime },
+                    { label: "Address",   value: `${address}, ${city}` },
+                  ]
+              ).map((row, i, arr) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < arr.length - 1 ? `1px solid ${B.borderLight}` : "none" }}>
                   <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400 }}>{row.label}</span>
                   <span style={{ ...T.ui, fontSize: 13, color: B.textPrimary, fontWeight: 600, maxWidth: "55%", textAlign: "right" }}>{row.value}</span>
                 </div>
@@ -406,20 +418,35 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
 
             {/* Membership upsell hint */}
             <div style={{ background: `${B.gold}08`, border: `1px solid ${B.gold}25`, borderRadius: 12, padding: "12px 16px", marginBottom: 20 }}>
-              <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, marginBottom: 4 }}>
-                💎 Members save ${treatment ? Math.round(treatment.price * 0.25 / 100) : "—"}
-              </div>
-              <div style={{ ...T.body, fontSize: 12, color: B.textMuted }}>
-                Join a membership to pay ${treatment ? Math.round(treatment.price * 0.75 / 100) : "—"} instead
-              </div>
+              {isShipped ? (
+                <>
+                  <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, marginBottom: 4 }}>
+                    💎 Members get free shipping + priority fulfillment
+                  </div>
+                  <div style={{ ...T.body, fontSize: 12, color: B.textMuted }}>
+                    Join a membership to pay ${treatment ? Math.round(treatment.price * 0.75 / 100) : "—"} per shipment
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, marginBottom: 4 }}>
+                    💎 Members save ${treatment ? Math.round(treatment.price * 0.25 / 100) : "—"}
+                  </div>
+                  <div style={{ ...T.body, fontSize: 12, color: B.textMuted }}>
+                    Join a membership to pay ${treatment ? Math.round(treatment.price * 0.75 / 100) : "—"} instead
+                  </div>
+                </>
+              )}
             </div>
 
             <Btn fullWidth style={{ padding: "15px 0", fontSize: 14 }} onClick={handleConfirm}>
-              {totalDue === 0 ? "CONFIRM — FREE WITH CREDITS" : `CONFIRM & PAY $${totalDue}`}
+              {isShipped
+                ? (totalDue === 0 ? "PLACE ORDER — FREE WITH CREDITS" : `PLACE ORDER · $${totalDue}`)
+                : (totalDue === 0 ? "CONFIRM — FREE WITH CREDITS" : `CONFIRM & PAY $${totalDue}`)}
             </Btn>
 
             <div style={{ ...T.body, fontSize: 11, color: B.textMuted, textAlign: "center", marginTop: 12 }}>
-              Free cancellation up to 2 hours before appointment
+              {isShipped ? "Ships in 3–5 business days · Free returns within 30 days" : "Free cancellation up to 2 hours before appointment"}
             </div>
           </div>
         )}

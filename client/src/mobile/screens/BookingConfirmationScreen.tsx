@@ -14,6 +14,7 @@ export function BookingConfirmationScreen({ details, goBack, onTabChange, naviga
   const memberSavings = Math.round(details.price * 0.25);
   const memberPrice = details.price - memberSavings;
   const creditsEarned = Math.max(1, Math.round(details.totalCharged * 0.1));
+  const isShipped = !!details.isShipped;
 
   return (
     <div style={{ position: "absolute", inset: 0, background: B.bg, zIndex: 150, display: "flex", flexDirection: "column", fontFamily: SANS, overflowY: "auto" }}>
@@ -35,43 +36,46 @@ export function BookingConfirmationScreen({ details, goBack, onTabChange, naviga
         </div>
 
         <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 30, color: B.textPrimary, marginBottom: 8, letterSpacing: "-0.02em" }}>
-          You're Booked!
+          {isShipped ? "Order Placed!" : "You're Booked!"}
         </div>
         <div style={{ ...T.body, fontSize: 14, color: B.textSecondary }}>
-          Your appointment is confirmed
+          {isShipped ? "Your order is confirmed" : "Your appointment is confirmed"}
         </div>
       </div>
 
-      {/* Appointment card */}
+      {/* Appointment / Order card */}
       <div style={{ padding: "0 20px 20px" }}>
         <div style={{ background: B.bgCard, border: `1px solid ${B.cyan}25`, borderRadius: 16, padding: 20, position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: 0, right: 0, width: 80, height: 80, background: `radial-gradient(circle at top right, ${B.cyan}10, transparent 70%)` }} />
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
             <div style={{ flex: 1, paddingRight: 12 }}>
-              <div style={{ ...T.over, fontSize: 9, color: B.cyan, marginBottom: 6 }}>CONFIRMED APPOINTMENT</div>
+              <div style={{ ...T.over, fontSize: 9, color: B.cyan, marginBottom: 6 }}>{isShipped ? "ORDER CONFIRMED" : "CONFIRMED APPOINTMENT"}</div>
               <div style={{ ...T.product, fontSize: 18, color: B.textPrimary, lineHeight: 1.3 }}>{details.treatmentName}</div>
             </div>
             <span style={{ ...T.tag, fontSize: 9, color: B.cyan, background: `${B.cyan}15`, padding: "4px 12px", borderRadius: 20, border: `1px solid ${B.cyan}25`, flexShrink: 0 }}>
-              Confirmed
+              {isShipped ? "Processing" : "Confirmed"}
             </span>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: `${B.cyan}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 15 }}>📅</div>
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: `${B.cyan}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 15 }}>{isShipped ? "📦" : "📅"}</div>
               <div>
                 <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{details.date}</div>
-                <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{details.time}</div>
+                {details.time && (
+                  <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{details.time}</div>
+                )}
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: `${B.cyan}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 15 }}>📍</div>
               <div>
                 <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{details.address}</div>
-                <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>Nurse comes to you</div>
+                <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{isShipped ? "Ships to your address" : "Nurse comes to you"}</div>
               </div>
             </div>
+            {!isShipped && (
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: `${B.cyan}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 15 }}>👩‍⚕️</div>
               <div>
@@ -79,6 +83,7 @@ export function BookingConfirmationScreen({ details, goBack, onTabChange, naviga
                 <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>You'll get a notification when confirmed</div>
               </div>
             </div>
+            )}
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: `${B.cyan}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 15 }}>💳</div>
               <div style={{ flex: 1 }}>
