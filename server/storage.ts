@@ -516,7 +516,7 @@ export class MemStorage implements IStorage {
     // NAD+ Treatments — now part of Vitamin & Wellness
     await this.createTreatment({
       categoryId: vitaminWellness.id,
-      name: "NAD+ IV Therapy",
+      name: "NAD+",
       slug: "nad-iv-therapy",
       description: "Advanced anti-aging therapy that supports brain function, increases energy, and aids in addiction recovery. NAD+ is essential for cellular health and longevity.",
       benefits: [

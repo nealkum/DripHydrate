@@ -14,7 +14,7 @@ const shipped = [
 const past = [
   { name: "Recovery IV", slug: "recovery-performance", date: "Mar 15, 2026", price: "$209", nurse: "Sarah K.",  rating: 5 },
   { name: "Hangover IV",               slug: "hangover-iv",          date: "Feb 28, 2026", price: "$179", nurse: "Maria G.",  rating: 5 },
-  { name: "NAD+ IV Therapy",           slug: "nad-iv-therapy",       date: "Feb 1, 2026",  price: "$559", nurse: "David R.",  rating: 5 },
+  { name: "NAD+",                       slug: "nad-iv-therapy",       date: "Feb 1, 2026",  price: "$559", nurse: "David R.",  rating: 5 },
 ];
 
 const stats = [

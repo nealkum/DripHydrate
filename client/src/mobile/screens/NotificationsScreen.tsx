@@ -37,7 +37,7 @@ const initialNotifications = [
     id: 4,
     icon: "⭐",
     title: "Rate your last visit",
-    body: "How was your NAD+ IV Therapy with David R.?",
+    body: "How was your NAD+ with David R.?",
     time: "3 days ago",
     unread: false,
     accent: B.gold,

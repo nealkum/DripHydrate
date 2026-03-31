@@ -71,7 +71,7 @@ const MOCK_ORDERS: MockOrder[] = [
   },
   {
     id: "APT-9744",
-    treatmentName: "NAD+ IV Therapy",
+    treatmentName: "NAD+",
     treatmentSlug: "nad-iv-therapy",
     date: "2026-02-22",
     time: "2:00 PM",
@@ -108,7 +108,7 @@ const MOCK_ORDERS: MockOrder[] = [
 
 const MOCK_LOYALTY_HISTORY: LoyaltyHistoryItem[] = [
   { date: "Mar 10, 2026", description: "Myers' Cocktail booking",    points: 279,  type: "earn"   },
-  { date: "Feb 22, 2026", description: "NAD+ IV Therapy booking",    points: 899,  type: "earn"   },
+  { date: "Feb 22, 2026", description: "NAD+ booking",               points: 899,  type: "earn"   },
   { date: "Feb 15, 2026", description: "Referral bonus — 1 friend",  points: 250,  type: "earn"   },
   { date: "Feb 05, 2026", description: "B-12 Injections order",      points: 35,   type: "earn"   },
   { date: "Jan 31, 2026", description: "Redeemed: $25 off booking",  points: -500, type: "redeem" },
