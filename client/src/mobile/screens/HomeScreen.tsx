@@ -113,56 +113,6 @@ export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
         </div>
       </div>
 
-      {/* Past treatments */}
-      <div style={{ padding: "0 20px 20px" }}>
-        <SectionHeader action="View All →" onAction={() => onTabChange("ord")}>Your Treatments</SectionHeader>
-        <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 4, marginRight: -20, paddingRight: 20 }}>
-          {pastTreatments.map((t, i) => (
-            <div key={i} style={{ minWidth: 156, background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 14, padding: 14, flexShrink: 0 }}>
-              <div
-                onClick={() => navigate({ type: "treatment-detail", slug: t.slug })}
-                style={{ ...T.product, fontSize: 14, color: B.textPrimary, marginBottom: 4, cursor: "pointer" }}
-              >
-                {t.name}
-              </div>
-              <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, marginBottom: 4 }}>{t.date} · {t.price}</div>
-              <div style={{ marginBottom: 10 }}>
-                {t.rated
-                  ? <Stars rating={t.rating} size={10} />
-                  : <span style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>⭐ Rate</span>
-                }
-              </div>
-              <Btn variant="ghost" style={{ width: "100%", padding: "9px 0", fontSize: 11 }} onClick={() => openBooking(t.slug)}>Rebook</Btn>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recommendations */}
-      <div style={{ padding: "0 20px 0" }}>
-        <SectionHeader>Recommended for You</SectionHeader>
-        <div style={{ ...T.body, fontSize: 12, color: B.textMuted, marginTop: -10, marginBottom: 14 }}>Based on your treatment history</div>
-        {recommendations.map((r, i) => (
-          <div
-            key={i}
-            onClick={() => r.slug && navigate({ type: "treatment-detail", slug: r.slug })}
-            style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 0", borderBottom: i < recommendations.length - 1 ? `1px solid ${B.borderLight}` : "none", cursor: r.slug ? "pointer" : "default" }}
-          >
-            <div style={{ width: 48, height: 48, borderRadius: 12, background: B.bgCard, border: `1px solid ${B.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>
-              {r.icon}
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ ...T.product, fontSize: 14, color: B.textPrimary }}>{r.name}</div>
-              <div style={{ ...T.body, fontSize: 11, color: B.textMuted, marginTop: 2 }}>{r.reason}</div>
-            </div>
-            <div style={{ textAlign: "right", flexShrink: 0 }}>
-              <div style={{ ...T.price, fontSize: 14, color: B.textPrimary }}>{r.price}</div>
-              {r.memberPrice && <div style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600 }}>{r.memberPrice}</div>}
-            </div>
-          </div>
-        ))}
-      </div>
-
       {/* Membership card */}
       <div style={{ padding: "24px 20px" }}>
         <div style={{ background: `linear-gradient(135deg, ${B.bgCard} 0%, ${B.tealLight} 100%)`, border: `1px solid ${B.gold}30`, borderRadius: B.cardR, padding: 20, position: "relative", overflow: "hidden" }}>
