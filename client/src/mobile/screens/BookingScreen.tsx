@@ -192,7 +192,6 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
                     <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{t.duration} min</div>
                     <div style={{ marginTop: "auto", paddingTop: 4 }}>
                       <div style={{ ...T.price, fontSize: 15, color: B.textPrimary }}>${Math.round(t.price / 100)}</div>
-                      <div style={{ ...T.ui, fontSize: 10, color: B.cyan, fontWeight: 600, marginTop: 2 }}>${Math.round(t.price * 0.75 / 100)} mbr</div>
                     </div>
                   </div>
                 ))}
