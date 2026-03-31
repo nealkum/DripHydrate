@@ -23,12 +23,6 @@ const pressLogos = [
 export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
   return (
     <div style={{ fontFamily: SANS }}>
-      {/* Promo banner */}
-      <div style={{ background: `linear-gradient(90deg, ${B.gold}, #d4b878)`, padding: "8px 20px", textAlign: "center" }}>
-        <span style={{ ...T.ui, fontSize: 11, color: B.teal }}>Celebrating 10 Years of Drip | 10% OFF with code </span>
-        <span style={{ ...T.tag, fontSize: 10, color: B.teal, background: "rgba(255,255,255,0.4)", padding: "2px 8px", borderRadius: 4 }}>DRIPDECADE</span>
-      </div>
-
       {/* Greeting */}
       <div style={{ padding: "20px 20px 6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
