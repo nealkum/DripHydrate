@@ -27,9 +27,20 @@ const shippedSlugs = new Set([
 
 const USER_CREDITS = 75; // mock loyalty balance
 
+const FILTER_TAGS = [
+  { label: "All",        slugs: null },
+  { label: "Recovery",   slugs: ["hangover-iv", "recovery-performance", "myers-cocktail-plus"] },
+  { label: "Energy",     slugs: ["energy-boost", "nad-iv-therapy", "nad-boost"] },
+  { label: "Immunity",   slugs: ["immunity-boost"] },
+  { label: "Beauty",     slugs: ["beauty-drip"] },
+  { label: "Hydration",  slugs: ["hydration-package"] },
+  { label: "Specialty",  slugs: ["migraine-relief", "iron-iv", "ketamine-iv", "exosome-iv"] },
+] as const;
+
 export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: BookingScreenProps) {
   const [step, setStep] = useState<Step>(slug ? "location" : "select");
   const [selectedSlug, setSelectedSlug] = useState(slug ?? "");
+  const [activeFilter, setActiveFilter] = useState<string>("All");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -123,33 +134,68 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
         {step === "select" && (
           <div>
             <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 6 }}>Choose a Treatment</div>
-            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 20 }}>All IV treatments include a licensed nurse visit</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {ivTreatments.map((t) => (
-                <div
-                  key={t.id}
-                  onClick={() => { setSelectedSlug(t.slug); setStep("location"); }}
-                  style={{
-                    background: selectedSlug === t.slug ? `${B.cyan}10` : B.bgCard,
-                    border: `1px solid ${selectedSlug === t.slug ? B.cyan : B.border}`,
-                    borderRadius: 14,
-                    padding: "14px 16px",
-                    cursor: "pointer",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div>
-                    <div style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>{t.name}</div>
-                    <div style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400, marginTop: 2 }}>{t.duration} min · Licensed nurse</div>
+            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 14 }}>All IV treatments include a licensed nurse visit</div>
+
+            {/* Filter tags */}
+            <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4, marginBottom: 16, marginLeft: -20, paddingLeft: 20, marginRight: -20, paddingRight: 20 }}>
+              {FILTER_TAGS.map((tag) => {
+                const active = activeFilter === tag.label;
+                return (
+                  <button
+                    key={tag.label}
+                    onClick={() => setActiveFilter(tag.label)}
+                    style={{
+                      padding: "7px 16px",
+                      borderRadius: 20,
+                      border: `1px solid ${active ? B.cyan : B.border}`,
+                      background: active ? `${B.cyan}18` : B.bgCard,
+                      color: active ? B.cyan : B.textSecondary,
+                      fontSize: 12,
+                      fontFamily: SANS,
+                      fontWeight: active ? 700 : 500,
+                      cursor: "pointer",
+                      whiteSpace: "nowrap" as const,
+                      transition: "all 0.15s",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {tag.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* 2-column grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              {ivTreatments
+                .filter((t) => {
+                  const tag = FILTER_TAGS.find((f) => f.label === activeFilter);
+                  if (!tag || tag.slugs === null) return true;
+                  return (tag.slugs as readonly string[]).includes(t.slug);
+                })
+                .map((t) => (
+                  <div
+                    key={t.id}
+                    onClick={() => { setSelectedSlug(t.slug); setStep("location"); }}
+                    style={{
+                      background: selectedSlug === t.slug ? `${B.cyan}12` : B.bgCard,
+                      border: `1px solid ${selectedSlug === t.slug ? B.cyan : B.border}`,
+                      borderRadius: 14,
+                      padding: "14px 12px",
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 6,
+                    }}
+                  >
+                    <div style={{ ...T.product, fontSize: 13, color: B.textPrimary, lineHeight: 1.3 }}>{t.name}</div>
+                    <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{t.duration} min</div>
+                    <div style={{ marginTop: "auto", paddingTop: 4 }}>
+                      <div style={{ ...T.price, fontSize: 15, color: B.textPrimary }}>${Math.round(t.price / 100)}</div>
+                      <div style={{ ...T.ui, fontSize: 10, color: B.cyan, fontWeight: 600, marginTop: 2 }}>${Math.round(t.price * 0.75 / 100)} mbr</div>
+                    </div>
                   </div>
-                  <div style={{ textAlign: "right" }}>
-                    <div style={{ ...T.price, fontSize: 16, color: B.textPrimary }}>${Math.round(t.price / 100)}</div>
-                    <div style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600 }}>${Math.round(t.price * 0.75 / 100)} with membership</div>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
