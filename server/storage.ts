@@ -150,7 +150,7 @@ export class MemStorage implements IStorage {
     // Vitamin & Wellness Treatments
     await this.createTreatment({
       categoryId: vitaminWellness.id,
-      name: "Myers Cocktail Plus",
+      name: "Myers Cocktail",
       slug: "myers-cocktail-plus",
       description: "Our most comprehensive IV therapy combining B-Complex, B12, Vitamin C, Lipostat (MIC), Magnesium, Glutathione, Biotin, and Zinc for total wellness support.",
       benefits: [
