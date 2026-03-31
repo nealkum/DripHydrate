@@ -38,8 +38,6 @@ export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: B.cyan, boxShadow: `0 0 8px ${B.cyan}`, display: "inline-block" }} />
               IV Member
             </span>
-            <span style={{ color: B.textMuted }}>·</span>
-            <span>Next treatment tomorrow</span>
           </div>
         </div>
         <button
