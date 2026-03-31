@@ -11,12 +11,6 @@ const pastTreatments = [
   { name: "Immune Boost", date: "Jan 18", price: "$179", rated: true,  rating: 5, slug: "immunity-boost" },
 ];
 
-const recommendations = [
-  { name: "NAD+ Boost IV",    reason: "Pairs with your Recovery IV",      price: "$699", memberPrice: "$559", icon: "🧬", slug: "nad-boost" },
-  { name: "Glutathione Push", reason: "87% of Recovery clients add this", price: "+$35",  memberPrice: null,   icon: "✨", slug: null },
-  { name: "Semaglutide",      reason: "Shipped to your door monthly",     price: "$299/mo", memberPrice: null, icon: "📦", slug: "weight-loss-semaglutide" },
-];
-
 const pressLogos = [
   { name: "The New York Times",     style: { fontFamily: "'Times New Roman', Georgia, serif", fontStyle: "italic" as const, fontWeight: 700, fontSize: 12 } },
   { name: "The Wall Street Journal.", style: { fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 10 } },
@@ -27,12 +21,6 @@ const pressLogos = [
 ];
 
 export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
-  const quickActions = [
-    { icon: "↻", label: "Rebook",   sub: "Last IV",  grad: `linear-gradient(135deg, #2d5a5a, #3d8b8b)`, action: () => openBooking("recovery-performance") },
-    { icon: "📅", label: "Schedule", sub: "New Appt", grad: `linear-gradient(135deg, #3d5a2d, #5b8b3d)`, action: () => openBooking() },
-    { icon: "📦", label: "Shop",     sub: "Shipped",  grad: `linear-gradient(135deg, #5a4a2d, #c9a96e)`,  action: () => onTabChange("tx") },
-  ];
-
   return (
     <div style={{ fontFamily: SANS }}>
       {/* Promo banner */}
@@ -63,21 +51,37 @@ export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
         </button>
       </div>
 
-      {/* Quick actions */}
-      <div style={{ padding: "16px 20px 20px", display: "flex", gap: 10 }}>
-        {quickActions.map((a, i) => (
-          <button
-            key={i}
-            onClick={a.action}
-            style={{ flex: 1, border: `1px solid ${B.border}`, background: B.bgCard, borderRadius: 16, padding: "16px 4px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer" }}
+      {/* Past treatments */}
+      <div style={{ padding: "16px 0 20px" }}>
+        <div style={{ padding: "0 20px 10px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ ...T.heading, fontSize: 20, color: B.textPrimary }}>Your Treatments</div>
+          <span
+            onClick={() => onTabChange("ord")}
+            style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600, cursor: "pointer" }}
           >
-            <div style={{ width: 46, height: 46, borderRadius: 14, background: a.grad, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
-              {a.icon}
+            View All →
+          </span>
+        </div>
+        <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingLeft: 20, paddingRight: 20, paddingBottom: 4 }}>
+          {pastTreatments.map((t, i) => (
+            <div key={i} style={{ minWidth: 156, background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 14, padding: 14, flexShrink: 0 }}>
+              <div
+                onClick={() => navigate({ type: "treatment-detail", slug: t.slug })}
+                style={{ ...T.product, fontSize: 14, color: B.textPrimary, marginBottom: 4, cursor: "pointer" }}
+              >
+                {t.name}
+              </div>
+              <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, marginBottom: 6 }}>{t.date} · {t.price}</div>
+              <div style={{ marginBottom: 10 }}>
+                {t.rated
+                  ? <Stars rating={t.rating} size={10} />
+                  : <span style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>⭐ Rate</span>
+                }
+              </div>
+              <Btn variant="ghost" style={{ width: "100%", padding: "9px 0", fontSize: 11 }} onClick={() => openBooking(t.slug)}>Rebook</Btn>
             </div>
-            <div style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.textPrimary }}>{a.label}</div>
-            <div style={{ ...T.ui, fontSize: 10, color: B.textMuted, fontWeight: 400 }}>{a.sub}</div>
-          </button>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Upcoming appointment */}
