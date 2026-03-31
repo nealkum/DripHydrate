@@ -4,7 +4,7 @@ import { Btn } from "../components/Btn";
 import type { NavProps } from "../MobileApp";
 
 const upcoming = [
-  { name: "Recovery & Performance IV", slug: "recovery-performance", date: "Mar 26, 2026", time: "2:00 PM", location: "Your home · 123 Main St", nurse: "Sarah K.", status: "Confirmed" },
+  { name: "Recovery IV", slug: "recovery-performance", date: "Mar 26, 2026", time: "2:00 PM", location: "Your home · 123 Main St", nurse: "Sarah K.", status: "Confirmed" },
 ];
 
 const shipped = [
@@ -12,7 +12,7 @@ const shipped = [
 ];
 
 const past = [
-  { name: "Recovery & Performance IV", slug: "recovery-performance", date: "Mar 15, 2026", price: "$209", nurse: "Sarah K.",  rating: 5 },
+  { name: "Recovery IV", slug: "recovery-performance", date: "Mar 15, 2026", price: "$209", nurse: "Sarah K.",  rating: 5 },
   { name: "Hangover IV",               slug: "hangover-iv",          date: "Feb 28, 2026", price: "$179", nurse: "Maria G.",  rating: 5 },
   { name: "NAD+ IV Therapy",           slug: "nad-iv-therapy",       date: "Feb 1, 2026",  price: "$559", nurse: "David R.",  rating: 5 },
 ];

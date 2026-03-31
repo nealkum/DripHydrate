@@ -252,7 +252,7 @@ export class MemStorage implements IStorage {
 
     await this.createTreatment({
       categoryId: vitaminWellness.id,
-      name: "Recovery & Performance",
+      name: "Recovery",
       slug: "recovery-performance",
       description: "Improve athletic endurance, shorten muscle recovery time, and enhance overall performance with targeted nutrients for active individuals.",
       benefits: [

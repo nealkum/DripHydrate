@@ -88,7 +88,7 @@ export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
             onClick={() => navigate({ type: "treatment-detail", slug: "recovery-performance" })}
             style={{ ...T.product, fontSize: 19, color: B.textPrimary, marginBottom: 14, cursor: "pointer" }}
           >
-            Recovery & Performance IV
+            Recovery IV
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 18 }}>
             <div style={{ ...T.body, fontSize: 13, color: B.textSecondary, display: "flex", alignItems: "center", gap: 10 }}>

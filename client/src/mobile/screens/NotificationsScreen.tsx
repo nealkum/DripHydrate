@@ -7,7 +7,7 @@ const initialNotifications = [
     id: 1,
     icon: "👩‍⚕️",
     title: "Nurse Sarah K. is on her way",
-    body: "ETA: 25 minutes · Recovery & Performance IV",
+    body: "ETA: 25 minutes · Recovery IV",
     time: "Just now",
     unread: true,
     accent: B.cyan,
