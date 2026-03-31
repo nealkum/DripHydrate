@@ -201,7 +201,7 @@ export class MemStorage implements IStorage {
 
     await this.createTreatment({
       categoryId: vitaminWellness.id,
-      name: "Hydration Package",
+      name: "Dehydration",
       slug: "hydration-package",
       description: "Rapid rehydration with IV fluids and electrolytes. Essential for recovery from dehydration, hangovers, or intense physical activity.",
       benefits: [
