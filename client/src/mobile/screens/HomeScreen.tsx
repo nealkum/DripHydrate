@@ -15,24 +15,39 @@ const pastTreatments = [
 export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
   return (
     <div style={{ fontFamily: SANS }}>
-      {/* Greeting */}
-      <div style={{ padding: "20px 20px 6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div>
-          <div style={{ ...T.hero, fontSize: 26, color: B.textPrimary }}>Good morning, Neal</div>
-          <div style={{ ...T.ui, fontSize: 13, color: B.textSecondary, marginTop: 4, display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: B.gold, fontWeight: 600, fontSize: 12 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: B.cyan, boxShadow: `0 0 8px ${B.cyan}`, display: "inline-block" }} />
-              IV Member
-            </span>
+      {/* Address bar */}
+      <div style={{ padding: "10px 20px 4px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <button
+          style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center", gap: 5, textAlign: "left" }}
+        >
+          <div>
+            <div style={{ fontFamily: SANS, fontWeight: 700, fontSize: 15, color: B.textPrimary, display: "flex", alignItems: "center", gap: 4 }}>
+              2847 Oak Street
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ marginTop: 1, flexShrink: 0 }}>
+                <path d="M3 4.5L6 7.5L9 4.5" stroke={B.textPrimary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div style={{ fontFamily: SANS, fontSize: 11, color: B.textMuted, fontWeight: 400, marginTop: 1 }}>Los Angeles, CA</div>
           </div>
-        </div>
+        </button>
         <button
           onClick={() => navigate({ type: "notifications" })}
-          style={{ width: 42, height: 42, borderRadius: "50%", background: B.bgCard, border: `1px solid ${B.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, cursor: "pointer", position: "relative" }}
+          style={{ width: 38, height: 38, borderRadius: "50%", background: B.bgCard, border: `1px solid ${B.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, cursor: "pointer", position: "relative", flexShrink: 0 }}
         >
           🔔
-          <span style={{ position: "absolute", top: 8, right: 8, width: 8, height: 8, borderRadius: "50%", background: B.cyan, border: `2px solid ${B.bg}` }} />
+          <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: B.cyan, border: `2px solid ${B.bg}` }} />
         </button>
+      </div>
+
+      {/* Greeting */}
+      <div style={{ padding: "8px 20px 6px" }}>
+        <div style={{ ...T.hero, fontSize: 26, color: B.textPrimary }}>Good morning, Neal</div>
+        <div style={{ ...T.ui, fontSize: 13, color: B.textSecondary, marginTop: 4, display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: B.gold, fontWeight: 600, fontSize: 12 }}>
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: B.cyan, boxShadow: `0 0 8px ${B.cyan}`, display: "inline-block" }} />
+            IV Member
+          </span>
+        </div>
       </div>
 
       {/* Past treatments */}
