@@ -23,7 +23,6 @@ function isPopular(slug: string) {
 
 export function TreatmentsScreen({ navigate, openBooking }: NavProps) {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [query, setQuery] = useState("");
 
   const { data: treatments = [] } = useQuery<Treatment[]>({
     queryKey: ["/api/treatments"],
@@ -31,11 +30,7 @@ export function TreatmentsScreen({ navigate, openBooking }: NavProps) {
 
   const filtered = treatments.filter((t) => {
     const cat = getTxCategory(t);
-    const matchCat = activeCategory === "All" || cat === activeCategory;
-    const matchQ = !query
-      || t.name.toLowerCase().includes(query.toLowerCase())
-      || (t.description ?? "").toLowerCase().includes(query.toLowerCase());
-    return matchCat && matchQ;
+    return activeCategory === "All" || cat === activeCategory;
   });
 
   return (
@@ -44,21 +39,6 @@ export function TreatmentsScreen({ navigate, openBooking }: NavProps) {
         <div style={{ ...T.hero, fontSize: 28, color: B.textPrimary }}>Treatments</div>
       </div>
 
-      {/* Search */}
-      <div style={{ padding: "0 20px 14px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, background: B.bgCard, borderRadius: 12, padding: "12px 14px", border: `1px solid ${B.border}` }}>
-          <span style={{ fontSize: 15, color: B.textMuted }}>🔍</span>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search treatments, symptoms..."
-            style={{ border: "none", background: "none", outline: "none", flex: 1, ...T.body, fontSize: 14, color: B.textPrimary, fontFamily: SANS }}
-          />
-          {query && (
-            <button onClick={() => setQuery("")} style={{ background: "none", border: "none", color: B.textMuted, cursor: "pointer", fontSize: 16, lineHeight: 1 }}>×</button>
-          )}
-        </div>
-      </div>
 
       {/* Category pills */}
       <div style={{ display: "flex", gap: 8, padding: "0 20px 18px", overflowX: "auto" }}>
