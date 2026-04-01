@@ -5,32 +5,32 @@ import type { NavProps } from "../MobileApp";
 
 const plans = [
   {
-    id: "essential",
-    name: "Essential",
-    price: 149,
-    perSession: 74,
-    sessions: 2,
+    id: "basic",
+    name: "Basic",
+    price: 279,
+    savings: "SAVE UP TO 25%",
+    sessions: 1,
     color: B.tealAccent,
-    features: ["2 IV sessions/month", "Member pricing on all IVs", "Priority booking", "Free nurse visit fee"],
+    features: ["Priority Booking", "15% off all Shipped To You Products", "Free Discovery Call with our Longevity Specialist", "Access to all Active Locations", "Exclusive Monthly Member Promotions"],
   },
   {
-    id: "performance",
-    name: "Performance",
-    price: 259,
-    perSession: 65,
-    sessions: 4,
+    id: "premium",
+    name: "Premium",
+    price: 499,
+    savings: "SAVE UP TO 30%",
+    sessions: 2,
     color: B.cyan,
     current: true,
-    features: ["4 IV sessions/month", "Member pricing on all IVs", "Priority booking", "Free add-ons ($70 value)", "Dedicated care coordinator"],
+    features: ["Priority Booking", "15% off all Shipped To You Products", "Free Discovery Call with our Longevity Specialist", "Access to all Active Locations", "Exclusive Monthly Member Promotions"],
   },
   {
-    id: "vip",
-    name: "VIP Unlimited",
-    price: 449,
-    perSession: null,
-    sessions: null,
+    id: "elite",
+    name: "Elite",
+    price: 899,
+    savings: "SAVE UP TO 35%",
+    sessions: 4,
     color: B.gold,
-    features: ["Unlimited IV sessions", "Member pricing on all IVs", "Same-day priority booking", "All add-ons included", "Dedicated care coordinator", "Concierge wellness support"],
+    features: ["Priority Booking", "15% off all Shipped To You Products", "Free Discovery Call with our Longevity Specialist", "Access to all Active Locations", "Exclusive Monthly Member Promotions"],
   },
 ];
 
@@ -52,7 +52,7 @@ const faqs = [
 
 export function MembershipScreen({ goBack }: NavProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [activePlan, setActivePlan] = useState("performance");
+  const [activePlan, setActivePlan] = useState("premium");
   const [switchBanner, setSwitchBanner] = useState<string | null>(null);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [cancelled, setCancelled] = useState(false);
@@ -165,18 +165,14 @@ export function MembershipScreen({ goBack }: NavProps) {
                         <div style={{ ...T.product, fontSize: 18, color: B.textPrimary }}>{plan.name}</div>
                         <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 4 }}>
                           <span style={{ fontFamily: SANS, fontWeight: 700, fontSize: 26, color: isActive ? plan.color : B.textSecondary }}>${plan.price}</span>
-                          <span style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>/mo</span>
+                          <span style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>/month</span>
                         </div>
-                        {plan.perSession && (
-                          <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, marginTop: 2 }}>
-                            ${plan.perSession}/session · {plan.sessions} sessions/mo
-                          </div>
-                        )}
-                        {!plan.sessions && (
-                          <div style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600, marginTop: 2 }}>
-                            Unlimited sessions included
-                          </div>
-                        )}
+                        <div style={{ display: "inline-block", marginTop: 8, padding: "4px 12px", borderRadius: 20, background: isActive ? `${plan.color}20` : "rgba(255,255,255,0.07)", border: `1px solid ${isActive ? plan.color + "40" : "rgba(255,255,255,0.12)"}` }}>
+                          <span style={{ fontFamily: SANS, fontWeight: 700, fontSize: 10, color: isActive ? plan.color : B.textMuted, letterSpacing: "0.06em" }}>{plan.savings}</span>
+                        </div>
+                        <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textSecondary, marginTop: 10, paddingBottom: 10, borderBottom: `1px solid rgba(255,255,255,0.07)` }}>
+                          {plan.sessions} IV Treatment{plan.sessions !== 1 ? "s" : ""} /month
+                        </div>
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
                         {plan.features.map((f) => (
