@@ -14,7 +14,7 @@ import { SelectedTreatmentBanner } from "@/components/booking/selected-treatment
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import type { Treatment, City, InsertAppointment } from "@shared/schema";
-import { ArrowLeft, ArrowRight, CreditCard, Lock, Shield, Star, Stethoscope, Check, Droplets, Package, ChevronDown, ChevronUp, Plus, Minus } from "lucide-react";
+import { ArrowLeft, ArrowRight, CreditCard, Lock, Shield, Star, Stethoscope, Check, Droplets, Package, ChevronDown, ChevronUp, Plus, Minus, ClipboardCheck, Truck, PackageCheck } from "lucide-react";
 import { Link } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -37,7 +37,6 @@ export default function BookingPayment() {
   const { toast } = useToast();
   const treatmentSlug = params?.treatmentSlug;
   const [subscribeAndSave, setSubscribeAndSave] = useState(false);
-  const [upsellDismissed, setUpsellDismissed] = useState(false);
   // Rehydrate add-ons from sessionStorage so back-navigation preserves selections.
   // Only applies to shipped flows; confirmation page clears the key after a completed order.
   const [additionalItems, setAdditionalItems] = useState<Treatment[]>(() => {
@@ -287,63 +286,27 @@ export default function BookingPayment() {
         <SelectedTreatmentBanner treatment={treatment} />
 
         <div className="mt-6 max-w-2xl mx-auto space-y-6">
-          {/* Membership Upsell — IV only */}
-          {!isShipped && memberPrice && !subscribeAndSave && !upsellDismissed && (
-            <Card className="border-primary/20 overflow-hidden" data-testid="card-membership-upsell">
-              <div className="bg-primary/5 border-b border-primary/10 px-4 py-3 flex items-center gap-3">
+          {/* Membership reminder — IV only (lightweight; full upsell is on the treatment detail page) */}
+          {!isShipped && memberPrice && !subscribeAndSave && (
+            <button
+              className="w-full flex items-center justify-between p-3 rounded-lg border border-primary/20 bg-primary/5 text-left transition-colors"
+              onClick={() => setSubscribeAndSave(true)}
+              data-testid="button-switch-membership"
+            >
+              <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
                   <Droplets className="w-4 h-4 text-primary-foreground" />
                 </div>
-                <p className="text-sm font-semibold">
-                  You'd <span className="text-primary">save ${savings} today</span> with a membership
-                </p>
+                <div>
+                  <p className="text-sm font-medium text-foreground">
+                    Save <span className="text-primary font-semibold">${savings}</span> with a membership
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Pay ${memberPriceFormatted} instead of ${regularPrice} · Priority scheduling · Free delivery
+                  </p>
+                </div>
               </div>
-              <CardContent className="p-4 space-y-4">
-                <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
-                  <div className="text-center p-3 rounded-md bg-muted/50 border">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1">Single session</p>
-                    <p className="text-xl font-bold text-muted-foreground line-through decoration-red-400">${regularPrice}</p>
-                    <p className="text-[10px] text-muted-foreground">One-time price</p>
-                  </div>
-                  <div className="text-primary text-xl font-bold px-1">
-                    <ArrowRight className="w-5 h-5" />
-                  </div>
-                  <div className="text-center p-3 rounded-md border-2 border-primary bg-primary/5">
-                    <p className="text-[10px] uppercase tracking-wider text-primary font-semibold mb-1">As a member</p>
-                    <p className="text-xl font-bold text-foreground">${memberPriceFormatted}</p>
-                    <p className="text-[10px] text-primary font-semibold">Save ${savings}/session</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> Priority scheduling</div>
-                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> Free delivery always</div>
-                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> 10-20% off boosters</div>
-                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> 3-month minimum</div>
-                </div>
-                <div className="flex gap-2">
-                  <Button className="flex-1 font-semibold uppercase text-xs" onClick={() => setSubscribeAndSave(true)} data-testid="button-switch-membership">
-                    Switch to Membership
-                  </Button>
-                  <Button variant="outline" className="text-xs" onClick={() => setUpsellDismissed(true)} data-testid="button-dismiss-upsell">
-                    No thanks
-                  </Button>
-                </div>
-                <p className="text-center text-[10px] text-muted-foreground">3-month minimum · First session today</p>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Mini upsell reminder */}
-          {!isShipped && memberPrice && !subscribeAndSave && upsellDismissed && (
-            <button
-              className="w-full flex items-center justify-between p-3 rounded-md border text-left hover-elevate transition-colors"
-              onClick={() => setUpsellDismissed(false)}
-              data-testid="button-restore-upsell"
-            >
-              <span className="text-sm text-muted-foreground">
-                Members save <span className="text-primary font-semibold">${savings}+</span> on this session
-              </span>
-              <span className="text-xs text-primary font-semibold whitespace-nowrap ml-2">See offer</span>
+              <span className="text-xs text-primary font-semibold whitespace-nowrap ml-3">Apply</span>
             </button>
           )}
 
@@ -396,6 +359,46 @@ export default function BookingPayment() {
                   <div className="text-right">
                     <p className="font-bold text-foreground">${(shippingPlan.pricePerMonth / 100).toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">/month</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Shipping Timeline — shipped orders only */}
+          {isShipped && (
+            <Card data-testid="card-shipping-timeline">
+              <CardContent className="p-4">
+                <h3 className="font-semibold text-foreground text-sm mb-4">Estimated Delivery Timeline</h3>
+                <div className="relative">
+                  {/* Connector line */}
+                  <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-primary/20" />
+                  <div className="space-y-4">
+                    {[
+                      { icon: ClipboardCheck, label: "Order placed", detail: "Today", active: true },
+                      { icon: Package, label: "Processed & compounded", detail: "1–2 business days", active: false },
+                      { icon: Truck, label: "Shipped via priority mail", detail: "Tracking number emailed", active: false },
+                      { icon: PackageCheck, label: "Delivered to your door", detail: "2–3 business days after shipment", active: false },
+                    ].map((step, idx) => {
+                      const Icon = step.icon;
+                      return (
+                        <div key={idx} className="flex items-start gap-3 relative">
+                          <div className={`w-[30px] h-[30px] rounded-full flex items-center justify-center flex-shrink-0 z-10 ${
+                            step.active
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted border-2 border-primary/20 text-muted-foreground"
+                          }`}>
+                            <Icon className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="pt-0.5">
+                            <p className={`text-sm font-medium ${step.active ? "text-foreground" : "text-muted-foreground"}`}>
+                              {step.label}
+                            </p>
+                            <p className="text-xs text-muted-foreground">{step.detail}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </CardContent>
