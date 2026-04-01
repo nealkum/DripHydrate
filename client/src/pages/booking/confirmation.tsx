@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle2, Calendar, MapPin, Clock, User, Star, Users, Gift, ArrowRight, Package, RefreshCw } from "lucide-react";
+import { CheckCircle2, Calendar, MapPin, Clock, User, Star, Users, Gift, ArrowRight, Package, RefreshCw, ClipboardCheck, Truck, PackageCheck } from "lucide-react";
 import type { Appointment, Treatment, City } from "@shared/schema";
 import { Link } from "wouter";
 import { shippedToYouSlugs } from "@/lib/treatment-data";
@@ -196,13 +196,44 @@ export default function BookingConfirmation() {
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-foreground mb-1">
-                  {isShipped ? "Estimated Delivery" : "Estimated Arrival"}
+                  {isShipped ? "Delivery Timeline" : "Estimated Arrival"}
                 </h3>
-                <p className="text-muted-foreground">
-                  {isShipped
-                    ? "Orders typically ship within 2–5 business days. You'll receive a tracking number via email."
-                    : "Our licensed nurse will arrive within the scheduled 2-hour window"}
-                </p>
+                {isShipped ? (
+                  <div className="relative mt-3">
+                    <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-primary/20" />
+                    <div className="space-y-3">
+                      {[
+                        { icon: ClipboardCheck, label: "Order placed", detail: "Today", active: true },
+                        { icon: Package, label: "Processed & compounded", detail: "1–2 business days", active: false },
+                        { icon: Truck, label: "Shipped with tracking", detail: "Priority mail", active: false },
+                        { icon: PackageCheck, label: "Delivered", detail: "2–3 days after shipment", active: false },
+                      ].map((step, idx) => {
+                        const Icon = step.icon;
+                        return (
+                          <div key={idx} className="flex items-center gap-3 relative">
+                            <div className={`w-[22px] h-[22px] rounded-full flex items-center justify-center flex-shrink-0 z-10 ${
+                              step.active
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted border-2 border-primary/20 text-muted-foreground"
+                            }`}>
+                              <Icon className="w-3 h-3" />
+                            </div>
+                            <div className="flex items-baseline gap-2">
+                              <p className={`text-sm ${step.active ? "font-medium text-foreground" : "text-muted-foreground"}`}>
+                                {step.label}
+                              </p>
+                              <p className="text-xs text-muted-foreground">— {step.detail}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">
+                    Our licensed nurse will arrive within the scheduled 2-hour window
+                  </p>
+                )}
               </div>
             </div>
 
@@ -224,19 +255,19 @@ export default function BookingConfirmation() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>You'll receive a confirmation email with your order details</span>
+                  <span>Confirmation email sent to <span className="font-medium text-foreground">{appointment.customerEmail}</span></span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Your order will be processed and shipped within 1–2 business days</span>
+                  <span>Your order is being compounded at a licensed US pharmacy (1–2 business days)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>You'll receive a tracking number via email once your order ships</span>
+                  <span>You'll receive a tracking number by email when it ships via priority mail</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Delivery typically takes 2–5 business days</span>
+                  <span>Expected at your door in <span className="font-medium text-foreground">3–5 business days total</span></span>
                 </li>
               </ul>
             ) : (

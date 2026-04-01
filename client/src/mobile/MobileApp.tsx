@@ -13,6 +13,7 @@ import { NotificationsScreen } from "./screens/NotificationsScreen";
 import { ReferralScreen } from "./screens/ReferralScreen";
 import { HelpScreen } from "./screens/HelpScreen";
 import { EditProfileScreen } from "./screens/EditProfileScreen";
+import { RebookSheet } from "./components/RebookSheet";
 
 export type TabId = "home" | "tx" | "ord" | "acc";
 
@@ -41,12 +42,14 @@ export interface NavProps {
   goBack: () => void;
   onTabChange: (tab: TabId) => void;
   openBooking: (slug?: string, addOns?: string[]) => void;
+  openRebook: (slug: string, addOns?: string[]) => void;
 }
 
 export function MobileApp() {
   const [tab, setTab] = useState<TabId>("home");
   const [navStack, setNavStack] = useState<NavScreen[]>([]);
   const [booking, setBooking] = useState<{ open: boolean; slug?: string; addOns?: string[] }>({ open: false });
+  const [rebook, setRebook] = useState<{ open: boolean; slug: string; addOns?: string[] }>({ open: false, slug: "" });
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +72,10 @@ export function MobileApp() {
     setBooking({ open: true, slug, addOns });
   }
 
+  function openRebook(slug: string, addOns?: string[]) {
+    setRebook({ open: true, slug, addOns });
+  }
+
   function handleTabSelect(id: TabId) {
     setTab(id);
     setNavStack([]);
@@ -80,10 +87,11 @@ export function MobileApp() {
 
   function handleBookingConfirmed(details: BookingConfirmation) {
     setBooking({ open: false });
+    setRebook({ open: false, slug: "" });
     setNavStack((prev) => [...prev, { type: "booking-confirmation", details }]);
   }
 
-  const navProps: NavProps = { navigate, goBack, onTabChange: handleTabSelect, openBooking };
+  const navProps: NavProps = { navigate, goBack, onTabChange: handleTabSelect, openBooking, openRebook };
 
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", minHeight: "100vh", background: "#0a1f1f", padding: "16px 0", fontFamily: SANS }}>
@@ -205,6 +213,16 @@ export function MobileApp() {
             slug={booking.slug}
             initialAddOns={booking.addOns}
             onClose={() => setBooking({ open: false })}
+            onConfirmed={handleBookingConfirmed}
+          />
+        )}
+
+        {/* Rebook bottom sheet (one-tap) */}
+        {rebook.open && rebook.slug && (
+          <RebookSheet
+            slug={rebook.slug}
+            previousAddOns={rebook.addOns}
+            onClose={() => setRebook({ open: false, slug: "" })}
             onConfirmed={handleBookingConfirmed}
           />
         )}

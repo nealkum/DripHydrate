@@ -12,7 +12,7 @@ const pastTreatments = [
 ];
 
 
-export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
+export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: NavProps) {
   return (
     <div style={{ fontFamily: SANS }}>
       {/* Address bar */}
@@ -77,7 +77,7 @@ export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
                   : <span style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>⭐ Rate</span>
                 }
               </div>
-              <Btn variant="ghost" style={{ width: "100%", padding: "9px 0", fontSize: 11 }} onClick={() => openBooking(t.slug)}>Rebook</Btn>
+              <Btn variant="ghost" style={{ width: "100%", padding: "9px 0", fontSize: 11 }} onClick={() => openRebook(t.slug)}>Rebook</Btn>
             </div>
           ))}
         </div>

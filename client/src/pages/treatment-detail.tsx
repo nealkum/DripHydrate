@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ArrowLeft, Check, Clock, DollarSign, Search, Stethoscope, CheckCircle2, Shield, Star, FlaskConical, Package, Truck, RefreshCw } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Clock, DollarSign, Droplets, Search, Stethoscope, CheckCircle2, Shield, Star, FlaskConical, Package, Truck, RefreshCw } from "lucide-react";
 import type { Treatment } from "@shared/schema";
 import { ingredientMap, bestForMap, reviewMap, memberPriceMap, treatmentReviews, addOns, shippedToYouSlugs, subscriptionPlans, type SubscriptionPlanId } from "@/lib/treatment-data";
 
@@ -272,6 +272,47 @@ export default function TreatmentDetail() {
             </ul>
           </div>
 
+          {/* Membership upsell — IV treatments only (positioned before add-ons for max conversion) */}
+          {memberFormatted && !isShipped && (
+            <Card className="border-primary/20 overflow-hidden" data-testid="section-membership-upsell">
+              <div className="bg-primary/5 border-b border-primary/10 px-5 py-3 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                  <Droplets className="w-4 h-4 text-primary-foreground" />
+                </div>
+                <p className="text-sm font-semibold">
+                  Save <span className="text-primary">${savingsFormatted} ({savingsPercent}%)</span> on this treatment with a membership
+                </p>
+              </div>
+              <CardContent className="p-5 space-y-4">
+                <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
+                  <div className="text-center p-3 rounded-md bg-muted/50 border">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1">Single session</p>
+                    <p className="text-xl font-bold text-muted-foreground line-through decoration-red-400">${formattedPrice}</p>
+                    <p className="text-[10px] text-muted-foreground">One-time price</p>
+                  </div>
+                  <div className="text-primary">
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
+                  <div className="text-center p-3 rounded-md border-2 border-primary bg-primary/5">
+                    <p className="text-[10px] uppercase tracking-wider text-primary font-semibold mb-1">As a member</p>
+                    <p className="text-xl font-bold text-foreground">${memberFormatted}</p>
+                    <p className="text-[10px] text-primary font-semibold">Save ${savingsFormatted}/session</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> Priority scheduling</div>
+                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> Free delivery always</div>
+                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> 10-20% off boosters</div>
+                  <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-primary flex-shrink-0" /> HSA/FSA eligible</div>
+                </div>
+                <Button className="w-full font-semibold uppercase text-xs" asChild data-testid="button-join-membership">
+                  <Link href="/membership">View Membership Plans</Link>
+                </Button>
+                <p className="text-center text-[10px] text-muted-foreground">3-month minimum · Cancel anytime after</p>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Subscription Plan Selector — Shipped To You only */}
           {isShipped && (
             <div data-testid="section-subscription-plans">
@@ -471,26 +512,6 @@ export default function TreatmentDetail() {
                 ))}
               </div>
             </div>
-          )}
-
-          {/* Membership upsell — IV treatments only */}
-          {memberFormatted && !isShipped && (
-            <Card className="border-primary/20 bg-primary/5" data-testid="section-membership-upsell">
-              <CardContent className="p-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Save with a Membership</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Get this treatment for <span className="font-bold text-primary">${memberFormatted}</span> instead of ${formattedPrice} — save ${savingsFormatted} ({savingsPercent}%) per session.
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">Cancel anytime. HSA/FSA eligible.</p>
-                  </div>
-                  <Button variant="outline" className="font-semibold uppercase whitespace-nowrap" asChild data-testid="button-join-membership">
-                    <Link href="/membership">View Plans</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           )}
 
           {/* Trust bar */}
