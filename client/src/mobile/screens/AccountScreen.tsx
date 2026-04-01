@@ -26,7 +26,7 @@ const sections = [
 ];
 
 const links = [
-  { label: "Membership & Plan",               icon: "💎", action: "membership" },
+  { label: "Membership",                       icon: "💎", action: "membership" },
   { label: "Referral Program — Give $25, Get $25", icon: "🎁", action: "referral" },
   { label: "Medical Profile",                  icon: "🏥", action: "edit-profile" },
   { label: "Help & FAQ",                       icon: "❓", action: "help" },

@@ -145,7 +145,7 @@ export function MobileApp() {
               {[
                 { icon: "👤", label: "Account",       sub: "Profile & preferences",  action: () => { setMenuOpen(false); handleTabSelect("acc"); } },
                 { icon: "📋", label: "Orders",         sub: "Appointments & shipments", action: () => { setMenuOpen(false); handleTabSelect("ord"); } },
-                { icon: "💎", label: "Membership",     sub: "Plans & benefits",       action: () => { setMenuOpen(false); navigate({ type: "membership" }); } },
+                { icon: "💎", label: "Membership",      sub: "Plans & benefits",       action: () => { setMenuOpen(false); navigate({ type: "membership" }); } },
                 { icon: "🎁", label: "Refer a Friend", sub: "Give $25, get $25",      action: () => { setMenuOpen(false); navigate({ type: "referral" }); } },
                 { icon: "❓", label: "Help & Support", sub: "FAQs & contact us",      action: () => { setMenuOpen(false); navigate({ type: "help" }); } },
               ].map((item) => (
