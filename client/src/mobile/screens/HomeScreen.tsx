@@ -11,14 +11,6 @@ const pastTreatments = [
   { name: "Immune Boost", date: "Jan 18", price: "$179", rated: true,  rating: 5, slug: "immunity-boost" },
 ];
 
-const pressLogos = [
-  { name: "The New York Times",     style: { fontFamily: "'Times New Roman', Georgia, serif", fontStyle: "italic" as const, fontWeight: 700, fontSize: 12 } },
-  { name: "The Wall Street Journal.", style: { fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 10 } },
-  { name: "VICE",                   style: { fontFamily: SANS, fontWeight: 900, fontSize: 13, letterSpacing: "0.04em" } },
-  { name: "Yahoo!",                 style: { fontFamily: SANS, fontWeight: 800, fontSize: 13 } },
-  { name: "New York Post",          style: { fontFamily: "Georgia, serif", fontWeight: 800, fontSize: 11 } },
-  { name: "POPSUGAR",               style: { fontFamily: SANS, fontWeight: 400, fontSize: 10, letterSpacing: "0.18em" } },
-];
 
 export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
   return (
@@ -146,15 +138,6 @@ export function HomeScreen({ navigate, onTabChange, openBooking }: NavProps) {
         </div>
       </div>
 
-      {/* Press logos */}
-      <div style={{ padding: "0 20px 24px" }}>
-        <div style={{ ...T.over, textAlign: "center", fontSize: 9, color: B.textMuted, marginBottom: 14 }}>As Featured In</div>
-        <div style={{ display: "flex", justifyContent: "center", gap: 20, flexWrap: "wrap", opacity: 0.35 }}>
-          {pressLogos.map((p) => (
-            <span key={p.name} style={{ ...p.style, color: B.textPrimary, whiteSpace: "nowrap" }}>{p.name}</span>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
