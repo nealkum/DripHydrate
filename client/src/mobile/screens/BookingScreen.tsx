@@ -539,85 +539,74 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
             </div>
 
             {/* Add-ons upsell (IV only) */}
-            {!isShipped && (
-              <div style={{ background: B.bgCard, border: `1px solid ${selectedAddOns.size > 0 ? B.cyan + "40" : B.border}`, borderRadius: 14, padding: 16, marginBottom: 14, transition: "all 0.2s" }}>
-                <div
-                  onClick={() => setAddOnsExpanded(!addOnsExpanded)}
-                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Add-ons (IV only) — always visible, recommended first */}
+            {!isShipped && (() => {
+              const recIds = recommendedAddOns[selectedSlug] ?? defaultRecommended;
+              const recommended = addOnDefs.filter((ao) => recIds.includes(ao.id));
+              const others = addOnDefs.filter((ao) => !recIds.includes(ao.id));
+              const visibleAddOns = showAllAddOns ? [...recommended, ...others] : recommended;
+
+              return (
+                <div style={{ background: B.bgCard, border: `1px solid ${selectedAddOns.size > 0 ? B.cyan + "40" : B.border}`, borderRadius: 14, padding: 16, marginBottom: 14, transition: "all 0.2s" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                     <div style={{ width: 36, height: 36, borderRadius: 10, background: `${B.cyan}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>
                       💊
                     </div>
                     <div>
-                      <div style={{ ...T.ui, fontSize: 14, fontWeight: 700, color: B.textPrimary }}>Vitamin Add-Ons</div>
+                      <div style={{ ...T.ui, fontSize: 14, fontWeight: 700, color: B.textPrimary }}>Add-Ons</div>
                       <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>
                         {selectedAddOns.size > 0
                           ? <span style={{ color: B.cyan, fontWeight: 600 }}>{selectedAddOns.size} selected · +${addOnTotal}</span>
-                          : "Customize your IV treatment"
+                          : "Recommended for this treatment"
                         }
                       </div>
                     </div>
                   </div>
-                  <span style={{ ...T.ui, fontSize: 18, color: B.textMuted, transition: "transform 0.2s", transform: addOnsExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
-                </div>
 
-                {addOnsExpanded && (() => {
-                  const recIds = recommendedAddOns[selectedSlug] ?? defaultRecommended;
-                  const recommended = addOnDefs.filter((ao) => recIds.includes(ao.id));
-                  const others = addOnDefs.filter((ao) => !recIds.includes(ao.id));
-                  const visibleAddOns = showAllAddOns ? [...recommended, ...others] : recommended;
-
-                  return (
-                    <div style={{ marginTop: 14 }}>
-                      <div style={{ ...T.over, fontSize: 9, color: B.cyan, marginBottom: 8 }}>RECOMMENDED FOR THIS TREATMENT</div>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        {visibleAddOns.map((ao) => {
-                          const selected = selectedAddOns.has(ao.id);
-                          const isRec = recIds.includes(ao.id);
-                          return (
-                            <div
-                              key={ao.id}
-                              onClick={() => toggleAddOn(ao.id)}
-                              style={{
-                                background: selected ? `${B.cyan}10` : B.bg,
-                                border: `1px solid ${selected ? B.cyan : B.border}`,
-                                borderRadius: 12,
-                                padding: "10px 12px",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 10,
-                                cursor: "pointer",
-                                transition: "all 0.15s",
-                              }}
-                            >
-                              <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${selected ? B.cyan : B.border}`, background: selected ? B.cyan : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.15s" }}>
-                                {selected && <span style={{ color: B.bg, fontSize: 11, lineHeight: 1 }}>✓</span>}
-                              </div>
-                              <div style={{ flex: 1 }}>
-                                <div style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.textPrimary }}>{ao.name}</div>
-                                <div style={{ ...T.body, fontSize: 10, color: B.textMuted }}>{ao.description}</div>
-                              </div>
-                              <div style={{ ...T.price, fontSize: 12, color: selected ? B.cyan : B.textSecondary, flexShrink: 0 }}>
-                                +${Math.round(ao.price / 100)}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                      {!showAllAddOns && others.length > 0 && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {visibleAddOns.map((ao) => {
+                      const selected = selectedAddOns.has(ao.id);
+                      return (
                         <div
-                          onClick={(e) => { e.stopPropagation(); setShowAllAddOns(true); }}
-                          style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600, textAlign: "center", padding: "12px 0 4px", cursor: "pointer" }}
+                          key={ao.id}
+                          onClick={() => toggleAddOn(ao.id)}
+                          style={{
+                            background: selected ? `${B.cyan}10` : B.bg,
+                            border: `1px solid ${selected ? B.cyan : B.border}`,
+                            borderRadius: 12,
+                            padding: "10px 12px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            cursor: "pointer",
+                            transition: "all 0.15s",
+                          }}
                         >
-                          See all {addOnDefs.length} add-ons →
+                          <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${selected ? B.cyan : B.border}`, background: selected ? B.cyan : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.15s" }}>
+                            {selected && <span style={{ color: B.bg, fontSize: 11, lineHeight: 1 }}>✓</span>}
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.textPrimary }}>{ao.name}</div>
+                            <div style={{ ...T.body, fontSize: 10, color: B.textMuted }}>{ao.description}</div>
+                          </div>
+                          <div style={{ ...T.price, fontSize: 12, color: selected ? B.cyan : B.textSecondary, flexShrink: 0 }}>
+                            +${Math.round(ao.price / 100)}
+                          </div>
                         </div>
-                      )}
+                      );
+                    })}
+                  </div>
+                  {!showAllAddOns && others.length > 0 && (
+                    <div
+                      onClick={() => setShowAllAddOns(true)}
+                      style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600, textAlign: "center", padding: "12px 0 4px", cursor: "pointer" }}
+                    >
+                      See all {addOnDefs.length} add-ons →
                     </div>
-                  );
-                })()}
-              </div>
-            )}
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Membership upsell hint */}
             <div style={{ background: `${B.gold}08`, border: `1px solid ${B.gold}25`, borderRadius: 12, padding: "12px 16px", marginBottom: 20 }}>
