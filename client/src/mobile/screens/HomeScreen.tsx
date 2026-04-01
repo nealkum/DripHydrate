@@ -42,12 +42,6 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
       {/* Greeting */}
       <div style={{ padding: "8px 20px 6px" }}>
         <div style={{ ...T.hero, fontSize: 26, color: B.textPrimary }}>Good morning, Neal</div>
-        <div style={{ ...T.ui, fontSize: 13, color: B.textSecondary, marginTop: 4, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: B.gold, fontWeight: 600, fontSize: 12 }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: B.cyan, boxShadow: `0 0 8px ${B.cyan}`, display: "inline-block" }} />
-            IV Member
-          </span>
-        </div>
       </div>
 
       {/* Past treatments */}
