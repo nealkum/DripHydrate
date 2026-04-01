@@ -116,7 +116,7 @@ export function TreatmentsScreen({ navigate, openBooking }: NavProps) {
                   style={{ padding: "11px 22px", fontSize: 12 }}
                   onClick={(e) => { e.stopPropagation(); openBooking(t.slug); }}
                 >
-                  BOOK NOW
+                  {shipped ? "ORDER" : "BOOK NOW"}
                 </Btn>
               </div>
             </div>

@@ -276,7 +276,7 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
             {addOnTotal > 0 && <div style={{ ...T.ui, fontSize: 11, color: B.textMuted }}>includes ${addOnTotal} in add-ons</div>}
           </div>
           <Btn style={{ padding: "14px 32px", fontSize: 13 }} onClick={() => openBooking(slug, [...selectedAddOns])}>
-            BOOK NOW
+            {isShipped ? "ORDER" : "BOOK NOW"}
           </Btn>
         </div>
       </div>
