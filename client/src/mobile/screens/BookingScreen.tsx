@@ -16,6 +16,11 @@ interface BookingScreenProps {
 type Step = "select" | "location" | "schedule" | "confirm";
 
 const TIMES = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM"];
+const TIME_SECTIONS = [
+  { label: "Morning", times: ["9:00 AM","10:00 AM","11:00 AM"] },
+  { label: "Afternoon", times: ["12:00 PM","1:00 PM","2:00 PM","3:00 PM"] },
+  { label: "Evening", times: ["4:00 PM","5:00 PM","6:00 PM"] },
+];
 const DATES = ["Today, Mar 25","Tomorrow, Mar 26","Thu, Mar 27","Fri, Mar 28","Sat, Mar 29","Sun, Mar 30"];
 
 const shippedSlugs = new Set([
@@ -41,10 +46,11 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
   const [step, setStep] = useState<Step>(slug ? "location" : "select");
   const [selectedSlug, setSelectedSlug] = useState(slug ?? "");
   const [activeFilter, setActiveFilter] = useState<string>("All");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+  const [address, setAddress] = useState("123 Main St, Los Angeles");
+  const [city, setCity] = useState("Los Angeles, CA");
+  const [editingAddress, setEditingAddress] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(DATES[0]);
+  const [selectedTime, setSelectedTime] = useState(TIMES[4]);
   const [selectedAddOns, setSelectedAddOns] = useState<Set<string>>(new Set(initialAddOns ?? []));
 
   // Credits state
@@ -212,40 +218,78 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
               </div>
             )}
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {/* Pre-filled saved address card (default view) */}
+            {!editingAddress && address && city ? (
               <div>
-                <label style={{ ...T.ui, fontSize: 12, color: B.textMuted, display: "block", marginBottom: 6 }}>STREET ADDRESS</label>
-                <input
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="123 Main St, Apt 4B"
-                  style={{ width: "100%", padding: "13px 14px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, color: B.textPrimary, fontSize: 14, fontFamily: SANS, outline: "none", boxSizing: "border-box" }}
-                />
-              </div>
-              <div>
-                <label style={{ ...T.ui, fontSize: 12, color: B.textMuted, display: "block", marginBottom: 6 }}>CITY</label>
-                <input
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Los Angeles, CA"
-                  style={{ width: "100%", padding: "13px 14px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, color: B.textPrimary, fontSize: 14, fontFamily: SANS, outline: "none", boxSizing: "border-box" }}
-                />
-              </div>
-            </div>
-
-            <div style={{ marginTop: 16 }}>
-              <div style={{ ...T.over, fontSize: 9, color: B.textMuted, marginBottom: 10 }}>SAVED ADDRESSES</div>
-              {["Home · 123 Main St, Los Angeles", "Office · 456 Wilshire Blvd"].map((a, i) => (
-                <div
-                  key={i}
-                  onClick={() => { setAddress(a.split("·")[1].trim()); setCity("Los Angeles, CA"); }}
-                  style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${B.borderLight}`, cursor: "pointer" }}
-                >
-                  <span>📍</span>
-                  <span style={{ ...T.ui, fontSize: 13, color: B.textSecondary }}>{a}</span>
+                <div style={{ background: B.bg, border: `1px solid ${B.cyan}25`, borderRadius: 12, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{ fontSize: 16 }}>📍</span>
+                    <div>
+                      <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>Home · {address}</div>
+                      <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{city}</div>
+                    </div>
+                  </div>
+                  <span onClick={() => setEditingAddress(true)} style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>Change</span>
                 </div>
-              ))}
-            </div>
+
+                <div style={{ ...T.over, fontSize: 9, color: B.textMuted, marginBottom: 10 }}>OTHER ADDRESSES</div>
+                {[{ label: "Office", street: "456 Wilshire Blvd", city: "Los Angeles, CA" }].map((a, i) => (
+                  <div
+                    key={i}
+                    onClick={() => { setAddress(a.street); setCity(a.city); }}
+                    style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${B.borderLight}`, cursor: "pointer" }}
+                  >
+                    <span>📍</span>
+                    <span style={{ ...T.ui, fontSize: 13, color: B.textSecondary }}>{a.label} · {a.street}</span>
+                  </div>
+                ))}
+                <div
+                  onClick={() => { setAddress(""); setCity(""); setEditingAddress(true); }}
+                  style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", cursor: "pointer" }}
+                >
+                  <span style={{ fontSize: 14, color: B.cyan }}>＋</span>
+                  <span style={{ ...T.ui, fontSize: 13, color: B.cyan, fontWeight: 600 }}>Add new address</span>
+                </div>
+              </div>
+            ) : (
+              /* Manual address entry (for editing or new address) */
+              <div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  <div>
+                    <label style={{ ...T.ui, fontSize: 12, color: B.textMuted, display: "block", marginBottom: 6 }}>STREET ADDRESS</label>
+                    <input
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="123 Main St, Apt 4B"
+                      style={{ width: "100%", padding: "13px 14px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, color: B.textPrimary, fontSize: 14, fontFamily: SANS, outline: "none", boxSizing: "border-box" }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ ...T.ui, fontSize: 12, color: B.textMuted, display: "block", marginBottom: 6 }}>CITY</label>
+                    <input
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder="Los Angeles, CA"
+                      style={{ width: "100%", padding: "13px 14px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, color: B.textPrimary, fontSize: 14, fontFamily: SANS, outline: "none", boxSizing: "border-box" }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ marginTop: 16 }}>
+                  <div style={{ ...T.over, fontSize: 9, color: B.textMuted, marginBottom: 10 }}>SAVED ADDRESSES</div>
+                  {["Home · 123 Main St, Los Angeles", "Office · 456 Wilshire Blvd"].map((a, i) => (
+                    <div
+                      key={i}
+                      onClick={() => { setAddress(a.split("·")[1].trim()); setCity("Los Angeles, CA"); setEditingAddress(false); }}
+                      style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${B.borderLight}`, cursor: "pointer" }}
+                    >
+                      <span>📍</span>
+                      <span style={{ ...T.ui, fontSize: 13, color: B.textSecondary }}>{a}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <Btn fullWidth style={{ marginTop: 24, padding: "14px 0", fontSize: 13 }} onClick={() => { if (address && city) setStep(isShipped ? "confirm" : "schedule"); }}>
               CONTINUE
@@ -277,18 +321,22 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
               ))}
             </div>
 
-            <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 10 }}>TIME</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 24 }}>
-              {TIMES.map((time) => (
-                <button
-                  key={time}
-                  onClick={() => setSelectedTime(time)}
-                  style={{ padding: "12px", borderRadius: 12, border: `1px solid ${selectedTime === time ? B.cyan : B.border}`, background: selectedTime === time ? `${B.cyan}15` : B.bgCard, color: selectedTime === time ? B.cyan : B.textSecondary, fontSize: 13, fontFamily: SANS, fontWeight: 600, cursor: "pointer" }}
-                >
-                  {time}
-                </button>
-              ))}
-            </div>
+            {TIME_SECTIONS.map((section) => (
+              <div key={section.label} style={{ marginBottom: 16 }}>
+                <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 10 }}>{section.label.toUpperCase()}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                  {section.times.map((time) => (
+                    <button
+                      key={time}
+                      onClick={() => setSelectedTime(time)}
+                      style={{ padding: "12px 8px", borderRadius: 12, border: `1px solid ${selectedTime === time ? B.cyan : B.border}`, background: selectedTime === time ? `${B.cyan}15` : B.bgCard, color: selectedTime === time ? B.cyan : B.textSecondary, fontSize: 13, fontFamily: SANS, fontWeight: 600, cursor: "pointer" }}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
 
             <Btn fullWidth style={{ padding: "14px 0", fontSize: 13 }} onClick={() => { if (selectedDate && selectedTime) setStep("confirm"); }}>
               CONTINUE
