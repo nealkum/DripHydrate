@@ -47,6 +47,7 @@ export function MobileApp() {
   const [tab, setTab] = useState<TabId>("home");
   const [navStack, setNavStack] = useState<NavScreen[]>([]);
   const [booking, setBooking] = useState<{ open: boolean; slug?: string; addOns?: string[] }>({ open: false });
+  const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const currentScreen = navStack[navStack.length - 1] ?? null;
@@ -114,7 +115,66 @@ export function MobileApp() {
         </div>
 
         {/* Bottom tab bar — hidden when a sub-screen is open */}
-        {!currentScreen && <TabBar active={tab} onSelect={handleTabSelect} />}
+        {!currentScreen && <TabBar active={tab} onSelect={handleTabSelect} onMenu={() => setMenuOpen(true)} />}
+
+        {/* Hamburger menu sheet */}
+        {menuOpen && (
+          <div
+            onClick={() => setMenuOpen(false)}
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 300, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{ background: B.bgCard, borderRadius: "20px 20px 0 0", paddingBottom: 36, overflow: "hidden" }}
+            >
+              {/* Handle bar */}
+              <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 4px" }}>
+                <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)" }} />
+              </div>
+
+              {/* User row */}
+              <div style={{ padding: "12px 24px 16px", display: "flex", alignItems: "center", gap: 14, borderBottom: `1px solid rgba(255,255,255,0.07)` }}>
+                <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>👤</div>
+                <div>
+                  <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 15, color: B.textPrimary }}>Neal Johnson</div>
+                  <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: B.textMuted, fontWeight: 400, marginTop: 1 }}>IV Member · Active</div>
+                </div>
+              </div>
+
+              {/* Menu items */}
+              {[
+                { icon: "👤", label: "Account",       sub: "Profile & preferences",  action: () => { setMenuOpen(false); handleTabSelect("acc"); } },
+                { icon: "📋", label: "Orders",         sub: "Appointments & shipments", action: () => { setMenuOpen(false); handleTabSelect("ord"); } },
+                { icon: "💎", label: "Membership",     sub: "Plans & benefits",       action: () => { setMenuOpen(false); navigate({ type: "membership" }); } },
+                { icon: "🎁", label: "Refer a Friend", sub: "Give $25, get $25",      action: () => { setMenuOpen(false); navigate({ type: "referral" }); } },
+                { icon: "❓", label: "Help & Support", sub: "FAQs & contact us",      action: () => { setMenuOpen(false); navigate({ type: "help" }); } },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  onClick={item.action}
+                  style={{ width: "100%", background: "none", border: "none", padding: "14px 24px", display: "flex", alignItems: "center", gap: 16, cursor: "pointer", textAlign: "left" }}
+                >
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{item.icon}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 14, color: B.textPrimary }}>{item.label}</div>
+                    <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, color: B.textMuted, fontWeight: 400, marginTop: 1 }}>{item.sub}</div>
+                  </div>
+                  <span style={{ color: B.textMuted, fontSize: 16, opacity: 0.4 }}>›</span>
+                </button>
+              ))}
+
+              {/* Book CTA */}
+              <div style={{ padding: "8px 24px 0" }}>
+                <button
+                  onClick={() => { setMenuOpen(false); openBooking(); }}
+                  style={{ width: "100%", padding: "14px 0", borderRadius: 14, background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, border: "none", color: "#fff", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 14, cursor: "pointer", letterSpacing: "0.04em" }}
+                >
+                  BOOK IV THERAPY
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Nav stack screens */}
         {currentScreen?.type === "treatment-detail" && (
