@@ -14,7 +14,7 @@ import { ReferralScreen } from "./screens/ReferralScreen";
 import { HelpScreen } from "./screens/HelpScreen";
 import { EditProfileScreen } from "./screens/EditProfileScreen";
 
-export type TabId = "home" | "tx" | "bk" | "ord" | "acc";
+export type TabId = "home" | "tx" | "ord" | "acc";
 
 export interface BookingConfirmation {
   treatmentName: string;
@@ -69,10 +69,6 @@ export function MobileApp() {
   }
 
   function handleTabSelect(id: TabId) {
-    if (id === "bk") {
-      openBooking();
-      return;
-    }
     setTab(id);
     setNavStack([]);
     // Reset the shared scroll container so each tab starts at the top

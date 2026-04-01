@@ -1,6 +1,6 @@
 import { B, T, SANS } from "../theme";
 
-type TabId = "home" | "tx" | "bk" | "ord" | "acc";
+type TabId = "home" | "tx" | "ord" | "acc";
 
 interface TabBarProps {
   active: TabId;
@@ -10,7 +10,6 @@ interface TabBarProps {
 const tabs = [
   { id: "home" as TabId, label: "Home",       icon: "⌂" },
   { id: "tx"   as TabId, label: "Treatments", icon: "⊕" },
-  { id: "bk"   as TabId, label: "Book",       icon: "+", center: true },
   { id: "ord"  as TabId, label: "Orders",     icon: "≡" },
   { id: "acc"  as TabId, label: "Account",    icon: "◯" },
 ];
@@ -49,39 +48,16 @@ export function TabBar({ active, onSelect }: TabBarProps) {
             fontFamily: SANS,
           }}
         >
-          {t.center ? (
-            <div
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: "50%",
-                background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
-                fontSize: 28,
-                fontWeight: 300,
-                marginTop: -20,
-                boxShadow: `0 4px 20px rgba(91,191,191,0.4)`,
-                border: "3px solid rgba(255,255,255,0.1)",
-                lineHeight: 1,
-              }}
-            >
-              +
-            </div>
-          ) : (
-            <span
-              style={{
-                fontSize: 20,
-                lineHeight: 1,
-                opacity: active === t.id ? 1 : 0.5,
-                color: active === t.id ? B.cyan : B.textMuted,
-              }}
-            >
-              {t.icon}
-            </span>
-          )}
+          <span
+            style={{
+              fontSize: 20,
+              lineHeight: 1,
+              opacity: active === t.id ? 1 : 0.5,
+              color: active === t.id ? B.cyan : B.textMuted,
+            }}
+          >
+            {t.icon}
+          </span>
           <span
             style={{
               ...T.ui,
