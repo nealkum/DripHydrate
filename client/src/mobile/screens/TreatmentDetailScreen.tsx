@@ -103,7 +103,7 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
             <span style={{ ...T.price, fontSize: 32, color: B.textPrimary }}>${basePrice}</span>
             <div>
               <div style={{ ...T.ui, fontSize: 13, fontWeight: 700, color: B.cyan }}>${memberPrice} member price</div>
-              <div style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>Save ${savings} with membership</div>
+              <div style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>Save ${savings} with {isShipped ? "monthly subscription" : "membership"}</div>
             </div>
           </div>
 
@@ -235,7 +235,7 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
           <div style={{ background: `linear-gradient(135deg, ${B.bgCard}, ${B.tealLight})`, border: `1px solid ${B.gold}25`, borderRadius: 14, padding: 18 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
               <span style={{ fontSize: 18 }}>💎</span>
-              <div style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>Save ${savings} with a Membership</div>
+              <div style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>Save ${savings} with a {isShipped ? "Monthly Subscription" : "Membership"}</div>
             </div>
             <div style={{ ...T.body, fontSize: 12, color: B.textSecondary, marginBottom: 14 }}>
               Members pay <span style={{ color: B.cyan, fontWeight: 700 }}>${memberPrice}</span> per session. Cancel anytime, HSA/FSA eligible.

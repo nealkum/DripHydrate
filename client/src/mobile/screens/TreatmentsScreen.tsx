@@ -107,7 +107,7 @@ export function TreatmentsScreen({ navigate, openBooking }: NavProps) {
                 </div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
                   <span style={{ ...T.price, fontSize: 20, color: B.textPrimary }}>${price}</span>
-                  {mp && <span style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.cyan }}>${mp} with membership</span>}
+                  {mp && <span style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.cyan }}>${mp} with {shipped ? "monthly subscription" : "membership"}</span>}
                   {shipped && !mp && <span style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>/month</span>}
                 </div>
               </div>
