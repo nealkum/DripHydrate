@@ -19,8 +19,37 @@ interface TreatmentDetailScreenProps extends NavProps {
   slug: string;
 }
 
+// Per-treatment recommended add-ons (top 3 shown first)
+const recommendedAddOns: Record<string, string[]> = {
+  "myers-cocktail-plus": ["glutathione", "b12-booster", "magnesium"],
+  "hangover-iv":         ["glutathione", "b12-booster", "magnesium"],
+  "recovery-performance":["b12-booster", "magnesium", "zinc"],
+  "nad-iv-therapy":      ["glutathione", "b12-booster", "vitamin-d"],
+  "nad-boost":           ["glutathione", "b12-booster", "vitamin-d"],
+  "energy-boost":        ["b12-booster", "vitamin-d", "magnesium"],
+  "immunity-boost":      ["zinc", "vitamin-d", "glutathione"],
+  "beauty-drip":         ["biotin", "glutathione", "vitamin-d"],
+  "hydration-package":   ["b12-booster", "magnesium", "zinc"],
+  "migraine-relief":     ["magnesium", "b12-booster", "zinc"],
+  "iron-iv":             ["b12-booster", "vitamin-d", "zinc"],
+  "ketamine-iv":         ["magnesium", "b12-booster", "glutathione"],
+  "exosome-iv":          ["glutathione", "biotin", "vitamin-d"],
+};
+const defaultRecommended = ["glutathione", "b12-booster", "magnesium"];
+
+// Social proof: "X% of [treatment] customers add this"
+const addOnPopularity: Record<string, number> = {
+  "glutathione": 73,
+  "b12-booster": 68,
+  "magnesium":   52,
+  "zinc":        47,
+  "biotin":      44,
+  "vitamin-d":   41,
+};
+
 export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDetailScreenProps) {
   const [selectedAddOns, setSelectedAddOns] = useState<Set<string>>(new Set());
+  const [showAllAddOns, setShowAllAddOns] = useState(false);
 
   const { data: treatments = [] } = useQuery<Treatment[]>({ queryKey: ["/api/treatments"] });
   const treatment = treatments.find((t) => t.slug === slug);
@@ -162,45 +191,73 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
           </div>
         )}
 
-        {/* Add-ons */}
-        {relevantAddOns.length > 0 && (
-          <div style={{ padding: "0 20px 24px" }}>
-            <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 4 }}>Vitamin Add-Ons</div>
-            <div style={{ ...T.body, fontSize: 12, color: B.textMuted, marginBottom: 12 }}>Customize your IV with additional boosters</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {relevantAddOns.map((ao) => {
-                const selected = selectedAddOns.has(ao.id);
-                return (
-                  <div
-                    key={ao.id}
-                    onClick={() => toggleAddOn(ao.id)}
-                    style={{
-                      background: selected ? `${B.cyan}10` : B.bgCard,
-                      border: `1px solid ${selected ? B.cyan : B.border}`,
-                      borderRadius: 12,
-                      padding: "12px 14px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 12,
-                      cursor: "pointer",
-                    }}
-                  >
-                    <div style={{ width: 22, height: 22, borderRadius: "50%", border: `2px solid ${selected ? B.cyan : B.border}`, background: selected ? B.cyan : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.15s" }}>
-                      {selected && <span style={{ color: B.bg, fontSize: 12, lineHeight: 1 }}>✓</span>}
+        {/* Add-ons — recommendation-driven with social proof */}
+        {relevantAddOns.length > 0 && (() => {
+          const recIds = recommendedAddOns[slug] ?? defaultRecommended;
+          const recommended = relevantAddOns.filter((ao) => recIds.includes(ao.id));
+          const others = relevantAddOns.filter((ao) => !recIds.includes(ao.id));
+          const visibleAddOns = showAllAddOns ? [...recommended, ...others] : recommended;
+
+          return (
+            <div style={{ padding: "0 20px 24px" }}>
+              <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 4 }}>Recommended Add-Ons</div>
+              <div style={{ ...T.body, fontSize: 12, color: B.textMuted, marginBottom: 12 }}>Most popular with this treatment</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {visibleAddOns.map((ao, idx) => {
+                  const selected = selectedAddOns.has(ao.id);
+                  const popularity = addOnPopularity[ao.id];
+                  const isTopPick = idx === 0 && !showAllAddOns;
+                  return (
+                    <div
+                      key={ao.id}
+                      onClick={() => toggleAddOn(ao.id)}
+                      style={{
+                        background: selected ? `${B.cyan}10` : B.bgCard,
+                        border: `1px solid ${selected ? B.cyan : isTopPick ? B.cyan + "40" : B.border}`,
+                        borderRadius: 12,
+                        padding: "12px 14px",
+                        cursor: "pointer",
+                        position: "relative" as const,
+                        overflow: "hidden",
+                      }}
+                    >
+                      {isTopPick && (
+                        <div style={{ position: "absolute", top: 0, right: 0, background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, padding: "3px 10px", borderRadius: "0 0 0 8px" }}>
+                          <span style={{ ...T.tag, fontSize: 8, color: "#fff", fontWeight: 700 }}>MOST ADDED</span>
+                        </div>
+                      )}
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <div style={{ width: 22, height: 22, borderRadius: "50%", border: `2px solid ${selected ? B.cyan : B.border}`, background: selected ? B.cyan : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.15s" }}>
+                          {selected && <span style={{ color: B.bg, fontSize: 12, lineHeight: 1 }}>✓</span>}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{ao.name}</div>
+                          <div style={{ ...T.body, fontSize: 11, color: B.textMuted }}>{ao.description}</div>
+                          {popularity && (
+                            <div style={{ ...T.ui, fontSize: 10, color: B.cyan, fontWeight: 600, marginTop: 3 }}>
+                              ⚡ {popularity}% of customers add this
+                            </div>
+                          )}
+                        </div>
+                        <div style={{ ...T.price, fontSize: 13, color: selected ? B.cyan : B.textSecondary }}>
+                          +${Math.round(ao.price / 100)}
+                        </div>
+                      </div>
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{ao.name}</div>
-                      <div style={{ ...T.body, fontSize: 11, color: B.textMuted }}>{ao.description}</div>
-                    </div>
-                    <div style={{ ...T.price, fontSize: 13, color: selected ? B.cyan : B.textSecondary }}>
-                      +${Math.round(ao.price / 100)}
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+              {!showAllAddOns && others.length > 0 && (
+                <div
+                  onClick={() => setShowAllAddOns(true)}
+                  style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600, cursor: "pointer", textAlign: "center", marginTop: 12 }}
+                >
+                  See all {relevantAddOns.length} add-ons →
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* How it works */}
         {!isShipped && (

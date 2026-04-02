@@ -103,7 +103,7 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
             </div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <Btn variant="outline" style={{ flex: 1, padding: "11px 0" }} onClick={() => onTabChange("ord")}>Manage</Btn>
+            <Btn variant="outline" style={{ flex: 1, padding: "11px 0" }} onClick={() => onTabChange("ord")}>View Details</Btn>
             <Btn variant="outline" style={{ flex: 1, padding: "11px 0" }} onClick={() => openBooking("recovery-performance")}>Reschedule</Btn>
             <Btn style={{ flex: 1, padding: "11px 0" }} onClick={() => openBooking("recovery-performance")}>Add-On</Btn>
           </div>
