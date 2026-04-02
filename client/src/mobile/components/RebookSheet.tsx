@@ -102,13 +102,14 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
       onClick={onClose}
       style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 400, display: "flex", flexDirection: "column", justifyContent: "flex-end", fontFamily: SANS }}
     >
-      <div onClick={(e) => e.stopPropagation()} style={{ background: B.bgCard, borderRadius: "24px 24px 0 0", maxHeight: "85%", overflowY: "auto" }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ background: B.bgCard, borderRadius: "24px 24px 0 0", maxHeight: "85%", display: "flex", flexDirection: "column" }}>
         {/* Handle */}
-        <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 4px", position: "sticky", top: 0, background: B.bgCard, borderRadius: "24px 24px 0 0", zIndex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 4px", flexShrink: 0, borderRadius: "24px 24px 0 0" }}>
           <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)" }} />
         </div>
 
-        <div style={{ padding: "8px 20px 36px" }}>
+        {/* Scrollable content */}
+        <div style={{ padding: "8px 20px 0", overflowY: "auto", flex: 1, minHeight: 0 }}>
           {/* Treatment header */}
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
             <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>
@@ -316,7 +317,7 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
           </div>
 
           {/* Payment */}
-          <div style={{ background: B.bg, border: `1px solid ${editingPayment ? B.cyan + "40" : B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 24, transition: "all 0.2s" }}>
+          <div style={{ background: B.bg, border: `1px solid ${editingPayment ? B.cyan + "40" : B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12, transition: "all 0.2s" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <span style={{ fontSize: 16 }}>{selectedPayment.icon}</span>
@@ -354,7 +355,10 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
             )}
           </div>
 
-          {/* CTA */}
+        </div>
+
+        {/* Fixed footer with CTA */}
+        <div style={{ padding: "12px 20px 36px", flexShrink: 0, borderTop: `1px solid ${B.border}` }}>
           <Btn
             fullWidth
             style={{
