@@ -19,8 +19,14 @@ const NEXT_AVAILABLE = { label: "Today, Apr 1", time: "2:00 PM", value: "Today, 
 const ALL_DATES = ["Today, Apr 1","Tomorrow, Apr 2","Thu, Apr 3","Fri, Apr 4","Sat, Apr 5","Sun, Apr 6"];
 const ALL_TIMES = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM"];
 
-const SAVED_ADDRESS = { label: "Home", street: "123 Main St", city: "Los Angeles, CA", full: "123 Main St, Los Angeles, CA" };
-const SAVED_PAYMENT = { brand: "Visa", last4: "4242", icon: "💳" };
+const SAVED_ADDRESSES = [
+  { label: "Home", street: "123 Main St", city: "Los Angeles, CA", full: "123 Main St, Los Angeles, CA" },
+  { label: "Office", street: "456 Wilshire Blvd", city: "Los Angeles, CA", full: "456 Wilshire Blvd, Los Angeles, CA" },
+];
+const SAVED_PAYMENTS = [
+  { brand: "Visa", last4: "4242", icon: "💳" },
+  { brand: "Amex", last4: "1001", icon: "💳" },
+];
 const USER_CREDITS = 75;
 
 export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }: RebookSheetProps) {
@@ -33,6 +39,21 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [membershipOn, setMembershipOn] = useState(true);
   const [processing, setProcessing] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(SAVED_ADDRESSES[0]);
+  const [addingNewAddress, setAddingNewAddress] = useState(false);
+  const [newStreet, setNewStreet] = useState("");
+  const [newCity, setNewCity] = useState("");
+  const [selectedPayment, setSelectedPayment] = useState(SAVED_PAYMENTS[0]);
+
+  // Accordion: only one section open at a time
+  type Section = "time" | "address" | "payment" | null;
+  const [activeSection, setActiveSection] = useState<Section>(null);
+  const editingAddress = activeSection === "address";
+  const editingPayment = activeSection === "payment";
+  function toggleSection(s: Section) {
+    setActiveSection((prev) => prev === s ? null : s);
+    if (s !== "address") setAddingNewAddress(false);
+  }
 
   if (!treatment) {
     return (
@@ -67,7 +88,7 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
         treatmentName: treatment!.name,
         date: isShipped ? "Ships in 3–5 business days" : selectedDate,
         time: isShipped ? "" : selectedTime,
-        address: SAVED_ADDRESS.full,
+        address: selectedAddress.full,
         price: total,
         creditsApplied: 0,
         totalCharged: total,
@@ -185,7 +206,7 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
             </div>
           ) : (
             <div
-              onClick={() => setShowTimePicker(true)}
+              onClick={() => { setShowTimePicker(true); setActiveSection(null); }}
               style={{ background: B.bg, border: `1px solid ${B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -200,27 +221,137 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
           )}
 
           {/* Address */}
-          <div style={{ background: B.bg, border: `1px solid ${B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 16 }}>📍</span>
-              <div>
-                <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{SAVED_ADDRESS.label} · {SAVED_ADDRESS.street}</div>
-                <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{SAVED_ADDRESS.city}</div>
+          <div style={{ background: B.bg, border: `1px solid ${editingAddress ? B.cyan + "40" : B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 16, transition: "all 0.2s" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 16 }}>📍</span>
+                <div>
+                  <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{selectedAddress.label} · {selectedAddress.street}</div>
+                  <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{selectedAddress.city}</div>
+                </div>
               </div>
+              <span onClick={() => toggleSection("address")} style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>{editingAddress ? "Done" : "Edit"}</span>
             </div>
-            <span style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>Edit</span>
+            {editingAddress && (
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${B.borderLight}`, display: "flex", flexDirection: "column", gap: 8 }}>
+                {SAVED_ADDRESSES.map((addr, i) => {
+                  const active = selectedAddress.full === addr.full;
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => { setSelectedAddress(addr); setActiveSection(null); setAddingNewAddress(false); }}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+                        background: active ? `${B.cyan}10` : "transparent",
+                        border: `1px solid ${active ? B.cyan : B.borderLight}`,
+                      }}
+                    >
+                      <div style={{ width: 18, height: 18, borderRadius: "50%", border: `2px solid ${active ? B.cyan : B.border}`, background: active ? B.cyan : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        {active && <span style={{ color: B.bg, fontSize: 10, lineHeight: 1 }}>✓</span>}
+                      </div>
+                      <div>
+                        <div style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.textPrimary }}>{addr.label} · {addr.street}</div>
+                        <div style={{ ...T.ui, fontSize: 10, color: B.textMuted, fontWeight: 400 }}>{addr.city}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Add new address */}
+                {!addingNewAddress ? (
+                  <div
+                    onClick={() => setAddingNewAddress(true)}
+                    style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", cursor: "pointer" }}
+                  >
+                    <span style={{ fontSize: 14, color: B.cyan }}>＋</span>
+                    <span style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600 }}>Add new address</span>
+                  </div>
+                ) : (
+                  <div style={{ padding: "10px 12px", borderRadius: 10, border: `1px solid ${B.cyan}30`, background: `${B.cyan}06` }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                      <input
+                        value={newStreet}
+                        onChange={(e) => setNewStreet(e.target.value)}
+                        placeholder="Street address"
+                        style={{ width: "100%", padding: "10px 12px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 10, color: B.textPrimary, fontSize: 13, fontFamily: SANS, outline: "none", boxSizing: "border-box" as const }}
+                      />
+                      <input
+                        value={newCity}
+                        onChange={(e) => setNewCity(e.target.value)}
+                        placeholder="City, State"
+                        style={{ width: "100%", padding: "10px 12px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 10, color: B.textPrimary, fontSize: 13, fontFamily: SANS, outline: "none", boxSizing: "border-box" as const }}
+                      />
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <div
+                          onClick={() => setAddingNewAddress(false)}
+                          style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 600, padding: "8px 16px", cursor: "pointer" }}
+                        >
+                          Cancel
+                        </div>
+                        <div
+                          onClick={() => {
+                            if (newStreet && newCity) {
+                              const addr = { label: "New", street: newStreet, city: newCity, full: `${newStreet}, ${newCity}` };
+                              setSelectedAddress(addr);
+                              setAddingNewAddress(false);
+                              setActiveSection(null);
+                              setNewStreet("");
+                              setNewCity("");
+                            }
+                          }}
+                          style={{
+                            ...T.ui, fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer",
+                            background: newStreet && newCity ? B.cyan : B.border,
+                            color: newStreet && newCity ? B.bg : B.textMuted,
+                          }}
+                        >
+                          Use this address
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Payment */}
-          <div style={{ background: B.bg, border: `1px solid ${B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 16 }}>{SAVED_PAYMENT.icon}</span>
-              <div>
-                <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{SAVED_PAYMENT.brand} •••• {SAVED_PAYMENT.last4}</div>
-                <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>Default payment method</div>
+          <div style={{ background: B.bg, border: `1px solid ${editingPayment ? B.cyan + "40" : B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 24, transition: "all 0.2s" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 16 }}>{selectedPayment.icon}</span>
+                <div>
+                  <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>{selectedPayment.brand} •••• {selectedPayment.last4}</div>
+                  <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>Default payment method</div>
+                </div>
               </div>
+              <span onClick={() => toggleSection("payment")} style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>{editingPayment ? "Done" : "Change"}</span>
             </div>
-            <span style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>Change</span>
+            {editingPayment && (
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${B.borderLight}`, display: "flex", flexDirection: "column", gap: 8 }}>
+                {SAVED_PAYMENTS.map((pm, i) => {
+                  const active = selectedPayment.last4 === pm.last4;
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => { setSelectedPayment(pm); setActiveSection(null); }}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+                        background: active ? `${B.cyan}10` : "transparent",
+                        border: `1px solid ${active ? B.cyan : B.borderLight}`,
+                      }}
+                    >
+                      <div style={{ width: 18, height: 18, borderRadius: "50%", border: `2px solid ${active ? B.cyan : B.border}`, background: active ? B.cyan : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        {active && <span style={{ color: B.bg, fontSize: 10, lineHeight: 1 }}>✓</span>}
+                      </div>
+                      <div>
+                        <div style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.textPrimary }}>{pm.icon} {pm.brand} •••• {pm.last4}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* CTA */}
