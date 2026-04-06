@@ -14,6 +14,7 @@ import { ReferralScreen } from "./screens/ReferralScreen";
 import { HelpScreen } from "./screens/HelpScreen";
 import { EditProfileScreen } from "./screens/EditProfileScreen";
 import { RebookSheet } from "./components/RebookSheet";
+import { SplashScreen } from "./components/SplashScreen";
 
 export type TabId = "home" | "tx" | "ord" | "acc";
 
@@ -51,6 +52,7 @@ export function MobileApp() {
   const [booking, setBooking] = useState<{ open: boolean; slug?: string; addOns?: string[] }>({ open: false });
   const [rebook, setRebook] = useState<{ open: boolean; slug: string; addOns?: string[] }>({ open: false, slug: "" });
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const currentScreen = navStack[navStack.length - 1] ?? null;
@@ -109,6 +111,8 @@ export function MobileApp() {
           flexDirection: "column",
         }}
       >
+        {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
+
         {/* Status bar notch */}
         <div style={{ height: 54, background: B.bg, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 4, flexShrink: 0 }}>
           <div style={{ width: 126, height: 5, borderRadius: 3, background: "rgba(255,255,255,0.3)" }} />

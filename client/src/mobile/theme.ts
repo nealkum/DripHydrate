@@ -1,26 +1,29 @@
 import type { CSSProperties } from "react";
 
+// Brand palette sourced from the Drip Hydration logo (navy droplet).
+// Legacy key names (teal/cyan/gold) are preserved so existing screens pick up the
+// new colors without needing mass edits.
 export const B = {
-  teal: "#1a3a3a",
-  tealLight: "#2d5a5a",
-  tealAccent: "#3d8b8b",
-  cyan: "#5bbfbf",
-  cyanLight: "#7ed4d4",
-  gold: "#c9a96e",
+  teal: "#12243f",        // legacy key → now navy (brand primary)
+  tealLight: "#1c3358",   // legacy key → lifted navy
+  tealAccent: "#355b8a",  // legacy key → mid navy
+  cyan: "#6ea8d4",        // legacy key → hydration blue (softer, logo-adjacent)
+  cyanLight: "#9cc4e4",
+  gold: "#c9a96e",        // kept as-is; most screens have been migrated off
   goldLight: "#e8d5a8",
-  cream: "#f5f0e8",
-  warmWhite: "#faf8f4",
+  cream: "#faf8f5",
+  warmWhite: "#faf8f5",
   white: "#ffffff",
-  bg: "#0f2b2b",
-  bgCard: "#1a3a3a",
-  bgSurface: "#163030",
+  bg: "#0a1728",          // deep navy ink (was deep teal)
+  bgCard: "#12243f",
+  bgSurface: "#0f1e36",
   textPrimary: "#ffffff",
-  textSecondary: "rgba(255,255,255,0.7)",
-  textMuted: "rgba(255,255,255,0.45)",
-  textDark: "#1a3a3a",
+  textSecondary: "rgba(255,255,255,0.72)",
+  textMuted: "rgba(255,255,255,0.48)",
+  textDark: "#12243f",
   border: "rgba(255,255,255,0.1)",
   borderLight: "rgba(255,255,255,0.06)",
-  success: "#5bbfbf",
+  success: "#6ea8d4",
   cardR: "16px",
 } as const;
 

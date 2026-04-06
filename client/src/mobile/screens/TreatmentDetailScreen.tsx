@@ -5,6 +5,10 @@ import { B, T, SANS } from "../theme";
 import { Stars } from "../components/Stars";
 import { Btn } from "../components/Btn";
 import type { NavProps } from "../MobileApp";
+import treatmentHero from "@/assets/brand/photos/treatment-hero.jpeg";
+import treatmentSmile from "@/assets/brand/photos/treatment-smile.jpeg";
+import robeCoffee from "@/assets/brand/photos/robe-coffee.jpeg";
+import membershipRobe from "@/assets/brand/photos/membership-robe.jpeg";
 import {
   bestForMap,
   reviewMap,
@@ -102,6 +106,18 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
 
   const relevantAddOns = isShipped ? [] : addOns;
 
+  const heroPhotoMap: Record<string, string> = {
+    "nad-iv-therapy": robeCoffee,
+    "nad-boost": robeCoffee,
+    "myers-cocktail-plus": treatmentSmile,
+    "hangover-iv": treatmentHero,
+    "recovery-performance": treatmentHero,
+    "immunity-boost": treatmentSmile,
+    "beauty-drip": membershipRobe,
+    "energy-boost": treatmentHero,
+  };
+  const heroPhoto = heroPhotoMap[slug] ?? treatmentHero;
+
   const addOnTotal = [...selectedAddOns].reduce((sum, id) => {
     const ao = addOns.find((a) => a.id === id);
     return sum + (ao ? Math.round(ao.price / 100) : 0);
@@ -139,8 +155,16 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
 
       {/* Scrollable body */}
       <div style={{ flex: 1, overflowY: "auto", paddingBottom: 90 }}>
-        {/* Hero section */}
-        <div style={{ padding: "24px 20px 20px", background: `linear-gradient(180deg, ${B.bgCard} 0%, ${B.bg} 100%)` }}>
+        {/* Hero section — photo background */}
+        <div
+          style={{
+            padding: "200px 20px 22px",
+            backgroundImage: `linear-gradient(180deg, rgba(10,23,40,0.05) 0%, rgba(10,23,40,0.55) 55%, ${B.bg} 100%), url(${heroPhoto})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center 25%",
+            position: "relative",
+          }}
+        >
           <div style={{ ...T.hero, fontSize: 28, color: B.textPrimary, marginBottom: 6 }}>{treatment.name}</div>
           {heroTaglines[slug] && (
             <div style={{ ...T.body, fontSize: 14, color: B.textSecondary, marginBottom: 10 }}>

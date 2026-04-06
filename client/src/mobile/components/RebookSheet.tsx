@@ -14,7 +14,7 @@ interface RebookSheetProps {
   onConfirmed: (details: BookingConfirmation) => void;
 }
 
-const NEXT_AVAILABLE = { label: "Today, Apr 1", time: "2:00 PM", value: "Today, Apr 1" };
+const NEXT_AVAILABLE = { label: "ASAP · Today", time: "ASAP (~90 min)", value: "Today, Apr 1" };
 
 const ALL_DATES = ["Today, Apr 1","Tomorrow, Apr 2","Thu, Apr 3","Fri, Apr 4","Sat, Apr 5","Sun, Apr 6"];
 const ALL_TIMES = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM"];
@@ -44,6 +44,14 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
   const [newStreet, setNewStreet] = useState("");
   const [newCity, setNewCity] = useState("");
   const [selectedPayment, setSelectedPayment] = useState(SAVED_PAYMENTS[0]);
+  const [selectedAddOns, setSelectedAddOns] = useState<Set<string>>(new Set(previousAddOns));
+  function toggleAddOn(id: string) {
+    setSelectedAddOns((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
 
   // Accordion: only one section open at a time
   type Section = "time" | "address" | "payment" | null;
@@ -74,7 +82,7 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
   const activePrice = membershipOn ? memberPrice : basePrice;
 
   // Add-on total from previous booking
-  const addOnTotal = previousAddOns.reduce((sum, id) => {
+  const addOnTotal = Array.from(selectedAddOns).reduce((sum, id) => {
     const ao = addOnDefs.find((a) => a.id === id);
     return sum + (ao ? Math.round(ao.price / 100) : 0);
   }, 0);
@@ -181,18 +189,30 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
             </div>
           </div>
 
-          {/* Previous add-ons */}
-          {previousAddOns.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
-              <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, marginRight: 4 }}>Add-ons:</span>
-              {previousAddOns.map((id) => {
-                const ao = addOnDefs.find((a) => a.id === id);
-                return ao ? (
-                  <span key={id} style={{ ...T.ui, fontSize: 10, color: B.cyan, background: `${B.cyan}10`, padding: "3px 8px", borderRadius: 6, fontWeight: 600 }}>
-                    {ao.name} +${Math.round(ao.price / 100)}
-                  </span>
-                ) : null;
-              })}
+          {/* Add-ons (editable) */}
+          {!isShipped && addOnDefs.length > 0 && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ ...T.over, fontSize: 9, color: B.textMuted, marginBottom: 8 }}>ADD-ONS</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {addOnDefs.slice(0, 6).map((ao) => {
+                  const active = selectedAddOns.has(ao.id);
+                  return (
+                    <span
+                      key={ao.id}
+                      onClick={() => toggleAddOn(ao.id)}
+                      style={{
+                        ...T.ui, fontSize: 11, fontWeight: 600, cursor: "pointer",
+                        color: active ? B.cyan : B.textSecondary,
+                        background: active ? `${B.cyan}15` : "transparent",
+                        border: `1px solid ${active ? B.cyan : B.border}`,
+                        padding: "6px 10px", borderRadius: 8,
+                      }}
+                    >
+                      {active ? "✓ " : "+ "}{ao.name} ${Math.round(ao.price / 100)}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           )}
 

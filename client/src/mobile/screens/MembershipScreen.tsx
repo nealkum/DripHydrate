@@ -2,6 +2,7 @@ import { useState } from "react";
 import { B, T, SANS } from "../theme";
 import { Btn } from "../components/Btn";
 import type { NavProps } from "../MobileApp";
+import membershipRobe from "@/assets/brand/photos/membership-robe.jpeg";
 
 const plans = [
   {
@@ -103,8 +104,16 @@ export function MembershipScreen({ goBack }: NavProps) {
           <>
             {/* Current plan banner */}
             <div style={{ padding: "20px 20px 0" }}>
-              <div style={{ background: `linear-gradient(135deg, ${B.bgCard}, ${B.tealLight})`, border: `1px solid ${B.gold}30`, borderRadius: 16, padding: 20, position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: -15, right: -15, width: 90, height: 90, background: `radial-gradient(circle, ${B.gold}15, transparent 70%)` }} />
+              <div style={{
+                backgroundImage: `linear-gradient(180deg, rgba(10,23,40,0.25) 0%, rgba(10,23,40,0.75) 50%, rgba(10,23,40,0.95) 100%), url(${membershipRobe})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center 15%",
+                border: `1px solid ${B.cyan}30`,
+                borderRadius: 16,
+                padding: "120px 20px 20px",
+                position: "relative",
+                overflow: "hidden",
+              }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 22 }}>💎</span>

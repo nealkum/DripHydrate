@@ -1,6 +1,8 @@
 import { B, T, SANS } from "../theme";
 import { Stars } from "../components/Stars";
 import { Btn } from "../components/Btn";
+import { Logo } from "../components/Logo";
+import heroCouch from "@/assets/brand/photos/hero-couch.jpeg";
 import type { NavProps } from "../MobileApp";
 
 const popularTreatments = [
@@ -14,8 +16,13 @@ const popularTreatments = [
 export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: NavProps) {
   return (
     <div style={{ fontFamily: SANS }}>
+      {/* Brand wordmark */}
+      <div style={{ padding: "10px 20px 2px", display: "flex", justifyContent: "center" }}>
+        <Logo variant="wordmark" height={18} style={{ opacity: 0.95 }} />
+      </div>
+
       {/* Address bar */}
-      <div style={{ padding: "10px 20px 4px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ padding: "6px 20px 4px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <button
           style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center", gap: 5, textAlign: "left" }}
         >
@@ -48,17 +55,18 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
         <div
           onClick={() => openBooking("immunity-boost")}
           style={{
-            background: `linear-gradient(135deg, ${B.bgCard} 0%, ${B.tealLight} 60%, ${B.bgCard} 100%)`,
+            backgroundImage: `linear-gradient(180deg, rgba(10,23,40,0.05) 0%, rgba(10,23,40,0.55) 55%, rgba(10,23,40,0.95) 100%), url(${heroCouch})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center 20%",
             border: `1px solid ${B.cyan}25`,
             borderRadius: 16,
-            padding: "20px 18px",
+            padding: "160px 18px 20px",
             position: "relative",
             overflow: "hidden",
             cursor: "pointer",
+            minHeight: 300,
           }}
         >
-          <div style={{ position: "absolute", top: -30, right: -20, width: 160, height: 160, background: `radial-gradient(circle, ${B.cyan}12, transparent 65%)`, pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -20, left: -10, width: 100, height: 100, background: `radial-gradient(circle, ${B.gold}08, transparent 65%)`, pointerEvents: "none" }} />
           <div style={{ ...T.tag, fontSize: 9, color: B.gold, background: `${B.gold}18`, padding: "3px 10px", borderRadius: 6, border: `1px solid ${B.gold}25`, display: "inline-block", marginBottom: 10 }}>
             SPRING WELLNESS
           </div>
@@ -109,69 +117,34 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
         </div>
       </div>
 
-      {/* Upcoming appointment */}
-      <div style={{ padding: "0 20px 20px" }}>
-        <div style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: B.cardR, padding: 20, position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: 0, right: 0, width: 140, height: 140, background: `radial-gradient(circle at top right, ${B.tealAccent}15, transparent 70%)` }} />
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <div style={{ ...T.over, fontSize: 10, color: B.cyan }}>Upcoming Appointment</div>
-            <div style={{ marginLeft: "auto", ...T.tag, fontSize: 9, color: B.cyan, background: `${B.cyan}18`, padding: "3px 10px", borderRadius: 20, border: `1px solid ${B.cyan}30` }}>Confirmed</div>
-          </div>
-          <div
-            onClick={() => navigate({ type: "treatment-detail", slug: "recovery-performance" })}
-            style={{ ...T.product, fontSize: 19, color: B.textPrimary, marginBottom: 14, cursor: "pointer" }}
-          >
-            Recovery IV
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 18 }}>
-            <div style={{ ...T.body, fontSize: 13, color: B.textSecondary, display: "flex", alignItems: "center", gap: 10 }}>
-              <span>📅</span><span>Tomorrow, Mar 26 · 2:00 PM</span>
+      {/* Upcoming appointment — compact banner */}
+      <div style={{ padding: "0 20px 16px" }}>
+        <div
+          onClick={() => onTabChange("ord")}
+          style={{ background: B.bgCard, border: `1px solid ${B.cyan}30`, borderRadius: 12, padding: "12px 14px", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}
+        >
+          <span style={{ fontSize: 16 }}>📅</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Tomorrow, 2:00 PM · Recovery IV
             </div>
-            <div style={{ ...T.body, fontSize: 13, color: B.textSecondary, display: "flex", alignItems: "center", gap: 10 }}>
-              <span>📍</span><span>Your home · 123 Main St, LA</span>
-            </div>
-            <div style={{ ...T.body, fontSize: 13, color: B.textSecondary, display: "flex", alignItems: "center", gap: 10 }}>
-              <span>👩‍⚕️</span><span>Nurse Sarah K. · <Stars rating={5} size={10} /></span>
-            </div>
+            <div style={{ ...T.body, fontSize: 11, color: B.textMuted, marginTop: 1 }}>Nurse Sarah K. · Confirmed</div>
           </div>
-          <Btn variant="outline" style={{ width: "100%", padding: "10px 0" }} onClick={() => onTabChange("ord")}>View Details</Btn>
+          <span style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600 }}>→</span>
         </div>
       </div>
 
-      {/* Membership card */}
-      <div style={{ padding: "24px 20px" }}>
-        <div style={{ background: `linear-gradient(135deg, ${B.bgCard} 0%, ${B.tealLight} 100%)`, border: `1px solid ${B.gold}30`, borderRadius: B.cardR, padding: 20, position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: -20, right: -20, width: 100, height: 100, background: `radial-gradient(circle, ${B.gold}12, transparent 70%)` }} />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 20 }}>💎</span>
-              <div>
-                <div style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>IV Membership</div>
-                <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>Active since Jan 2025</div>
-              </div>
-            </div>
-            <span style={{ ...T.tag, fontSize: 10, color: B.cyan, background: `${B.cyan}15`, padding: "4px 12px", borderRadius: 20, border: `1px solid ${B.cyan}25` }}>Active</span>
+      {/* Membership — 1-line footer */}
+      <div style={{ padding: "0 20px 20px" }}>
+        <div
+          onClick={() => navigate({ type: "membership" })}
+          style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: `${B.gold}08`, border: `1px solid ${B.gold}25`, borderRadius: 10, cursor: "pointer" }}
+        >
+          <span style={{ fontSize: 14 }}>💎</span>
+          <div style={{ ...T.ui, fontSize: 12, color: B.textSecondary, fontWeight: 500, flex: 1 }}>
+            Member · 2 of 4 sessions this month
           </div>
-          <div style={{ marginBottom: 14 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", ...T.ui, fontSize: 12, color: B.textSecondary, marginBottom: 8, fontWeight: 400 }}>
-              <span>2 of 4 sessions this month</span>
-              <span style={{ color: B.cyan, fontWeight: 600 }}>50%</span>
-            </div>
-            <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.08)" }}>
-              <div style={{ height: "100%", width: "50%", borderRadius: 3, background: `linear-gradient(90deg, ${B.tealAccent}, ${B.cyan})` }} />
-            </div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>
-              Savings this year: <span style={{ color: B.gold, fontWeight: 700 }}>$1,080</span>
-            </div>
-            <span
-              onClick={() => navigate({ type: "membership" })}
-              style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600, cursor: "pointer" }}
-            >
-              Benefits →
-            </span>
-          </div>
+          <span style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>Benefits →</span>
         </div>
       </div>
 

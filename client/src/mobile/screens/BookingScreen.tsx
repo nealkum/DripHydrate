@@ -316,7 +316,15 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
                   <div style={{ ...T.ui, fontSize: 15, fontWeight: 700, color: B.textPrimary }}>{treatment?.name ?? selectedSlug}</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                     <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, display: "flex", alignItems: "center", gap: 4 }}>
-                      📅 {selectedDate} · {selectedTime}
+                      📅 {selectedDate} · Nurse arrives {selectedTime}–{(() => {
+                        const m = selectedTime.match(/^(\d+):(\d+)\s*(AM|PM)$/);
+                        if (!m) return selectedTime;
+                        let h = parseInt(m[1], 10);
+                        let min = parseInt(m[2], 10) + 15;
+                        let per = m[3];
+                        if (min >= 60) { min -= 60; h += 1; if (h === 12) per = per === "AM" ? "PM" : "AM"; if (h > 12) h -= 12; }
+                        return `${h}:${min.toString().padStart(2, "0")} ${per}`;
+                      })()}
                     </span>
                     <span style={{ color: B.border }}>·</span>
                     <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, display: "flex", alignItems: "center", gap: 4 }}>
