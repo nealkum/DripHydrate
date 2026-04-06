@@ -13,6 +13,7 @@ import { NotificationsScreen } from "./screens/NotificationsScreen";
 import { ReferralScreen } from "./screens/ReferralScreen";
 import { HelpScreen } from "./screens/HelpScreen";
 import { EditProfileScreen } from "./screens/EditProfileScreen";
+import { TreatmentQuizScreen } from "./screens/TreatmentQuizScreen";
 import { RebookSheet } from "./components/RebookSheet";
 import { SplashScreen } from "./components/SplashScreen";
 
@@ -36,6 +37,7 @@ export type NavScreen =
   | { type: "referral" }
   | { type: "help" }
   | { type: "edit-profile" }
+  | { type: "treatment-quiz" }
   | { type: "booking-confirmation"; details: BookingConfirmation };
 
 export interface NavProps {
@@ -206,6 +208,9 @@ export function MobileApp() {
         )}
         {currentScreen?.type === "edit-profile" && (
           <EditProfileScreen {...navProps} />
+        )}
+        {currentScreen?.type === "treatment-quiz" && (
+          <TreatmentQuizScreen {...navProps} />
         )}
         {currentScreen?.type === "booking-confirmation" && (
           <BookingConfirmationScreen details={currentScreen.details} {...navProps} />

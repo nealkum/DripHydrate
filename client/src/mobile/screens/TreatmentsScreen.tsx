@@ -115,6 +115,7 @@ export function TreatmentsScreen({ navigate }: NavProps) {
       {/* Help me choose */}
       <div style={{ padding: "0 20px 14px" }}>
         <div
+          onClick={() => navigate({ type: "treatment-quiz" })}
           style={{ background: `linear-gradient(135deg, ${B.bgCard}, ${B.tealLight})`, border: `1px solid ${B.cyan}20`, borderRadius: 12, padding: "12px 16px", display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
         >
           <span style={{ fontSize: 20 }}>🩺</span>
