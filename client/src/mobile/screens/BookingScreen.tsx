@@ -6,24 +6,6 @@ import type { Treatment } from "@shared/schema";
 import type { BookingConfirmation } from "../MobileApp";
 import { addOns as addOnDefs } from "@/lib/treatment-data";
 
-// Recommended add-ons per treatment (top 3 most relevant)
-const recommendedAddOns: Record<string, string[]> = {
-  "myers-cocktail-plus": ["glutathione", "b12-booster", "magnesium"],
-  "hangover-iv":         ["glutathione", "b12-booster", "magnesium"],
-  "recovery-performance":["b12-booster", "magnesium", "zinc"],
-  "nad-iv-therapy":      ["glutathione", "b12-booster", "vitamin-d"],
-  "nad-boost":           ["glutathione", "b12-booster", "vitamin-d"],
-  "energy-boost":        ["b12-booster", "vitamin-d", "magnesium"],
-  "immunity-boost":      ["zinc", "vitamin-d", "glutathione"],
-  "beauty-drip":         ["biotin", "glutathione", "vitamin-d"],
-  "hydration-package":   ["b12-booster", "magnesium", "zinc"],
-  "migraine-relief":     ["magnesium", "b12-booster", "zinc"],
-  "iron-iv":             ["b12-booster", "vitamin-d", "zinc"],
-  "ketamine-iv":         ["magnesium", "b12-booster", "glutathione"],
-  "exosome-iv":          ["glutathione", "biotin", "vitamin-d"],
-};
-const defaultRecommended = ["glutathione", "b12-booster", "magnesium"];
-
 interface BookingScreenProps {
   slug?: string;
   initialAddOns?: string[];
@@ -68,18 +50,8 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
   const [city, setCity] = useState("Los Angeles, CA");
   const [editingAddress, setEditingAddress] = useState(false);
   const [selectedDate, setSelectedDate] = useState(DATES[0]);
-  const [selectedTime, setSelectedTime] = useState(TIMES[4]);
-  const [selectedAddOns, setSelectedAddOns] = useState<Set<string>>(new Set(initialAddOns ?? []));
-  const [showAllAddOns, setShowAllAddOns] = useState(false);
-
-  function toggleAddOn(id: string) {
-    setSelectedAddOns((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }
+  const [selectedTime, setSelectedTime] = useState(TIMES[0]);
+  const [selectedAddOns] = useState<Set<string>>(new Set(initialAddOns ?? []));
 
   // Credits state — default ON when user has credits, pre-apply max available
   const [creditsOn, setCreditsOn] = useState(USER_CREDITS > 0);
@@ -277,7 +249,7 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
         {step === "schedule" && (
           <div>
             <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 4 }}>Pick a Date & Time</div>
-            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 16 }}>Same-day appointments often available</div>
+            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 16 }}>A licensed nurse comes to you — book as early as today</div>
 
             {/* Address card — inline at top */}
             {renderAddressCard()}
@@ -439,100 +411,8 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
               </div>
             )}
 
-            {/* Add-ons (IV only) — always visible, recommended first */}
-            {!isShipped && (() => {
-              const recIds = recommendedAddOns[selectedSlug] ?? defaultRecommended;
-              const recommended = addOnDefs.filter((ao) => recIds.includes(ao.id));
-              const others = addOnDefs.filter((ao) => !recIds.includes(ao.id));
-              const visibleAddOns = showAllAddOns ? [...recommended, ...others] : recommended;
-
-              return (
-                <div style={{ background: B.bgCard, border: `1px solid ${selectedAddOns.size > 0 ? B.cyan + "40" : B.border}`, borderRadius: 14, padding: 16, marginBottom: 14, transition: "all 0.2s" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: `${B.cyan}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>
-                      💊
-                    </div>
-                    <div>
-                      <div style={{ ...T.ui, fontSize: 14, fontWeight: 700, color: B.textPrimary }}>Add-Ons</div>
-                      <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>
-                        {selectedAddOns.size > 0
-                          ? <span style={{ color: B.cyan, fontWeight: 600 }}>{selectedAddOns.size} selected · +${addOnTotal}</span>
-                          : "Recommended for this treatment"
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {visibleAddOns.map((ao) => {
-                      const selected = selectedAddOns.has(ao.id);
-                      return (
-                        <div
-                          key={ao.id}
-                          onClick={() => toggleAddOn(ao.id)}
-                          style={{
-                            background: selected ? `${B.cyan}10` : B.bg,
-                            border: `1px solid ${selected ? B.cyan : B.border}`,
-                            borderRadius: 12,
-                            padding: "10px 12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            cursor: "pointer",
-                            transition: "all 0.15s",
-                          }}
-                        >
-                          <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${selected ? B.cyan : B.border}`, background: selected ? B.cyan : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.15s" }}>
-                            {selected && <span style={{ color: B.bg, fontSize: 11, lineHeight: 1 }}>✓</span>}
-                          </div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: B.textPrimary }}>{ao.name}</div>
-                            <div style={{ ...T.body, fontSize: 10, color: B.textMuted }}>{ao.description}</div>
-                          </div>
-                          <div style={{ ...T.price, fontSize: 12, color: selected ? B.cyan : B.textSecondary, flexShrink: 0 }}>
-                            +${Math.round(ao.price / 100)}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {!showAllAddOns && others.length > 0 && (
-                    <div
-                      onClick={() => setShowAllAddOns(true)}
-                      style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600, textAlign: "center", padding: "12px 0 4px", cursor: "pointer" }}
-                    >
-                      See all {addOnDefs.length} add-ons →
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-
-            {/* Membership upsell hint */}
-            <div style={{ background: `${B.gold}08`, border: `1px solid ${B.gold}25`, borderRadius: 12, padding: "12px 16px", marginBottom: 14 }}>
-              {isShipped ? (
-                <>
-                  <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, marginBottom: 4 }}>
-                    💎 Members get free shipping + priority fulfillment
-                  </div>
-                  <div style={{ ...T.body, fontSize: 12, color: B.textMuted }}>
-                    Join a membership to pay ${treatment ? Math.round(treatment.price * 0.75 / 100) : "—"} per shipment
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, marginBottom: 4 }}>
-                    💎 Members save ${treatment ? Math.round(treatment.price * 0.25 / 100) : "—"}
-                  </div>
-                  <div style={{ ...T.body, fontSize: 12, color: B.textMuted }}>
-                    Join a membership to pay ${treatment ? Math.round(treatment.price * 0.75 / 100) : "—"} instead
-                  </div>
-                </>
-              )}
-            </div>
-
             {/* Payment method */}
-            <div style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 20, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, padding: "14px 16px", marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <span style={{ fontSize: 16 }}>💳</span>
                 <div>
@@ -551,6 +431,11 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
 
             <div style={{ ...T.body, fontSize: 11, color: B.textMuted, textAlign: "center", marginTop: 12 }}>
               {isShipped ? "Ships in 3–5 business days · Free returns within 30 days" : "Free cancellation up to 2 hours before appointment"}
+            </div>
+
+            {/* Membership nudge — subtle, below CTA */}
+            <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, textAlign: "center", marginTop: 16, cursor: "pointer" }}>
+              💎 Members save ${treatment ? Math.round(treatment.price * 0.25 / 100) : "—"} on this treatment →
             </div>
           </div>
         )}

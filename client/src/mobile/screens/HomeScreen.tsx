@@ -1,14 +1,13 @@
-import { B, T, SERIF, SANS } from "../theme";
+import { B, T, SANS } from "../theme";
 import { Stars } from "../components/Stars";
-import { SectionHeader } from "../components/SectionHeader";
 import { Btn } from "../components/Btn";
 import type { NavProps } from "../MobileApp";
 
-const pastTreatments = [
-  { name: "Recovery IV",  date: "Mar 15", price: "$209", rated: true,  rating: 5, slug: "recovery-performance" },
-  { name: "Hangover IV",  date: "Feb 28", price: "$179", rated: true,  rating: 5, slug: "hangover-iv" },
-  { name: "NAD+ IV",      date: "Feb 1",  price: "$559", rated: false, rating: 0, slug: "nad-iv-therapy" },
-  { name: "Immune Boost", date: "Jan 18", price: "$179", rated: true,  rating: 5, slug: "immunity-boost" },
+const popularTreatments = [
+  { name: "Myers Cocktail", desc: "Full-spectrum vitamin infusion", price: "$299", rating: 4.9, reviews: 2150, slug: "myers-cocktail-plus" },
+  { name: "Hangover IV",    desc: "Fast nausea & headache relief",  price: "$179", rating: 4.9, reviews: 2840, slug: "hangover-iv" },
+  { name: "Recovery IV",    desc: "Post-workout recovery",          price: "$229", rating: 4.9, reviews: 1520, slug: "recovery-performance" },
+  { name: "NAD+",           desc: "Anti-aging & cellular repair",   price: "$599", rating: 4.8, reviews: 620,  slug: "nad-iv-therapy" },
 ];
 
 
@@ -40,38 +39,71 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
       </div>
 
       {/* Greeting */}
-      <div style={{ padding: "8px 20px 6px" }}>
-        <div style={{ ...T.hero, fontSize: 26, color: B.textPrimary }}>Good morning, Neal</div>
+      <div style={{ padding: "8px 20px 4px" }}>
+        <div style={{ ...T.ui, fontSize: 14, color: B.textMuted, fontWeight: 400 }}>Good morning, Neal</div>
       </div>
 
-      {/* Past treatments */}
-      <div style={{ padding: "16px 0 20px" }}>
+      {/* Promo hero */}
+      <div style={{ padding: "6px 20px 8px" }}>
+        <div
+          onClick={() => openBooking("immunity-boost")}
+          style={{
+            background: `linear-gradient(135deg, ${B.bgCard} 0%, ${B.tealLight} 60%, ${B.bgCard} 100%)`,
+            border: `1px solid ${B.cyan}25`,
+            borderRadius: 16,
+            padding: "20px 18px",
+            position: "relative",
+            overflow: "hidden",
+            cursor: "pointer",
+          }}
+        >
+          <div style={{ position: "absolute", top: -30, right: -20, width: 160, height: 160, background: `radial-gradient(circle, ${B.cyan}12, transparent 65%)`, pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -20, left: -10, width: 100, height: 100, background: `radial-gradient(circle, ${B.gold}08, transparent 65%)`, pointerEvents: "none" }} />
+          <div style={{ ...T.tag, fontSize: 9, color: B.gold, background: `${B.gold}18`, padding: "3px 10px", borderRadius: 6, border: `1px solid ${B.gold}25`, display: "inline-block", marginBottom: 10 }}>
+            SPRING WELLNESS
+          </div>
+          <div style={{ ...T.hero, fontSize: 22, color: B.textPrimary, marginBottom: 6, lineHeight: 1.2 }}>
+            25% off Immunity Boost
+          </div>
+          <div style={{ ...T.body, fontSize: 13, color: B.textSecondary, marginBottom: 14, lineHeight: 1.4 }}>
+            Strengthen your immune system this season. <span style={{ color: B.cyan, fontWeight: 600 }}>$199 → $149</span>
+          </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Btn style={{ padding: "11px 24px", fontSize: 12 }} onClick={(e) => { e.stopPropagation(); openBooking("immunity-boost"); }}>
+              Book Now
+            </Btn>
+            <Btn variant="outline" style={{ padding: "11px 20px", fontSize: 12 }} onClick={(e) => { e.stopPropagation(); onTabChange("tx"); }}>
+              Browse All
+            </Btn>
+          </div>
+        </div>
+      </div>
+
+      {/* Popular treatments */}
+      <div style={{ padding: "14px 0 20px" }}>
         <div style={{ padding: "0 20px 10px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ ...T.heading, fontSize: 20, color: B.textPrimary }}>Your Treatments</div>
+          <div style={{ ...T.heading, fontSize: 18, color: B.textPrimary }}>Popular Treatments</div>
           <span
-            onClick={() => onTabChange("ord")}
+            onClick={() => onTabChange("tx")}
             style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600, cursor: "pointer" }}
           >
-            View All →
+            See All →
           </span>
         </div>
-        <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingLeft: 20, paddingRight: 20, paddingBottom: 4 }}>
-          {pastTreatments.map((t, i) => (
-            <div key={i} style={{ minWidth: 156, background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 14, padding: 14, flexShrink: 0 }}>
-              <div
-                onClick={() => navigate({ type: "treatment-detail", slug: t.slug })}
-                style={{ ...T.product, fontSize: 14, color: B.textPrimary, marginBottom: 4, cursor: "pointer" }}
-              >
-                {t.name}
+        <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingLeft: 20, paddingRight: 20, paddingBottom: 4 }}>
+          {popularTreatments.map((t, i) => (
+            <div
+              key={i}
+              onClick={() => navigate({ type: "treatment-detail", slug: t.slug })}
+              style={{ minWidth: 148, background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, padding: 12, flexShrink: 0, cursor: "pointer" }}
+            >
+              <div style={{ ...T.product, fontSize: 14, color: B.textPrimary, marginBottom: 3 }}>{t.name}</div>
+              <div style={{ ...T.body, fontSize: 11, color: B.textMuted, marginBottom: 6, lineHeight: 1.3 }}>{t.desc}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 8 }}>
+                <Stars rating={Math.round(t.rating)} size={9} />
+                <span style={{ ...T.ui, fontSize: 10, color: B.textMuted, fontWeight: 400 }}>{t.rating}</span>
               </div>
-              <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, marginBottom: 6 }}>{t.date} · {t.price}</div>
-              <div style={{ marginBottom: 10 }}>
-                {t.rated
-                  ? <Stars rating={t.rating} size={10} />
-                  : <span style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>⭐ Rate</span>
-                }
-              </div>
-              <Btn variant="ghost" style={{ width: "100%", padding: "9px 0", fontSize: 11 }} onClick={() => openRebook(t.slug)}>Rebook</Btn>
+              <div style={{ ...T.price, fontSize: 16, color: B.textPrimary }}>{t.price}</div>
             </div>
           ))}
         </div>
@@ -102,11 +134,7 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
               <span>👩‍⚕️</span><span>Nurse Sarah K. · <Stars rating={5} size={10} /></span>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            <Btn variant="outline" style={{ flex: 1, padding: "11px 0" }} onClick={() => onTabChange("ord")}>View Details</Btn>
-            <Btn variant="outline" style={{ flex: 1, padding: "11px 0" }} onClick={() => openBooking("recovery-performance")}>Reschedule</Btn>
-            <Btn style={{ flex: 1, padding: "11px 0" }} onClick={() => openBooking("recovery-performance")}>Add-On</Btn>
-          </div>
+          <Btn variant="outline" style={{ width: "100%", padding: "10px 0" }} onClick={() => onTabChange("ord")}>View Details</Btn>
         </div>
       </div>
 

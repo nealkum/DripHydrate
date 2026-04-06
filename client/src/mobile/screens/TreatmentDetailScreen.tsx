@@ -12,6 +12,7 @@ import {
   treatmentReviews,
   addOns,
   shippedToYouSlugs,
+  ingredientMap,
 } from "@/lib/treatment-data";
 
 interface TreatmentDetailScreenProps extends NavProps {
@@ -35,6 +36,36 @@ const recommendedAddOns: Record<string, string[]> = {
   "exosome-iv":          ["glutathione", "biotin", "vitamin-d"],
 };
 const defaultRecommended = ["glutathione", "b12-booster", "magnesium"];
+
+// Benefit-driven taglines — more specific than "BEST FOR" labels
+const heroTaglines: Record<string, string> = {
+  "myers-cocktail-plus": "Our most comprehensive vitamin infusion",
+  "hangover-iv":         "Feel better in 30 minutes, guaranteed",
+  "recovery-performance":"Rated #1 for post-workout recovery",
+  "nad-iv-therapy":      "Clinical-grade NAD+ for cellular health",
+  "nad-boost":           "Our most advanced anti-aging protocol",
+  "energy-boost":        "Natural energy without the crash",
+  "immunity-boost":      "High-dose immune defense when you need it",
+  "beauty-drip":         "Glow from the inside out",
+  "hydration-package":   "The fastest way to rehydrate",
+  "migraine-relief":     "Targeted relief for severe headaches",
+  "iron-iv":             "Medical-grade iron for lasting energy",
+  "ketamine-iv":         "Supervised therapy for mood disorders",
+  "exosome-iv":          "Next-generation regenerative therapy",
+  "weight-loss-semaglutide": "Clinically proven GLP-1 weight management",
+  "weight-loss-tirzepatide": "Dual-action weight loss protocol",
+  "testosterone-trt":    "Physician-supervised testosterone therapy",
+  "testosterone-enclomiphene":"Boost testosterone naturally",
+  "peptide-sermorelin":  "Stimulate your body's growth hormone",
+  "peptide-cjc-ipamorelin":"Dual peptide for recovery & body composition",
+  "peptide-ghk-cu":      "Clinically studied skin repair peptide",
+  "nad-injections":      "At-home NAD+ for longevity",
+  "nad-nasal-spray":     "Daily NAD+ for sharper focus",
+  "niagen-nr-injections":"Cutting-edge cellular energy support",
+  "vitamin-b12":         "The most bioavailable form of B12",
+  "vitamin-lipostat":    "Metabolic support for fat burning",
+  "ketamine-therapy":    "At-home ketamine for depression & anxiety",
+};
 
 // Social proof: "X% of [treatment] customers add this"
 const addOnPopularity: Record<string, number> = {
@@ -110,12 +141,12 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
       <div style={{ flex: 1, overflowY: "auto", paddingBottom: 90 }}>
         {/* Hero section */}
         <div style={{ padding: "24px 20px 20px", background: `linear-gradient(180deg, ${B.bgCard} 0%, ${B.bg} 100%)` }}>
-          {bestFor && (
-            <div style={{ display: "inline-block", ...T.tag, fontSize: 9, color: B.cyan, background: `${B.cyan}12`, padding: "4px 12px", borderRadius: 8, border: `1px solid ${B.cyan}25`, marginBottom: 12 }}>
-              {bestFor.label.replace("Best for: ", "BEST FOR: ")}
+          <div style={{ ...T.hero, fontSize: 28, color: B.textPrimary, marginBottom: 6 }}>{treatment.name}</div>
+          {heroTaglines[slug] && (
+            <div style={{ ...T.body, fontSize: 14, color: B.textSecondary, marginBottom: 10 }}>
+              {heroTaglines[slug]}
             </div>
           )}
-          <div style={{ ...T.hero, fontSize: 28, color: B.textPrimary, marginBottom: 10 }}>{treatment.name}</div>
 
           {reviews && (
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
@@ -164,6 +195,20 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
                   </span>
                   <span style={{ ...T.body, fontSize: 13, color: B.textSecondary }}>{b}</span>
                 </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* What's Inside */}
+        {ingredientMap[slug] && ingredientMap[slug].length > 0 && (
+          <div style={{ padding: "0 20px 24px" }}>
+            <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 12 }}>What's Inside</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {ingredientMap[slug].map((ing, i) => (
+                <span key={i} style={{ ...T.ui, fontSize: 12, fontWeight: 500, color: B.textSecondary, background: `rgba(255,255,255,0.06)`, padding: "6px 12px", borderRadius: 8, border: `1px solid ${B.border}` }}>
+                  {ing}
+                </span>
               ))}
             </div>
           </div>
