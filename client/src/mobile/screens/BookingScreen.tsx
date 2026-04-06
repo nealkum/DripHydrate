@@ -31,7 +31,7 @@ interface BookingScreenProps {
   onConfirmed: (details: BookingConfirmation) => void;
 }
 
-type Step = "select" | "location" | "schedule" | "confirm";
+type Step = "select" | "schedule" | "confirm";
 
 const TIMES = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM"];
 const TIME_SECTIONS = [
@@ -61,7 +61,7 @@ const FILTER_TAGS = [
 ] as const;
 
 export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: BookingScreenProps) {
-  const [step, setStep] = useState<Step>(slug ? "location" : "select");
+  const [step, setStep] = useState<Step>(slug ? "schedule" : "select");
   const [selectedSlug, setSelectedSlug] = useState(slug ?? "");
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [address, setAddress] = useState("123 Main St, Los Angeles");
@@ -70,7 +70,6 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
   const [selectedDate, setSelectedDate] = useState(DATES[0]);
   const [selectedTime, setSelectedTime] = useState(TIMES[4]);
   const [selectedAddOns, setSelectedAddOns] = useState<Set<string>>(new Set(initialAddOns ?? []));
-  const [addOnsExpanded, setAddOnsExpanded] = useState(false);
   const [showAllAddOns, setShowAllAddOns] = useState(false);
 
   function toggleAddOn(id: string) {
@@ -101,10 +100,10 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
   const discount = creditsOn ? creditsApplied : 0;
   const totalDue = Math.max(0, subtotal - discount);
 
-  // Shipped products skip the date/time scheduling step
+  // Shipped products skip scheduling — go straight to confirm
   const baseSteps: Step[] = isShipped
-    ? ["location", "confirm"]
-    : ["location", "schedule", "confirm"];
+    ? ["confirm"]
+    : ["schedule", "confirm"];
   const flowSteps: Step[] = slug ? baseSteps : ["select", ...baseSteps];
   const stepIdx = flowSteps.indexOf(step);
 
@@ -130,6 +129,57 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
       totalCharged: totalDue,
       isShipped,
     });
+  }
+
+  // Inline address card — used on both schedule and confirm (shipped) steps
+  function renderAddressCard() {
+    return (
+      <div style={{ marginBottom: 20 }}>
+        {!editingAddress && address && city ? (
+          <div style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 14 }}>📍</span>
+              <div>
+                <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>Home · {address}</div>
+                <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{city}</div>
+              </div>
+            </div>
+            <span onClick={() => setEditingAddress(true)} style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>Change</span>
+          </div>
+        ) : (
+          <div style={{ background: B.bgCard, border: `1px solid ${B.cyan}25`, borderRadius: 12, padding: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <input
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Street address"
+                style={{ width: "100%", padding: "11px 12px", background: B.bg, border: `1px solid ${B.border}`, borderRadius: 10, color: B.textPrimary, fontSize: 13, fontFamily: SANS, outline: "none", boxSizing: "border-box" as const }}
+              />
+              <input
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="City, State"
+                style={{ width: "100%", padding: "11px 12px", background: B.bg, border: `1px solid ${B.border}`, borderRadius: 10, color: B.textPrimary, fontSize: 13, fontFamily: SANS, outline: "none", boxSizing: "border-box" as const }}
+              />
+            </div>
+            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+              {[
+                { label: "Home", street: "123 Main St, Los Angeles", city: "Los Angeles, CA" },
+                { label: "Office", street: "456 Wilshire Blvd", city: "Los Angeles, CA" },
+              ].map((a, i) => (
+                <div
+                  key={i}
+                  onClick={() => { setAddress(a.street); setCity(a.city); setEditingAddress(false); }}
+                  style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", padding: "6px 12px", borderRadius: 8, background: `${B.cyan}10`, border: `1px solid ${B.cyan}20` }}
+                >
+                  📍 {a.label}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
   }
 
   return (
@@ -200,7 +250,7 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
                 .map((t) => (
                   <div
                     key={t.id}
-                    onClick={() => { setSelectedSlug(t.slug); setStep("location"); }}
+                    onClick={() => { setSelectedSlug(t.slug); setStep("schedule"); }}
                     style={{
                       background: selectedSlug === t.slug ? `${B.cyan}12` : B.bgCard,
                       border: `1px solid ${selectedSlug === t.slug ? B.cyan : B.border}`,
@@ -223,108 +273,14 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
           </div>
         )}
 
-        {/* Step 2: Location */}
-        {step === "location" && (
-          <div>
-            <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 4 }}>{isShipped ? "Shipping Address" : "Where should we go?"}</div>
-            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 24 }}>{isShipped ? "We'll ship your order directly to you" : "Our nurse will come to you"}</div>
-
-            {treatment && (
-              <div style={{ background: `${B.cyan}10`, border: `1px solid ${B.cyan}25`, borderRadius: 12, padding: "12px 16px", marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ ...T.product, fontSize: 14, color: B.textPrimary }}>{treatment.name}</div>
-                <div style={{ ...T.price, fontSize: 14, color: B.cyan }}>${Math.round(treatment.price / 100)}</div>
-              </div>
-            )}
-
-            {/* Pre-filled saved address card (default view) */}
-            {!editingAddress && address && city ? (
-              <div>
-                <div style={{ background: B.bg, border: `1px solid ${B.cyan}25`, borderRadius: 12, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <span style={{ fontSize: 16 }}>📍</span>
-                    <div>
-                      <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary }}>Home · {address}</div>
-                      <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>{city}</div>
-                    </div>
-                  </div>
-                  <span onClick={() => setEditingAddress(true)} style={{ ...T.ui, fontSize: 11, color: B.cyan, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>Change</span>
-                </div>
-
-                <div style={{ ...T.over, fontSize: 9, color: B.textMuted, marginBottom: 10 }}>OTHER ADDRESSES</div>
-                {[{ label: "Office", street: "456 Wilshire Blvd", city: "Los Angeles, CA" }].map((a, i) => (
-                  <div
-                    key={i}
-                    onClick={() => { setAddress(a.street); setCity(a.city); }}
-                    style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${B.borderLight}`, cursor: "pointer" }}
-                  >
-                    <span>📍</span>
-                    <span style={{ ...T.ui, fontSize: 13, color: B.textSecondary }}>{a.label} · {a.street}</span>
-                  </div>
-                ))}
-                <div
-                  onClick={() => { setAddress(""); setCity(""); setEditingAddress(true); }}
-                  style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", cursor: "pointer" }}
-                >
-                  <span style={{ fontSize: 14, color: B.cyan }}>＋</span>
-                  <span style={{ ...T.ui, fontSize: 13, color: B.cyan, fontWeight: 600 }}>Add new address</span>
-                </div>
-              </div>
-            ) : (
-              /* Manual address entry (for editing or new address) */
-              <div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  <div>
-                    <label style={{ ...T.ui, fontSize: 12, color: B.textMuted, display: "block", marginBottom: 6 }}>STREET ADDRESS</label>
-                    <input
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="123 Main St, Apt 4B"
-                      style={{ width: "100%", padding: "13px 14px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, color: B.textPrimary, fontSize: 14, fontFamily: SANS, outline: "none", boxSizing: "border-box" }}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ ...T.ui, fontSize: 12, color: B.textMuted, display: "block", marginBottom: 6 }}>CITY</label>
-                    <input
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder="Los Angeles, CA"
-                      style={{ width: "100%", padding: "13px 14px", background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, color: B.textPrimary, fontSize: 14, fontFamily: SANS, outline: "none", boxSizing: "border-box" }}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ marginTop: 16 }}>
-                  <div style={{ ...T.over, fontSize: 9, color: B.textMuted, marginBottom: 10 }}>SAVED ADDRESSES</div>
-                  {["Home · 123 Main St, Los Angeles", "Office · 456 Wilshire Blvd"].map((a, i) => (
-                    <div
-                      key={i}
-                      onClick={() => { setAddress(a.split("·")[1].trim()); setCity("Los Angeles, CA"); setEditingAddress(false); }}
-                      style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${B.borderLight}`, cursor: "pointer" }}
-                    >
-                      <span>📍</span>
-                      <span style={{ ...T.ui, fontSize: 13, color: B.textSecondary }}>{a}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <Btn fullWidth style={{ marginTop: 24, padding: "14px 0", fontSize: 13 }} onClick={() => { if (address && city) setStep(isShipped ? "confirm" : "schedule"); }}>
-              CONTINUE
-            </Btn>
-            {(!address || !city) && (
-              <div style={{ ...T.body, fontSize: 12, color: B.textMuted, textAlign: "center", marginTop: 8 }}>
-                Please enter your address to continue
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Step 3: Schedule */}
+        {/* Step 2: Schedule + Address (merged) */}
         {step === "schedule" && (
           <div>
             <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 4 }}>Pick a Date & Time</div>
-            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 20 }}>Same-day appointments often available</div>
+            <div style={{ ...T.body, fontSize: 13, color: B.textMuted, marginBottom: 16 }}>Same-day appointments often available</div>
+
+            {/* Address card — inline at top */}
+            {renderAddressCard()}
 
             <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 10 }}>DATE</div>
             <div style={{ display: "flex", gap: 8, overflowX: "auto", marginBottom: 20, paddingBottom: 4 }}>
@@ -356,48 +312,52 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
               </div>
             ))}
 
-            <Btn fullWidth style={{ padding: "14px 0", fontSize: 13 }} onClick={() => { if (selectedDate && selectedTime) setStep("confirm"); }}>
+            <Btn fullWidth style={{ padding: "14px 0", fontSize: 13 }} onClick={() => { if (selectedDate && selectedTime && address && city) setStep("confirm"); }}>
               CONTINUE
             </Btn>
-            {(!selectedDate || !selectedTime) && (
+            {(!address || !city) && (
               <div style={{ ...T.body, fontSize: 12, color: B.textMuted, textAlign: "center", marginTop: 8 }}>
-                Please select a date and time
+                Please enter your address to continue
               </div>
             )}
           </div>
         )}
 
-        {/* Step 4: Confirm */}
+        {/* Step 3: Confirm */}
         {step === "confirm" && (
           <div>
-            <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 20 }}>{isShipped ? "Confirm Order" : "Confirm Booking"}</div>
+            <div style={{ ...T.heading, fontSize: 22, color: B.textPrimary, marginBottom: 16 }}>{isShipped ? "Confirm Order" : "Confirm Booking"}</div>
 
-            {/* Booking summary */}
-            <div style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 14, padding: 18, marginBottom: 14 }}>
-              <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 14 }}>{isShipped ? "ORDER SUMMARY" : "BOOKING SUMMARY"}</div>
-              {(isShipped
-                ? [
-                    { label: "Product",   value: treatment?.name ?? selectedSlug },
-                    { label: "Ships to",  value: `${address}, ${city}` },
-                    { label: "Delivery",  value: "3–5 business days" },
-                  ]
-                : [
-                    { label: "Treatment", value: treatment?.name ?? selectedSlug },
-                    { label: "Date",      value: selectedDate },
-                    { label: "Time",      value: selectedTime },
-                    { label: "Address",   value: `${address}, ${city}` },
-                  ]
-              ).map((row, i, arr) => (
-                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < arr.length - 1 ? `1px solid ${B.borderLight}` : "none" }}>
-                  <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400 }}>{row.label}</span>
-                  <span style={{ ...T.ui, fontSize: 13, color: B.textPrimary, fontWeight: 600, maxWidth: "55%", textAlign: "right" }}>{row.value}</span>
+            {/* Compact booking summary — single card */}
+            <div style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 14, padding: 16, marginBottom: 14 }}>
+              {/* Compact details row */}
+              {isShipped ? (
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <span style={{ fontSize: 14 }}>📦</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ ...T.ui, fontSize: 14, fontWeight: 700, color: B.textPrimary }}>{treatment?.name ?? selectedSlug}</div>
+                    <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>Ships to {address} · 3–5 business days</div>
+                  </div>
                 </div>
-              ))}
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
+                  <div style={{ ...T.ui, fontSize: 15, fontWeight: 700, color: B.textPrimary }}>{treatment?.name ?? selectedSlug}</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, display: "flex", alignItems: "center", gap: 4 }}>
+                      📅 {selectedDate} · {selectedTime}
+                    </span>
+                    <span style={{ color: B.border }}>·</span>
+                    <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400, display: "flex", alignItems: "center", gap: 4 }}>
+                      📍 {address.split(",")[0]}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {/* Price breakdown */}
-              <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${B.border}`, display: "flex", flexDirection: "column", gap: 8 }}>
+              <div style={{ paddingTop: 12, borderTop: `1px solid ${B.border}`, display: "flex", flexDirection: "column", gap: 6 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400 }}>Treatment price</span>
+                  <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400 }}>Treatment</span>
                   <span style={{ ...T.ui, fontSize: 13, color: B.textPrimary, fontWeight: 600 }}>${rawPrice}</span>
                 </div>
                 {addOnTotal > 0 && (
@@ -420,12 +380,12 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
                 )}
                 {creditsOn && creditsApplied > 0 && (
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ ...T.ui, fontSize: 13, color: B.cyan, fontWeight: 500 }}>Drip Credits applied</span>
+                    <span style={{ ...T.ui, fontSize: 13, color: B.cyan, fontWeight: 500 }}>Drip Credits</span>
                     <span style={{ ...T.ui, fontSize: 13, color: B.cyan, fontWeight: 700 }}>−${creditsApplied}</span>
                   </div>
                 )}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 8, borderTop: `1px solid ${B.borderLight}` }}>
-                  <span style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>Total due</span>
+                  <span style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>Total</span>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     {(creditsOn && creditsApplied > 0) && (
                       <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400, textDecoration: "line-through" }}>${subtotal}</span>
@@ -479,7 +439,6 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
               </div>
             )}
 
-            {/* Add-ons upsell (IV only) */}
             {/* Add-ons (IV only) — always visible, recommended first */}
             {!isShipped && (() => {
               const recIds = recommendedAddOns[selectedSlug] ?? defaultRecommended;
@@ -550,7 +509,7 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
             })()}
 
             {/* Membership upsell hint */}
-            <div style={{ background: `${B.gold}08`, border: `1px solid ${B.gold}25`, borderRadius: 12, padding: "12px 16px", marginBottom: 20 }}>
+            <div style={{ background: `${B.gold}08`, border: `1px solid ${B.gold}25`, borderRadius: 12, padding: "12px 16px", marginBottom: 14 }}>
               {isShipped ? (
                 <>
                   <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, marginBottom: 4 }}>
