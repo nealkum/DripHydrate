@@ -6,7 +6,6 @@ import { Stars } from "../components/Stars";
 import { Btn } from "../components/Btn";
 import type { NavProps } from "../MobileApp";
 import {
-  ingredientMap,
   bestForMap,
   reviewMap,
   memberPriceMap,
@@ -66,7 +65,6 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
   const memberPrice = memberPriceMap[slug] ? Math.round(memberPriceMap[slug] / 100) : Math.round(treatment.price * 0.75 / 100);
   const savings = basePrice - memberPrice;
   const reviews = reviewMap[slug];
-  const ingredients = ingredientMap[slug] ?? [];
   const bestFor = bestForMap[slug];
   const customerReviews = treatmentReviews[slug] ?? [];
   const isShipped = shippedToYouSlugs.has(slug);
@@ -153,26 +151,6 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
           </div>
         </div>
 
-        {/* Description */}
-        <div style={{ padding: "0 20px 20px" }}>
-          <div style={{ ...T.body, fontSize: 14, color: B.textSecondary, lineHeight: 1.6 }}>
-            {treatment.description}
-          </div>
-        </div>
-
-        {/* Ingredients */}
-        {ingredients.length > 0 && (
-          <div style={{ padding: "0 20px 24px" }}>
-            <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 12 }}>What's Inside</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {ingredients.map((ing) => (
-                <span key={ing} style={{ ...T.ui, fontSize: 12, color: B.cyan, background: `${B.cyan}10`, padding: "6px 12px", borderRadius: 8, border: `1px solid ${B.cyan}20` }}>
-                  {ing}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Benefits */}
         {benefits.length > 0 && (
@@ -259,33 +237,6 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
           );
         })()}
 
-        {/* How it works */}
-        {!isShipped && (
-          <div style={{ padding: "0 20px 24px" }}>
-            <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 12 }}>How It Works</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-              {[
-                { n: "1", t: "Book Online", d: "Choose your treatment and pick a time" },
-                { n: "2", t: "Nurse Arrives", d: "A licensed nurse comes to your location" },
-                { n: "3", t: "Relax & Recover", d: "Sit back while your IV drips (~45–60 min)" },
-                { n: "4", t: "Feel the Difference", d: "Most clients feel results within hours" },
-              ].map((step, i, arr) => (
-                <div key={step.n} style={{ display: "flex", gap: 14, paddingBottom: i < arr.length - 1 ? 16 : 0 }}>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <span style={{ ...T.ui, fontSize: 12, fontWeight: 700, color: "#fff" }}>{step.n}</span>
-                    </div>
-                    {i < arr.length - 1 && <div style={{ width: 1, flex: 1, background: `${B.cyan}25`, marginTop: 4 }} />}
-                  </div>
-                  <div style={{ paddingTop: 4, paddingBottom: i < arr.length - 1 ? 0 : 0 }}>
-                    <div style={{ ...T.ui, fontSize: 13, fontWeight: 700, color: B.textPrimary }}>{step.t}</div>
-                    <div style={{ ...T.body, fontSize: 12, color: B.textMuted, marginTop: 2 }}>{step.d}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Membership upsell */}
         <div style={{ padding: "0 20px 24px" }}>
