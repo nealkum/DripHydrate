@@ -61,7 +61,7 @@ export function AccountScreen({ navigate }: NavProps) {
 
       {/* Profile row */}
       <div style={{ padding: "12px 20px 20px", display: "flex", alignItems: "center", gap: 14 }}>
-        <div style={{ width: 58, height: 58, borderRadius: "50%", background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 22, fontWeight: 700, fontFamily: SERIF, border: "3px solid rgba(255,255,255,0.1)", flexShrink: 0 }}>
+        <div style={{ width: 58, height: 58, borderRadius: "50%", background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 22, fontWeight: 700, fontFamily: SERIF, border: "3px solid rgba(18,36,63,0.1)", flexShrink: 0 }}>
           NK
         </div>
         <div>

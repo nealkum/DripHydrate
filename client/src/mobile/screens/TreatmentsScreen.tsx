@@ -5,6 +5,25 @@ import { Stars } from "../components/Stars";
 import { bestForMap, reviewMap, memberPriceMap, shippedToYouSlugs } from "@/lib/treatment-data";
 import type { Treatment } from "@shared/schema";
 import type { NavProps } from "../MobileApp";
+import treatmentHero from "@/assets/brand/photos/treatment-hero.jpeg";
+import treatmentSmile from "@/assets/brand/photos/treatment-smile.jpeg";
+import robeCoffee from "@/assets/brand/photos/robe-coffee.jpeg";
+import membershipRobe from "@/assets/brand/photos/membership-robe.jpeg";
+import heroCouch from "@/assets/brand/photos/hero-couch.jpeg";
+
+const thumbMap: Record<string, string> = {
+  "myers-cocktail-plus": treatmentSmile,
+  "hangover-iv": treatmentHero,
+  "recovery-performance": heroCouch,
+  "nad-iv-therapy": robeCoffee,
+  "nad-boost": robeCoffee,
+  "immunity-boost": treatmentSmile,
+  "beauty-drip": membershipRobe,
+  "energy-boost": treatmentHero,
+};
+function thumbFor(slug: string): string {
+  return thumbMap[slug] ?? treatmentHero;
+}
 
 const CATEGORIES = ["All", "In-Home IVs", "Shipped to You", "Specialty"];
 
@@ -135,6 +154,18 @@ export function TreatmentsScreen({ navigate }: NavProps) {
                 style={{ background: B.bgCard, border: `1px solid ${B.border}`, borderRadius: 12, padding: "12px 14px", cursor: "pointer", position: "relative" }}
               >
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                  <div
+                    style={{
+                      width: 72,
+                      height: 72,
+                      borderRadius: 10,
+                      flexShrink: 0,
+                      backgroundImage: `url(${thumbFor(t.slug)})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      border: `1px solid ${B.border}`,
+                    }}
+                  />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
                       <span style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>{t.name}</span>
@@ -161,7 +192,8 @@ export function TreatmentsScreen({ navigate }: NavProps) {
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", flexShrink: 0, paddingTop: 2 }}>
                     <span style={{ ...T.price, fontSize: 18, color: B.textPrimary }}>${price}</span>
-                    {mp && <span style={{ ...T.ui, fontSize: 11, fontWeight: 600, color: B.cyan }}>${mp} member</span>}
+                    {shipped && mp && <span style={{ ...T.ui, fontSize: 11, fontWeight: 600, color: B.cyan }}>${mp}/mo subscribe</span>}
+                    {!shipped && mp && <span style={{ ...T.ui, fontSize: 11, fontWeight: 600, color: B.cyan }}>${mp} member</span>}
                     {shipped && !mp && <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>/month</span>}
                   </div>
                 </div>

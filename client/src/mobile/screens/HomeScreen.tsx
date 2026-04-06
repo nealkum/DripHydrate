@@ -1,3 +1,4 @@
+import { Bell, Calendar, Gem, ArrowRight } from "lucide-react";
 import { B, T, SANS } from "../theme";
 import { Stars } from "../components/Stars";
 import { Btn } from "../components/Btn";
@@ -38,10 +39,10 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
         </button>
         <button
           onClick={() => navigate({ type: "notifications" })}
-          style={{ width: 38, height: 38, borderRadius: "50%", background: B.bgCard, border: `1px solid ${B.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, cursor: "pointer", position: "relative", flexShrink: 0 }}
+          style={{ width: 38, height: 38, borderRadius: "50%", background: B.bgCard, border: `1px solid ${B.border}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", position: "relative", flexShrink: 0 }}
         >
-          🔔
-          <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: B.cyan, border: `2px solid ${B.bg}` }} />
+          <Bell size={17} strokeWidth={1.8} color={B.textPrimary} />
+          <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: B.cyan, border: `2px solid ${B.bgCard}` }} />
         </button>
       </div>
 
@@ -70,17 +71,21 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
           <div style={{ ...T.tag, fontSize: 9, color: B.gold, background: `${B.gold}18`, padding: "3px 10px", borderRadius: 6, border: `1px solid ${B.gold}25`, display: "inline-block", marginBottom: 10 }}>
             SPRING WELLNESS
           </div>
-          <div style={{ ...T.hero, fontSize: 22, color: B.textPrimary, marginBottom: 6, lineHeight: 1.2 }}>
+          <div style={{ ...T.hero, fontSize: 22, color: "#fff", marginBottom: 6, lineHeight: 1.2 }}>
             25% off Immunity Boost
           </div>
-          <div style={{ ...T.body, fontSize: 13, color: B.textSecondary, marginBottom: 14, lineHeight: 1.4 }}>
-            Strengthen your immune system this season. <span style={{ color: B.cyan, fontWeight: 600 }}>$199 → $149</span>
+          <div style={{ ...T.body, fontSize: 13, color: "rgba(255,255,255,0.82)", marginBottom: 14, lineHeight: 1.4 }}>
+            Strengthen your immune system this season. <span style={{ color: B.cyanLight, fontWeight: 600 }}>$199 → $149</span>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <Btn style={{ padding: "11px 24px", fontSize: 12 }} onClick={(e) => { e.stopPropagation(); openBooking("immunity-boost"); }}>
               Book Now
             </Btn>
-            <Btn variant="outline" style={{ padding: "11px 20px", fontSize: 12 }} onClick={(e) => { e.stopPropagation(); onTabChange("tx"); }}>
+            <Btn
+              variant="outline"
+              style={{ padding: "11px 20px", fontSize: 12, color: "#fff", border: "1px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.08)" }}
+              onClick={(e) => { e.stopPropagation(); onTabChange("tx"); }}
+            >
               Browse All
             </Btn>
           </div>
@@ -123,14 +128,14 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
           onClick={() => onTabChange("ord")}
           style={{ background: B.bgCard, border: `1px solid ${B.cyan}30`, borderRadius: 12, padding: "12px 14px", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}
         >
-          <span style={{ fontSize: 16 }}>📅</span>
+          <Calendar size={18} strokeWidth={1.8} color={B.cyan} />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textPrimary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               Tomorrow, 2:00 PM · Recovery IV
             </div>
             <div style={{ ...T.body, fontSize: 11, color: B.textMuted, marginTop: 1 }}>Nurse Sarah K. · Confirmed</div>
           </div>
-          <span style={{ ...T.ui, fontSize: 12, color: B.cyan, fontWeight: 600 }}>→</span>
+          <ArrowRight size={16} strokeWidth={2} color={B.cyan} />
         </div>
       </div>
 
@@ -140,7 +145,7 @@ export function HomeScreen({ navigate, onTabChange, openBooking, openRebook }: N
           onClick={() => navigate({ type: "membership" })}
           style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: `${B.gold}08`, border: `1px solid ${B.gold}25`, borderRadius: 10, cursor: "pointer" }}
         >
-          <span style={{ fontSize: 14 }}>💎</span>
+          <Gem size={14} strokeWidth={1.8} color={B.gold} />
           <div style={{ ...T.ui, fontSize: 12, color: B.textSecondary, fontWeight: 500, flex: 1 }}>
             Member · 2 of 4 sessions this month
           </div>

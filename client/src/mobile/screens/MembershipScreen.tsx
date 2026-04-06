@@ -105,7 +105,7 @@ export function MembershipScreen({ goBack }: NavProps) {
             {/* Current plan banner */}
             <div style={{ padding: "20px 20px 0" }}>
               <div style={{
-                backgroundImage: `linear-gradient(180deg, rgba(10,23,40,0.25) 0%, rgba(10,23,40,0.75) 50%, rgba(10,23,40,0.95) 100%), url(${membershipRobe})`,
+                backgroundImage: `linear-gradient(180deg, rgba(10,23,40,0.35) 0%, rgba(10,23,40,0.8) 55%, rgba(10,23,40,0.95) 100%), url(${membershipRobe})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center 15%",
                 border: `1px solid ${B.cyan}30`,
@@ -118,30 +118,30 @@ export function MembershipScreen({ goBack }: NavProps) {
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 22 }}>💎</span>
                     <div>
-                      <div style={{ ...T.product, fontSize: 16, color: B.textPrimary }}>
+                      <div style={{ ...T.product, fontSize: 16, color: "#fff" }}>
                         {plans.find((p) => p.id === activePlan)?.name} Plan
                       </div>
-                      <div style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>
+                      <div style={{ ...T.ui, fontSize: 11, color: "rgba(255,255,255,0.72)", fontWeight: 400 }}>
                         ${plans.find((p) => p.id === activePlan)?.price}/mo · Active since Jan 2025
                       </div>
                     </div>
                   </div>
-                  <span style={{ ...T.tag, fontSize: 9, color: B.cyan, background: `${B.cyan}15`, padding: "4px 12px", borderRadius: 20, border: `1px solid ${B.cyan}25` }}>Active</span>
+                  <span style={{ ...T.tag, fontSize: 9, color: "#fff", background: `rgba(255,255,255,0.18)`, padding: "4px 12px", borderRadius: 20, border: `1px solid rgba(255,255,255,0.3)` }}>Active</span>
                 </div>
                 <div style={{ marginBottom: 12 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", ...T.ui, fontSize: 12, color: B.textSecondary, marginBottom: 8, fontWeight: 400 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", ...T.ui, fontSize: 12, color: "rgba(255,255,255,0.85)", marginBottom: 8, fontWeight: 400 }}>
                     <span>2 of {plans.find((p) => p.id === activePlan)?.sessions ?? "∞"} sessions used this month</span>
-                    <span style={{ color: B.cyan, fontWeight: 600 }}>50%</span>
+                    <span style={{ color: B.cyanLight, fontWeight: 600 }}>50%</span>
                   </div>
-                  <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.08)" }}>
-                    <div style={{ height: "100%", width: "50%", borderRadius: 3, background: `linear-gradient(90deg, ${B.tealAccent}, ${B.cyan})` }} />
+                  <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.18)" }}>
+                    <div style={{ height: "100%", width: "50%", borderRadius: 3, background: `linear-gradient(90deg, ${B.cyanLight}, #fff)` }} />
                   </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>
-                    Savings this year: <span style={{ color: B.gold, fontWeight: 700 }}>$1,080</span>
+                  <div style={{ ...T.ui, fontSize: 12, color: "rgba(255,255,255,0.72)", fontWeight: 400 }}>
+                    Savings this year: <span style={{ color: B.goldLight, fontWeight: 700 }}>$1,080</span>
                   </div>
-                  <div style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>Renews Apr 1</div>
+                  <div style={{ ...T.ui, fontSize: 12, color: "rgba(255,255,255,0.72)", fontWeight: 400 }}>Renews Apr 1</div>
                 </div>
               </div>
             </div>
@@ -176,10 +176,10 @@ export function MembershipScreen({ goBack }: NavProps) {
                           <span style={{ fontFamily: SANS, fontWeight: 700, fontSize: 26, color: isActive ? plan.color : B.textSecondary }}>${plan.price}</span>
                           <span style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>/month</span>
                         </div>
-                        <div style={{ display: "inline-block", marginTop: 8, padding: "4px 12px", borderRadius: 20, background: isActive ? `${plan.color}20` : "rgba(255,255,255,0.07)", border: `1px solid ${isActive ? plan.color + "40" : "rgba(255,255,255,0.12)"}` }}>
+                        <div style={{ display: "inline-block", marginTop: 8, padding: "4px 12px", borderRadius: 20, background: isActive ? `${plan.color}20` : "rgba(18,36,63,0.07)", border: `1px solid ${isActive ? plan.color + "40" : "rgba(18,36,63,0.12)"}` }}>
                           <span style={{ fontFamily: SANS, fontWeight: 700, fontSize: 10, color: isActive ? plan.color : B.textMuted, letterSpacing: "0.06em" }}>{plan.savings}</span>
                         </div>
-                        <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textSecondary, marginTop: 10, paddingBottom: 10, borderBottom: `1px solid rgba(255,255,255,0.07)` }}>
+                        <div style={{ ...T.ui, fontSize: 13, fontWeight: 600, color: B.textSecondary, marginTop: 10, paddingBottom: 10, borderBottom: `1px solid rgba(18,36,63,0.07)` }}>
                           {plan.sessions} IV Treatment{plan.sessions !== 1 ? "s" : ""} /month
                         </div>
                       </div>

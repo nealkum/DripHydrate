@@ -441,10 +441,12 @@ export function BookingScreen({ slug, initialAddOns, onClose, onConfirmed }: Boo
               {isShipped ? "Ships in 3–5 business days · Free returns within 30 days" : "Free cancellation up to 2 hours before appointment"}
             </div>
 
-            {/* Membership nudge — subtle, below CTA */}
-            <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, textAlign: "center", marginTop: 16, cursor: "pointer" }}>
-              💎 Members save ${treatment ? Math.round(treatment.price * 0.25 / 100) : "—"} on this treatment →
-            </div>
+            {/* Membership nudge — in-home IVs only */}
+            {!isShipped && !["iron-iv","ketamine-iv","exosome-iv"].includes(selectedSlug) && (
+              <div style={{ ...T.ui, fontSize: 12, color: B.gold, fontWeight: 600, textAlign: "center", marginTop: 16, cursor: "pointer" }}>
+                💎 Members save ${treatment ? Math.round(treatment.price * 0.25 / 100) : "—"} on this treatment →
+              </div>
+            )}
           </div>
         )}
       </div>

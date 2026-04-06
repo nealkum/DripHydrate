@@ -12,7 +12,7 @@ export function Stars({ rating, size = 11 }: StarsProps) {
         <span
           key={i}
           style={{
-            color: i <= rating ? B.gold : "rgba(255,255,255,0.12)",
+            color: i <= rating ? B.gold : "rgba(18,36,63,0.12)",
             fontSize: size,
           }}
         >

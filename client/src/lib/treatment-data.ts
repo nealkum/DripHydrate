@@ -116,10 +116,6 @@ export const memberPriceMap: Record<string, number> = {
   "vitamin-b12": 14900,
   "vitamin-lipostat": 14900,
   "ketamine-therapy": 31900,
-  // Specialty IVs
-  "iron-iv": 69900,
-  "ketamine-iv": 89900,
-  "exosome-iv": 179900,
 };
 
 export const treatmentReviews: Record<string, { name: string; city: string; rating: number; text: string }[]> = {

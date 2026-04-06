@@ -1,29 +1,29 @@
 import type { CSSProperties } from "react";
 
-// Brand palette sourced from the Drip Hydration logo (navy droplet).
-// Legacy key names (teal/cyan/gold) are preserved so existing screens pick up the
-// new colors without needing mass edits.
+// Brand palette sourced from the Drip Hydration logo (navy droplet) +
+// the editorial, sunlit photoshoot. Light theme — cream canvas, navy ink.
+// Legacy key names (teal/cyan/gold) preserved so existing screens cascade.
 export const B = {
-  teal: "#12243f",        // legacy key → now navy (brand primary)
-  tealLight: "#1c3358",   // legacy key → lifted navy
-  tealAccent: "#355b8a",  // legacy key → mid navy
-  cyan: "#6ea8d4",        // legacy key → hydration blue (softer, logo-adjacent)
-  cyanLight: "#9cc4e4",
-  gold: "#c9a96e",        // kept as-is; most screens have been migrated off
+  teal: "#12243f",        // navy ink (for primary dark surfaces still in use)
+  tealLight: "#eaf2fb",   // pale hydration tint (light card wash)
+  tealAccent: "#355b8a",  // mid navy (accent ink)
+  cyan: "#2f6db0",        // hydration blue — shifted darker for contrast on cream
+  cyanLight: "#6ea8d4",
+  gold: "#b08a3e",        // muted brass, only used sparingly
   goldLight: "#e8d5a8",
   cream: "#faf8f5",
-  warmWhite: "#faf8f5",
+  warmWhite: "#ffffff",
   white: "#ffffff",
-  bg: "#0a1728",          // deep navy ink (was deep teal)
-  bgCard: "#12243f",
-  bgSurface: "#0f1e36",
-  textPrimary: "#ffffff",
-  textSecondary: "rgba(255,255,255,0.72)",
-  textMuted: "rgba(255,255,255,0.48)",
+  bg: "#faf8f5",          // cream canvas
+  bgCard: "#ffffff",      // pure white cards
+  bgSurface: "#f2eee8",   // warmer surface wash
+  textPrimary: "#12243f", // navy ink
+  textSecondary: "rgba(18,36,63,0.72)",
+  textMuted: "rgba(18,36,63,0.52)",
   textDark: "#12243f",
-  border: "rgba(255,255,255,0.1)",
-  borderLight: "rgba(255,255,255,0.06)",
-  success: "#6ea8d4",
+  border: "rgba(18,36,63,0.12)",
+  borderLight: "rgba(18,36,63,0.07)",
+  success: "#2f6db0",
   cardR: "16px",
 } as const;
 

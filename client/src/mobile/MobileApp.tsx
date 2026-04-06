@@ -96,7 +96,7 @@ export function MobileApp() {
   const navProps: NavProps = { navigate, goBack, onTabChange: handleTabSelect, openBooking, openRebook };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", minHeight: "100vh", background: "#0a1f1f", padding: "16px 0", fontFamily: SANS }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", minHeight: "100vh", background: "#0a1728", padding: "16px 0", fontFamily: SANS }}>
       {/* Phone frame */}
       <div
         style={{
@@ -104,7 +104,7 @@ export function MobileApp() {
           minHeight: 844,
           background: B.bg,
           borderRadius: 44,
-          boxShadow: "0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)",
+          boxShadow: "0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(18,36,63,0.06)",
           overflow: "hidden",
           position: "relative",
           display: "flex",
@@ -115,7 +115,7 @@ export function MobileApp() {
 
         {/* Status bar notch */}
         <div style={{ height: 54, background: B.bg, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 4, flexShrink: 0 }}>
-          <div style={{ width: 126, height: 5, borderRadius: 3, background: "rgba(255,255,255,0.3)" }} />
+          <div style={{ width: 126, height: 5, borderRadius: 3, background: "rgba(18,36,63,0.3)" }} />
         </div>
 
         {/* Scrollable content */}
@@ -141,11 +141,11 @@ export function MobileApp() {
             >
               {/* Handle bar */}
               <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 4px" }}>
-                <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)" }} />
+                <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(18,36,63,0.15)" }} />
               </div>
 
               {/* User row */}
-              <div style={{ padding: "12px 24px 16px", display: "flex", alignItems: "center", gap: 14, borderBottom: `1px solid rgba(255,255,255,0.07)` }}>
+              <div style={{ padding: "12px 24px 16px", display: "flex", alignItems: "center", gap: 14, borderBottom: `1px solid rgba(18,36,63,0.07)` }}>
                 <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg, ${B.tealAccent}, ${B.cyan})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>👤</div>
                 <div>
                   <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 15, color: B.textPrimary }}>Neal Johnson</div>
@@ -166,7 +166,7 @@ export function MobileApp() {
                   onClick={item.action}
                   style={{ width: "100%", background: "none", border: "none", padding: "14px 24px", display: "flex", alignItems: "center", gap: 16, cursor: "pointer", textAlign: "left" }}
                 >
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{item.icon}</div>
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(18,36,63,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{item.icon}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 14, color: B.textPrimary }}>{item.label}</div>
                     <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, color: B.textMuted, fontWeight: 400, marginTop: 1 }}>{item.sub}</div>

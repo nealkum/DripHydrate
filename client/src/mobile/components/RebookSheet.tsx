@@ -34,10 +34,14 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
   const treatment = treatments.find((t) => t.slug === slug);
 
   const isShipped = shippedToYouSlugs.has(slug);
+  const isSpecialty = new Set(["iron-iv", "ketamine-iv", "exosome-iv"]).has(slug);
+  const hasMemberPrice = !isSpecialty && memberPriceMap[slug] != null;
+  const discountLabel = isShipped ? "monthly subscription" : "membership";
+  const discountLabelShort = isShipped ? "subscription" : "membership";
   const [selectedDate, setSelectedDate] = useState(NEXT_AVAILABLE.value);
   const [selectedTime, setSelectedTime] = useState(NEXT_AVAILABLE.time);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [membershipOn, setMembershipOn] = useState(true);
+  const [membershipOn, setMembershipOn] = useState(!isSpecialty);
   const [processing, setProcessing] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(SAVED_ADDRESSES[0]);
   const [addingNewAddress, setAddingNewAddress] = useState(false);
@@ -68,7 +72,7 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 400, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
         <div onClick={(e) => e.stopPropagation()} style={{ background: B.bgCard, borderRadius: "24px 24px 0 0", padding: "24px 20px 36px" }}>
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)" }} />
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(18,36,63,0.15)" }} />
           </div>
           <div style={{ ...T.body, fontSize: 14, color: B.textMuted, textAlign: "center", padding: "20px 0" }}>Loading...</div>
         </div>
@@ -77,9 +81,9 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
   }
 
   const basePrice = Math.round(treatment.price / 100);
-  const memberPrice = memberPriceMap[slug] ? Math.round(memberPriceMap[slug] / 100) : Math.round(basePrice * 0.75);
+  const memberPrice = hasMemberPrice ? Math.round(memberPriceMap[slug] / 100) : basePrice;
   const savings = basePrice - memberPrice;
-  const activePrice = membershipOn ? memberPrice : basePrice;
+  const activePrice = hasMemberPrice && membershipOn ? memberPrice : basePrice;
 
   // Add-on total from previous booking
   const addOnTotal = Array.from(selectedAddOns).reduce((sum, id) => {
@@ -113,7 +117,7 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
       <div onClick={(e) => e.stopPropagation()} style={{ background: B.bgCard, borderRadius: "24px 24px 0 0", maxHeight: "85%", display: "flex", flexDirection: "column" }}>
         {/* Handle */}
         <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 4px", flexShrink: 0, borderRadius: "24px 24px 0 0" }}>
-          <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)" }} />
+          <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(18,36,63,0.15)" }} />
         </div>
 
         {/* Scrollable content */}
@@ -147,30 +151,31 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
                   ${membershipOn ? memberPrice : basePrice}
                 </span>
                 {membershipOn && (
-                  <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400, textDecoration: "line-through", textDecorationColor: "rgba(255,255,255,0.25)" }}>
+                  <span style={{ ...T.ui, fontSize: 13, color: B.textMuted, fontWeight: 400, textDecoration: "line-through", textDecorationColor: "rgba(18,36,63,0.25)" }}>
                     ${basePrice}
                   </span>
                 )}
               </div>
-              {membershipOn && (
+              {hasMemberPrice && membershipOn && (
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <span style={{ ...T.tag, fontSize: 10, color: B.cyan, fontWeight: 700, background: `${B.cyan}12`, padding: "3px 8px", borderRadius: 6 }}>
                     SAVE ${savings}
                   </span>
-                  <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>with membership</span>
+                  <span style={{ ...T.ui, fontSize: 11, color: B.textMuted, fontWeight: 400 }}>with {discountLabel}</span>
                 </div>
               )}
             </div>
 
             {/* Toggle row */}
+            {hasMemberPrice && (
             <div
               onClick={() => setMembershipOn(!membershipOn)}
-              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", padding: "10px 12px", borderRadius: 10, background: membershipOn ? `${B.cyan}10` : "rgba(255,255,255,0.04)", border: `1px solid ${membershipOn ? B.cyan + "20" : B.borderLight}` }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", padding: "10px 12px", borderRadius: 10, background: membershipOn ? `${B.cyan}10` : "rgba(18,36,63,0.04)", border: `1px solid ${membershipOn ? B.cyan + "20" : B.borderLight}` }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ fontSize: 14 }}>💎</span>
                 <span style={{ ...T.ui, fontSize: 12, fontWeight: 600, color: membershipOn ? B.cyan : B.textSecondary }}>
-                  {membershipOn ? "Member pricing applied" : "Apply member pricing"}
+                  {membershipOn ? `${isShipped ? "Subscription" : "Member"} pricing applied` : `Apply ${discountLabelShort} pricing`}
                 </span>
               </div>
               <div style={{
@@ -187,6 +192,7 @@ export function RebookSheet({ slug, previousAddOns = [], onClose, onConfirmed }:
                 }} />
               </div>
             </div>
+            )}
           </div>
 
           {/* Add-ons (editable) */}

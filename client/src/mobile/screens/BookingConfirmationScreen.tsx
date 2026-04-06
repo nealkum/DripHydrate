@@ -15,6 +15,8 @@ export function BookingConfirmationScreen({ details, goBack, onTabChange, naviga
   const memberPrice = details.price - memberSavings;
   const creditsEarned = Math.max(1, Math.round(details.totalCharged * 0.1));
   const isShipped = !!details.isShipped;
+  const isSpecialty = /iron iv|ketamine iv|exosome/i.test(details.treatmentName);
+  const showMembershipUpsell = !isShipped && !isSpecialty;
 
   return (
     <div style={{ position: "absolute", inset: 0, background: B.bg, zIndex: 150, display: "flex", flexDirection: "column", fontFamily: SANS, overflowY: "auto" }}>
@@ -173,6 +175,7 @@ export function BookingConfirmationScreen({ details, goBack, onTabChange, naviga
       </div>
 
       {/* Membership upsell */}
+      {showMembershipUpsell && (
       <div style={{ padding: "0 20px 20px" }}>
         <div style={{ background: `linear-gradient(135deg, ${B.bgCard}, ${B.tealLight})`, border: `1px solid ${B.gold}25`, borderRadius: 16, padding: 20 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
@@ -187,6 +190,7 @@ export function BookingConfirmationScreen({ details, goBack, onTabChange, naviga
           </Btn>
         </div>
       </div>
+      )}
 
       {/* Referral card */}
       <div style={{ padding: "0 20px 20px" }}>

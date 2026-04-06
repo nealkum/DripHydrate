@@ -97,12 +97,14 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
   }
 
   const basePrice = Math.round(treatment.price / 100);
-  const memberPrice = memberPriceMap[slug] ? Math.round(memberPriceMap[slug] / 100) : Math.round(treatment.price * 0.75 / 100);
+  const isShipped = shippedToYouSlugs.has(slug);
+  const isSpecialty = new Set(["iron-iv", "ketamine-iv", "exosome-iv"]).has(slug);
+  const hasMemberPrice = !isSpecialty && memberPriceMap[slug] != null;
+  const memberPrice = hasMemberPrice ? Math.round(memberPriceMap[slug] / 100) : basePrice;
   const savings = basePrice - memberPrice;
   const reviews = reviewMap[slug];
   const bestFor = bestForMap[slug];
   const customerReviews = treatmentReviews[slug] ?? [];
-  const isShipped = shippedToYouSlugs.has(slug);
 
   const relevantAddOns = isShipped ? [] : addOns;
 
@@ -158,16 +160,16 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
         {/* Hero section — photo background */}
         <div
           style={{
-            padding: "200px 20px 22px",
-            backgroundImage: `linear-gradient(180deg, rgba(10,23,40,0.05) 0%, rgba(10,23,40,0.55) 55%, ${B.bg} 100%), url(${heroPhoto})`,
+            padding: "220px 20px 22px",
+            backgroundImage: `linear-gradient(180deg, rgba(10,23,40,0.05) 0%, rgba(10,23,40,0.7) 60%, rgba(10,23,40,0.95) 100%), url(${heroPhoto})`,
             backgroundSize: "cover",
             backgroundPosition: "center 25%",
             position: "relative",
           }}
         >
-          <div style={{ ...T.hero, fontSize: 28, color: B.textPrimary, marginBottom: 6 }}>{treatment.name}</div>
+          <div style={{ ...T.hero, fontSize: 28, color: "#fff", marginBottom: 6 }}>{treatment.name}</div>
           {heroTaglines[slug] && (
-            <div style={{ ...T.body, fontSize: 14, color: B.textSecondary, marginBottom: 10 }}>
+            <div style={{ ...T.body, fontSize: 14, color: "rgba(255,255,255,0.82)", marginBottom: 10 }}>
               {heroTaglines[slug]}
             </div>
           )}
@@ -175,31 +177,42 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
           {reviews && (
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
               <Stars rating={Math.round(reviews.rating)} size={13} />
-              <span style={{ ...T.ui, fontSize: 12, color: B.textMuted, fontWeight: 400 }}>
+              <span style={{ ...T.ui, fontSize: 12, color: "rgba(255,255,255,0.7)", fontWeight: 400 }}>
                 {reviews.rating} ({reviews.count.toLocaleString()} reviews)
               </span>
             </div>
           )}
 
           <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 8 }}>
-            <span style={{ ...T.price, fontSize: 32, color: B.textPrimary }}>${basePrice}</span>
-            <div>
-              <div style={{ ...T.ui, fontSize: 13, fontWeight: 700, color: B.cyan }}>${memberPrice} member price</div>
-              <div style={{ ...T.ui, fontSize: 11, color: B.gold, fontWeight: 600 }}>Save ${savings} with {isShipped ? "monthly subscription" : "membership"}</div>
-            </div>
+            <span style={{ ...T.price, fontSize: 32, color: "#fff" }}>${basePrice}{isShipped && " "}{isShipped && <span style={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.72)" }}>/mo</span>}</span>
+            {hasMemberPrice && (
+              <div>
+                {isShipped ? (
+                  <>
+                    <div style={{ ...T.ui, fontSize: 13, fontWeight: 700, color: B.cyanLight }}>${memberPrice}/mo subscribe</div>
+                    <div style={{ ...T.ui, fontSize: 11, color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>Save ${savings}/mo vs 1-month supply</div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ ...T.ui, fontSize: 13, fontWeight: 700, color: B.cyanLight }}>${memberPrice} member price</div>
+                    <div style={{ ...T.ui, fontSize: 11, color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>Save ${savings} with membership</div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {!isShipped && (
-              <span style={{ ...T.tag, fontSize: 9, color: B.textMuted, background: `rgba(255,255,255,0.06)`, padding: "5px 10px", borderRadius: 8 }}>
+              <span style={{ ...T.tag, fontSize: 9, color: "rgba(255,255,255,0.85)", background: `rgba(255,255,255,0.12)`, padding: "5px 10px", borderRadius: 8 }}>
                 ⏱ {treatment.duration} min
               </span>
             )}
-            <span style={{ ...T.tag, fontSize: 9, color: B.textMuted, background: `rgba(255,255,255,0.06)`, padding: "5px 10px", borderRadius: 8 }}>
+            <span style={{ ...T.tag, fontSize: 9, color: "rgba(255,255,255,0.85)", background: `rgba(255,255,255,0.12)`, padding: "5px 10px", borderRadius: 8 }}>
               {isShipped ? "📦 Ships nationwide" : "🏠 In-home visit"}
             </span>
             {!isShipped && (
-              <span style={{ ...T.tag, fontSize: 9, color: B.textMuted, background: `rgba(255,255,255,0.06)`, padding: "5px 10px", borderRadius: 8 }}>
+              <span style={{ ...T.tag, fontSize: 9, color: "rgba(255,255,255,0.85)", background: `rgba(255,255,255,0.12)`, padding: "5px 10px", borderRadius: 8 }}>
                 👩‍⚕️ Licensed nurse
               </span>
             )}
@@ -230,7 +243,7 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
             <div style={{ ...T.over, fontSize: 10, color: B.textMuted, marginBottom: 12 }}>What's Inside</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {ingredientMap[slug].map((ing, i) => (
-                <span key={i} style={{ ...T.ui, fontSize: 12, fontWeight: 500, color: B.textSecondary, background: `rgba(255,255,255,0.06)`, padding: "6px 12px", borderRadius: 8, border: `1px solid ${B.border}` }}>
+                <span key={i} style={{ ...T.ui, fontSize: 12, fontWeight: 500, color: B.textSecondary, background: `rgba(18,36,63,0.06)`, padding: "6px 12px", borderRadius: 8, border: `1px solid ${B.border}` }}>
                   {ing}
                 </span>
               ))}
@@ -307,21 +320,23 @@ export function TreatmentDetailScreen({ slug, goBack, openBooking }: TreatmentDe
         })()}
 
 
-        {/* Membership upsell */}
-        <div style={{ padding: "0 20px 24px" }}>
-          <div style={{ background: `linear-gradient(135deg, ${B.bgCard}, ${B.tealLight})`, border: `1px solid ${B.gold}25`, borderRadius: 14, padding: 18 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-              <span style={{ fontSize: 18 }}>💎</span>
-              <div style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>Save ${savings} with a {isShipped ? "Monthly Subscription" : "Membership"}</div>
+        {/* Membership upsell — in-home IVs only */}
+        {hasMemberPrice && !isShipped && (
+          <div style={{ padding: "0 20px 24px" }}>
+            <div style={{ background: `linear-gradient(135deg, ${B.bgCard}, ${B.tealLight})`, border: `1px solid ${B.gold}25`, borderRadius: 14, padding: 18 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <span style={{ fontSize: 18 }}>💎</span>
+                <div style={{ ...T.product, fontSize: 15, color: B.textPrimary }}>Save ${savings} with a Membership</div>
+              </div>
+              <div style={{ ...T.body, fontSize: 12, color: B.textSecondary, marginBottom: 14 }}>
+                Members pay <span style={{ color: B.cyan, fontWeight: 700 }}>${memberPrice}</span> per session. Cancel anytime, HSA/FSA eligible.
+              </div>
+              <Btn variant="ghost" style={{ width: "100%", padding: "11px 0", fontSize: 12 }} onClick={() => navigate({ type: "membership" })}>
+                VIEW MEMBERSHIP PLANS
+              </Btn>
             </div>
-            <div style={{ ...T.body, fontSize: 12, color: B.textSecondary, marginBottom: 14 }}>
-              Members pay <span style={{ color: B.cyan, fontWeight: 700 }}>${memberPrice}</span> per session. Cancel anytime, HSA/FSA eligible.
-            </div>
-            <Btn variant="ghost" style={{ width: "100%", padding: "11px 0", fontSize: 12 }} onClick={() => navigate({ type: "membership" })}>
-              VIEW MEMBERSHIP PLANS
-            </Btn>
           </div>
-        </div>
+        )}
 
         {/* Customer reviews */}
         {customerReviews.length > 0 && (
